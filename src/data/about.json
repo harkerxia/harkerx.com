@@ -1,0 +1,88 @@
+{
+  "title": "About Me",
+  "sections": [
+    {
+      "type": "intro",
+      "greeting": "Hello, welcome to HarkerX Harbor",
+      "name_prefix": "I'm",
+      "name": "HarkerX",
+      "description": "I write about thoughts, experiences, projects, and things worth keeping.",
+      "pursuit": {
+        "label": "What I care about",
+        "lines": [
+          "Think deeply",
+          "Build thoughtfully"
+        ],
+        "rotating_words": [
+          "Learn",
+          "Explore",
+          "Create",
+          "Reflect"
+        ]
+      }
+    },
+    {
+      "type": "skills_career",
+      "skills": {
+        "label": "Technical Skills",
+        "title": "Tools I work with",
+        "items": [
+        {
+          "name": "Python",
+          "icon": "fab fa-python",
+          "color": "#3776ab"
+        },
+        {
+          "name": "JavaScript",
+          "icon": "fab fa-js",
+          "color": "#f7df1e"
+        },
+        {
+          "name": "Git",
+          "icon": "fab fa-git-alt",
+          "color": "#f05032"
+        }
+      ]
+      },
+      "career": {
+        "label": "Journey",
+        "title": "Still exploring",
+        "summary": [
+          {
+            "name": "2023, started HarkerX Harbor",
+            "color": "#425aef"
+          },
+          {
+            "name": "Studying and building",
+            "color": "#ff4088"
+          },
+          {
+            "name": "Today, still exploring",
+            "color": "#16a34a"
+          }
+        ]
+      }
+    },
+    {
+      "type": "values",
+      "motto": {
+        "label": "A little motto",
+        "prefix": "Tuum est arbitrium;",
+        "content": "tuum est pretium."
+      },
+      "expertise": {
+        "label": "What I do",
+        "prefix": "Think deeply,",
+        "specialist": "build thoughtfully",
+        "content": "Keep",
+        "level": "exploring"
+      }
+    },
+    {
+      "type": "story",
+      "label": "About this place",
+      "title": "Why HarkerX Harbor?",
+      "content": "HarkerX Harbor is a personal space for recording thoughts, experiences, projects, and things worth keeping.\n\nI started writing online in 2023. Over time, the site has changed along with me, but the purpose has stayed simple: to keep a place for ideas that deserve more than a passing thought.\n\nMost of the site is a blog, but it also serves as a home for projects, experiments, notes, and anything else I find interesting enough to build or document.\n\nThe site will keep evolving over time. The goal is not to make it perfect, but to make it useful, personal, and worth coming back to."
+    }
+  ]
+}
