@@ -3,8 +3,7 @@ import { defineSolitudeConfig } from './lib/config';
 export default defineSolitudeConfig({
   site: 'https://harkerx.com/',
   title: 'HarkerX Harbor',
-  description:
-    'A personal space for sharing insights, experiences, projects, and things worth keeping.',
+  description: 'A personal blog about life, code, and whatever comes to mind.',
   locale: 'en',
   timeZone: 'UTC',
   author: { name: 'HarkerX' },
@@ -23,17 +22,39 @@ export default defineSolitudeConfig({
     },
   ],
   theme: {
+    nav: {
+      right: {
+        custom: [
+          {
+            name: 'Toggle theme',
+            icon: 'fas fa-circle-half-stroke',
+            action: 'switchDarkMode',
+            id: 'theme-toggle',
+          },
+          {
+            name: 'RSS Feed',
+            icon: 'fas fa-rss',
+            url: '/index.xml',
+            id: 'rss-feed',
+          },
+        ],
+      },
+    },
+    console: {
+      enable: false,
+    },
     lightbox: 'fancybox',
     site: {
       name: {
         class: 'text',
         custom: 'HarkerX Harbor',
       },
+      icon: '/img/icons/favicon.png',
     },
     hometop: {
       banner: {
         title: 'Welcome to HarkerX Harbor',
-        desc: 'Thoughts, experiences, projects, and things worth keeping.',
+        desc: 'Just writing stuff. Read if you feel like it.',
       },
     },
     aside: {
@@ -45,12 +66,11 @@ export default defineSolitudeConfig({
         runtime: '2023-01-22 00:00:00',
       },
       my_card: {
-        description: 'Thoughts, experiences, projects, and fragments collected along the way.',
+        author: {
+          img: '/img/avatar.png',
+        },
+        description: '随便写写，凑合看看。',
         content: 'Tuum est arbitrium; tuum est pretium.',
-        witty_words: [
-          'Think deeply, write freely',
-          'Build things worth keeping',
-        ],
         information: [
           {
             name: 'GitHub',
@@ -62,24 +82,10 @@ export default defineSolitudeConfig({
     },
     footer: {
       information: {
-        left: [
-          {
-            name: 'GitHub',
-            url: 'https://github.com/harkerxia',
-            icon: 'fab fa-github',
-          },
-        ],
-        right: [{ name: 'RSS', url: '/index.xml', icon: 'fas fa-rss' }],
-      },
-      group: {
-        Explore: [
-          { name: 'Posts', url: '/archives/' },
-          { name: 'Categories', url: '/categories/' },
-        ],
-        About: [
-          { name: 'Theme', url: '/about/' },
-        ],
-      },
+        author: '',
+        left: [],
+        right: [],
+      }
     },
     capsule: { enable: false, id: '7298728834454061071', type: 'playlist', server: 'qishui' },
     post: {
@@ -88,14 +94,13 @@ export default defineSolitudeConfig({
     },
     brevity: { enable: false },
     keyboard: {
-      enable: true,
-      list: [
-        { modifier: 'shift', key: 'D', action: 'toggleTheme' },
-        { modifier: 'mod', key: 'F', action: 'openSearch' },
-        { modifier: 'shift', key: 'K', action: 'toggleKeyboard' },
-      ],
+      enable: false,
     },
     search: { tags: ['Thoughts', 'Projects', 'Experiences'], local: { preload: true } },
-    pwa: { enable: true },
+    pwa: {
+      enable: true,
+      favicon_16_16: '/img/icons/favicon-16.png',
+      favicon_32_32: '/img/icons/favicon-32.png',
+    },
   },
 });

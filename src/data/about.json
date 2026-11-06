@@ -3,86 +3,74 @@
   "sections": [
     {
       "type": "intro",
-      "greeting": "Hello, welcome to HarkerX Harbor",
+      "greeting": "Hey, welcome to HarkerX Harbor.",
       "name_prefix": "I'm",
       "name": "HarkerX",
-      "description": "I write about thoughts, experiences, projects, and things worth keeping.",
+      "description": "Computer Science student at the University of British Columbia (UBC). I build software, explore AI and systems, and write about whatever catches my interest.",
       "pursuit": {
-        "label": "What I care about",
+        "label": "Currently curious about",
         "lines": [
-          "Think deeply",
-          "Build thoughtfully"
+          "Usually",
+          "tinkering with"
         ],
         "rotating_words": [
-          "Learn",
-          "Explore",
-          "Create",
-          "Reflect"
+          "AI / ML",
+          "Systems",
+          "Security",
+          "Data"
         ]
       }
     },
     {
       "type": "skills_career",
       "skills": {
-        "label": "Technical Skills",
-        "title": "Tools I work with",
+        "label": "Technical toolkit",
+        "title": "Things I work with",
         "items": [
-        {
-          "name": "Python",
-          "icon": "fab fa-python",
-          "color": "#3776ab"
-        },
-        {
-          "name": "JavaScript",
-          "icon": "fab fa-js",
-          "color": "#f7df1e"
-        },
-        {
-          "name": "Git",
-          "icon": "fab fa-git-alt",
-          "color": "#f05032"
-        }
-      ]
+          { "name": "C++", "icon": "fas fa-code", "color": "#5969a8" },
+          { "name": "Python", "icon": "fab fa-python", "color": "#3776ab" },
+          { "name": "Java", "icon": "fab fa-java", "color": "#e76f51" },
+          { "name": "JavaScript", "icon": "fab fa-js", "color": "#d9b72b" },
+          { "name": "SQL", "icon": "fas fa-database", "color": "#397db2" },
+          { "name": "FastAPI", "icon": "fas fa-server", "color": "#009688" },
+          { "name": "SQLite", "icon": "fas fa-database", "color": "#3286b5" },
+          { "name": "Supabase", "icon": "fas fa-cloud", "color": "#3ecf8e" },
+          { "name": "Git", "icon": "fab fa-git-alt", "color": "#f05032" },
+          { "name": "Linux", "icon": "fab fa-linux", "color": "#c19b26" },
+          { "name": "NumPy", "icon": "fas fa-chart-line", "color": "#4dabcf" },
+          { "name": "scikit-learn", "icon": "fas fa-brain", "color": "#ee8d36" }
+        ]
       },
       "career": {
-        "label": "Journey",
-        "title": "Still exploring",
+        "label": "A little background",
+        "title": "CS Student at UBC",
         "summary": [
           {
-            "name": "2023, started HarkerX Harbor",
+            "name": "UBC · BSc Computer Science (expected 2029)",
             "color": "#425aef"
           },
           {
-            "name": "Studying and building",
+            "name": "2024 · Machine learning research at Pioneer Academics",
             "color": "#ff4088"
           },
           {
-            "name": "Today, still exploring",
+            "name": "2023–2025 · Founded SFLS Geek CS & Tech Club",
             "color": "#16a34a"
           }
         ]
       }
     },
     {
-      "type": "values",
-      "motto": {
-        "label": "A little motto",
-        "prefix": "Tuum est arbitrium;",
-        "content": "tuum est pretium."
-      },
-      "expertise": {
-        "label": "What I do",
-        "prefix": "Think deeply,",
-        "specialist": "build thoughtfully",
-        "content": "Keep",
-        "level": "exploring"
-      }
+      "type": "story",
+      "label": "Selected projects",
+      "title": "Things I've built (or am still building)",
+      "content": "A few projects from different corners of my interests:\n\n- **AI Lifelog & Memory System** · *Python, SQLite, Linux* — An ongoing personal system that turns conversations into structured journal entries, with long-term memory and layered summaries.\n- **File Tamper Detector** · *Java, Swing, SHA-256, JUnit* — A desktop tool that monitors selected files and detects modifications, additions, and deletions.\n- **ParkShare** · *Python, FastAPI, Supabase* — A team hackathon project for sharing and reserving parking spaces. I worked on availability and booking-conflict logic.\n- **AlphaGen** · *Python, machine learning* — A supervised-learning experiment to predict next moves from Generals.io replay data.\n\nThere are a few more experiments too, from Monte Carlo simulations to Windows utilities and small games. Some end up on [GitHub](https://github.com/harkerxia); others stay as notes for a while."
     },
     {
       "type": "story",
       "label": "About this place",
       "title": "Why HarkerX Harbor?",
-      "content": "HarkerX Harbor is a personal space for recording thoughts, experiences, projects, and things worth keeping.\n\nI started writing online in 2023. Over time, the site has changed along with me, but the purpose has stayed simple: to keep a place for ideas that deserve more than a passing thought.\n\nMost of the site is a blog, but it also serves as a home for projects, experiments, notes, and anything else I find interesting enough to build or document.\n\nThe site will keep evolving over time. The goal is not to make it perfect, but to make it useful, personal, and worth coming back to."
+      "content": "I started blogging in 2023. The site has changed its look (and framework) a few times, but the idea is still pretty simple: somewhere to keep notes, document projects, and write about things I might otherwise forget.\n\nIt's mostly a blog, with room for experiments and whatever I feel like making next. No grand mission statement — just a corner of the internet that's mine."
     }
   ]
 }

@@ -145,13 +145,13 @@ const commentsEnabled =
         </main>
       </div>
     ) : post ? (
-      <main class="layout tw:[.layout&]:relative" id="content-inner">
+    <main class="layout tw:[.layout&]:relative" id="content-inner">
+      <div class="post-column">
         <div id="post">
           {post.data.not_cover && <PostMeta post={post} />}
           <article class="post-content article-container">
             {Content && <Content components={components} />}
           </article>
-          <Copyright post={post} />
           <div class="post-tools-right tw:[#post_&]:flex tw:[#post_&]:items-center tw:[#post_&]:flex-row tw:[#post_&]:justify-between tw:[#post_&]:flex-wrap">
             <div class="tag_share">
               <div class="post-meta__tag-list tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:flex tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:flex-row tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:items-center tw:[#post_.post-tools-right_.tag\_share_&]:flex tw:[#post_.post-tools-right_.tag\_share_&]:flex-wrap tw:[#post_.post-tools-right_.tag\_share_&]:flex-row">
@@ -172,36 +172,7 @@ const commentsEnabled =
               </div>
             </div>
           </div>
-          {(previous || next) && (
-            <nav
-              class="needEndHide pagination-post tw:[#post_&]:overflow-hidden"
-              id="pagination"
-              aria-label={t('postNavigation')}
-            >
-              {previous && (
-                <div class={`prev-post ${next ? 'pull-left' : 'pull-full'}`}>
-                  <a href={url(contentPath(previous))}>
-                    <div class="pagination-info tw:[#post_#pagination_.prev-post_&]:text-left tw:[#post_#pagination_&]:absolute">
-                      <div class="label">{t('previousPost')}</div>
-                      <div class="prev_info">{previous.data.title}</div>
-                    </div>
-                  </a>
-                </div>
-              )}
-              {next && (
-                <div
-                  class={`next-post ${previous ? 'pull-right' : 'pull-full'}`}
-                >
-                  <a href={url(contentPath(next))}>
-                    <div class="pagination-info tw:[#post_#pagination_.prev-post_&]:text-left tw:[#post_#pagination_&]:absolute">
-                      <div class="label">{t('nextPost')}</div>
-                      <div class="next_info">{next.data.title}</div>
-                    </div>
-                  </a>
-                </div>
-              )}
-            </nav>
-          )}
+          
           {cfg.related_post.enable && related.length > 0 && (
             <section class="relatedPosts" aria-labelledby="related-posts-title">
               <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
@@ -243,6 +214,47 @@ const commentsEnabled =
           )}
           <Comments enabled={commentsEnabled} />
         </div>
+        
+        <nav class="post-page-switch" aria-label="Post navigation">
+          {previous ? (
+            <a
+              class="post-page-switch__card"
+              href={url(contentPath(previous))}
+              title={previous.data.title}
+            >
+              <span class="post-page-switch__label">上一篇</span>
+              <span class="post-page-switch__title">
+                {previous.data.title}
+              </span>
+            </a>
+          ) : (
+            <span class="post-page-switch__card is-disabled">
+              <span class="post-page-switch__label">上一篇</span>
+              <span class="post-page-switch__title">没有更早的文章了</span>
+            </span>
+          )}
+
+          {next ? (
+            <a
+              class="post-page-switch__card"
+              href={url(contentPath(next))}
+              title={next.data.title}
+            >
+              <span class="post-page-switch__label">下一篇</span>
+              <span class="post-page-switch__title">
+                {next.data.title}
+              </span>
+            </a>
+          ) : (
+            <span class="post-page-switch__card is-disabled">
+              <span class="post-page-switch__label">下一篇</span>
+              <span class="post-page-switch__title">已经是最新文章了</span>
+            </span>
+          )}
+        </nav>
+
+        </div>
+
         <Aside
           posts={posts}
           post

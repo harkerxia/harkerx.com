@@ -65,15 +65,6 @@
   transition: background 0.2s;
 }
 
-.card-info:hover .avatar,
-.card-info:hover .sticker {
-  transform: scale(0);
-}
-
-.card-info:hover .description {
-  opacity: 1;
-}
-
 .card-info .sayhi {
   width: fit-content;
   font-size: 12px;
