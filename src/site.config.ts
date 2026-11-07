@@ -102,5 +102,24 @@ export default defineSolitudeConfig({
       favicon_16_16: '/img/icons/favicon-16.png',
       favicon_32_32: '/img/icons/favicon-32.png',
     },
+    comment: {
+      use: 'twikoo',
+      lazyload: false,
+      count: false,
+      sidebar: false,
+      commentBarrage: false,
+    },
+
+    twikoo: {
+      envId: 'https://comments.harkerx.com',
+      style: true,
+      option: {
+        lang: 'en',
+      },
+    },
+
+    cdn: {
+      twikoo: 'https://cdn.jsdelivr.net/npm/twikoo@2.0.17/dist/twikoo.min.js',
+    },
   },
 });

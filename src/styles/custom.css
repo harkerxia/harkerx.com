@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   width: 100%;
-  margin: 16px 0 32px;
+  margin: 16px 0 16px;
   border: 1px solid var(--efu-card-border, #e3e8f2);
   border-radius: 14px;
   background: var(--efu-card-bg, #fff);
@@ -106,4 +106,72 @@ a.post-page-switch__card:hover .post-page-switch__title {
 
 .post-content h5 {
   font-size: 0.85rem;
+}
+
+/* Independent comments card */
+.post-column > .post-comments-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px 32px 0px;
+  margin-bottom: 32px;
+
+  background: var(--efu-card-bg, #fff);
+  border: 1px solid var(--efu-card-border, #e3e8f2);
+  border-radius: 16px;
+}
+
+/* Remove extra spacing inside the comments card */
+.post-comments-card #post-comment {
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .post-column > .post-comments-card {
+    padding: 20px 16px;
+  }
+}
+
+/* Move nickname, comment and metadata slightly upward */
+#twikoo .tk-comment .tk-main {
+  position: relative;
+  top: -8px;
+}
+
+/* Spacing between nickname and comment text */
+#twikoo .tk-comment .tk-content {
+  margin-top: 2px !important;
+}
+
+/* Remove default paragraph spacing */
+#twikoo .tk-comment .tk-content p:first-child {
+  margin-top: 0 !important;
+}
+
+/* Hide Twikoo footer attribution */
+#twikoo .tk-footer {
+  display: none !important;
+}
+
+/* Hide browser and operating system information */
+#twikoo .tk-extras {
+  display: none !important;
+}
+
+/* Twikoo: smaller comment count heading */
+#twikoo .tk-comments-title,
+#twikoo .tk-comments-count {
+  font-size: 18px !important;
+}
+
+/* Separate comment editor from comment list */
+#twikoo .tk-comments-container {
+  margin-top: 24px;
+  padding-top: 32px;
+  border-top: 1px solid var(--efu-card-border, #e3e8f2);
+}
+
+/* Space between comment icon and title */
+#post-comment .comment-headline i {
+  margin-right: 8px;
 }

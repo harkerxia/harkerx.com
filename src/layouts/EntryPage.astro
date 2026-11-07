@@ -212,7 +212,6 @@ const commentsEnabled =
               </div>
             </section>
           )}
-          <Comments enabled={commentsEnabled} />
         </div>
         
         <nav class="post-page-switch" aria-label="Post navigation">
@@ -253,6 +252,12 @@ const commentsEnabled =
           )}
         </nav>
 
+        {commentsEnabled && cfg.comment.use && (
+          <div class="post-comments-card">
+            <Comments enabled={commentsEnabled} />
+          </div>
+        )}
+        
         </div>
 
         <Aside
