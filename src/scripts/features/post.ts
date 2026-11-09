@@ -32,6 +32,57 @@ const waitForCommentEditor = (
   });
 };
 
+let stopFollowingComment: (() => void) | undefined;
+
+const followCommentPosition = (root: HTMLElement, signal: AbortSignal) => {
+  stopFollowingComment?.();
+  let target: HTMLElement = root;
+  let active = true;
+  let frame = 0;
+  let releaseCleanup = () => {};
+  const controller = new AbortController();
+  const align = () => {
+    frame = 0;
+    if (!active || signal.aborted || !root.isConnected) return;
+    target.scrollIntoView({ block: "center", behavior: "instant" });
+  };
+  const observer = new ResizeObserver(() => {
+    if (active && !frame) frame = requestAnimationFrame(align);
+  });
+  const stop = () => {
+    if (!active) return;
+    active = false;
+    controller.abort();
+    observer.disconnect();
+    cancelAnimationFrame(frame);
+    clearTimeout(timer);
+    signal.removeEventListener("abort", stop);
+    releaseCleanup();
+    if (stopFollowingComment === stop) stopFollowingComment = undefined;
+  };
+  stopFollowingComment = stop;
+  let timer = window.setTimeout(stop, 8000);
+  signal.addEventListener("abort", stop, { once: true });
+  releaseCleanup = lifecycle.add(stop);
+  for (const event of ["wheel", "touchstart", "pointerdown", "keydown"] as const)
+    window.addEventListener(event, stop, { passive: true, signal: controller.signal });
+  // Images and the lazy editor can move the target after the first jump.
+  observer.observe(root);
+  const article = document.querySelector(".article-container");
+  if (article) observer.observe(article);
+  align();
+  return {
+    stop,
+    revealEditor(editor: HTMLTextAreaElement) {
+      if (!active) return;
+      target = editor;
+      align();
+      clearTimeout(timer);
+      timer = window.setTimeout(stop, 8000);
+    },
+  };
+};
+
 export const postActions = {
   switchCommentBarrage() {
     const commentBarrageElement =
@@ -100,11 +151,14 @@ export const postActions = {
     const root = document.getElementById("post-comment");
     const signal = lifecycle.signal;
     if (!root) return;
-    // Scrolling also lets lazy comment providers start loading their editor.
-    Solitude.scrollToDest(Solitude.getEleTop(root), 300);
+    const position = followCommentPosition(root, signal);
     const editor = await waitForCommentEditor(root, signal);
-    if (signal.aborted || !root.isConnected) return;
+    if (signal.aborted || !root.isConnected) {
+      position.stop();
+      return;
+    }
     if (!editor) {
+      position.stop();
       Solitude.snackbarShow(Solitude.config.lang.comments.error, false, 3000);
       return;
     }
@@ -117,6 +171,7 @@ export const postActions = {
     editor.dispatchEvent(new Event("input", { bubbles: true }));
     editor.focus({ preventScroll: true });
     editor.setSelectionRange(editor.value.length, editor.value.length);
+    position.revealEditor(editor);
     Solitude.snackbarShow(Solitude.config.lang.totalk, false, 2000);
   },
   initNotesTicker() {

@@ -186,7 +186,10 @@
   background-size: 200%;
 }
 
-#about-page .about-intro-card .about-card-copy { color: rgba(255,255,255,.82); }
+#about-page .about-intro-card .about-card-copy {
+  color: rgba(255,255,255,.82);
+  white-space: pre-line;
+}
 
 #about-page .about-intro-card h2 { margin: 8px 0 12px; color: #fff; font-size: 44px; }
 

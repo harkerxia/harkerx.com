@@ -4,6 +4,7 @@ import { applyInitialTheme } from "../scripts/theme-bootstrap";
 import { cfg, config, t, url, absolute, json } from "../lib/site";
 import { getPosts, getPages, contentPath, type Post } from "../lib/content";
 import { runtimeConfig } from "../lib/runtime-config";
+import { pageCommentsEnabled } from "../lib/comment-policy";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Search from "../components/Search.astro";
@@ -36,13 +37,14 @@ const {
 const posts = await getPosts(),
   pages = await getPages();
 const runtime = runtimeConfig(posts, pages, { ...page, type });
+const commentsEnabled = Boolean(cfg.comment.use) && pageCommentsEnabled(type, page.comment);
 const pageConfig = {
   is_post: Boolean(post),
   is_page: type !== "solitude" && !post,
   is_home: type === "solitude",
   page: type,
   toc: page.toc !== false && Boolean(post || type === "page"),
-  comment: page.comment !== false,
+  comment: commentsEnabled,
   color: page.color ?? false,
 };
 const canonicalUrl = type === "404"
@@ -182,24 +184,7 @@ const inlineVars = Object.entries(vars)
     <Overlays
       posts={posts}
       toc={toc}
-      comments={
-        Boolean(cfg.comment.use) &&
-        page.comment !== false &&
-        ![
-          "solitude",
-          "about",
-          "music",
-          "tags",
-          "categories",
-          "series",
-          "notes",
-          "recentcomment",
-          "archives",
-          "taxonomy",
-          "term",
-          "404",
-        ].includes(type)
-      }
+      comments={commentsEnabled}
     />
     <div
       id="body-wrap"

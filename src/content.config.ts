@@ -31,6 +31,6 @@ export const collections = {
   }),
   pages: defineCollection({
     loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/pages" }),
-    schema: common,
+    schema: common.extend({ comment: z.boolean().optional() }),
   }),
 };

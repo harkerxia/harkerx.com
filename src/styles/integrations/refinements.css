@@ -52,7 +52,8 @@ button:disabled { cursor: default; opacity: .45; }
 .search-result-summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-top: 4px; font-size: 14px; font-weight: 400; color: var(--efu-secondtext); }
 #local-search mark { color: var(--efu-lighttext); background: var(--efu-theme-op); border-radius: 2px; }
 #local-search #search-tips { min-height: 20px; font-size: 12px; color: var(--efu-secondtext); }
-#local-search #search-results > :is(.search-result-empty, .search-result-error, .search-result-loading) { padding: 24px 12px; text-align: center; font-size: 14px; }
+#local-search #search-results > :is(.search-result-empty, .search-result-error, .search-result-loading) { padding: 16px 12px; text-align: center; font-size: 14px; }
+#local-search #search-results > .search-result-empty {padding-bottom: 8px;}
 .search-retry { display: block; min-height: 44px; margin: 12px auto 0; padding: 8px 20px; border-radius: var(--efu-radius-sm); border: var(--style-border-always); background: var(--efu-card-btn-bg); color: var(--efu-fontcolor); cursor: pointer; }
 #local-search #search-pagination .pagination-list { flex-wrap: wrap; gap: 4px; }
 #local-search #search-pagination .pagination-button { min-width: 36px; height: 44px; padding: 0 8px; border-radius: var(--efu-radius-sm); }

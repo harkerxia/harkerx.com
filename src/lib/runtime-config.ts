@@ -3,6 +3,7 @@ import { contentPath, type Post, type Page } from "./content";
 import linksData from "../data/links.json";
 import type { LinksData } from "./page-types";
 import { pageData } from "./data";
+import { pageCommentsEnabled } from "./comment-policy";
 const links: LinksData = linksData;
 export function runtimeConfig(
   posts: Post[],
@@ -164,19 +165,10 @@ export function runtimeConfig(
     comment_runtime: {
       routes: Object.fromEntries(
         [...posts, ...pages]
-          .filter(
-            (p) =>
-              p.data.comment &&
-              ![
-                "about",
-                "music",
-                "tags",
-                "categories",
-                "links",
-                "notes",
-                "recentcomment",
-              ].includes(String(p.data.type)),
-          )
+          .filter((p) => pageCommentsEnabled(
+            p.collection === "posts" ? "post" : (p.data.type ?? "page"),
+            p.data.comment,
+          ))
           .map((p) => [url(contentPath(p)), p.data.title]),
       ),
       default_avatar: url("/img/icons/favicon.png"),

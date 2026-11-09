@@ -1,6 +1,6 @@
 ---
 title: Friends
-description: Other lights across the sea
+description: Other Lights Across the Sea
 type: links
 data: links
 comment: true

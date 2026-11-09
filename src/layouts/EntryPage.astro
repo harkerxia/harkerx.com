@@ -13,6 +13,7 @@ import {
 import { getPosts, taxonomy, contentPath, type Post } from "../lib/content";
 import type { Route } from "../lib/routes";
 import { pageData } from "../lib/data";
+import { pageCommentsEnabled } from "../lib/comment-policy";
 import { components } from "../components/mdx";
 import Aside from "../components/Aside.astro";
 import HomeTop from "../components/HomeTop.astro";
@@ -71,18 +72,7 @@ const related = post
       .slice(0, cfg.related_post.limit)
       .map((x) => x.item)
   : [];
-const commentsEnabled =
-  p.comment !== false &&
-  ![
-    "about",
-    "music",
-    "tags",
-    "categories",
-    "notes",
-    "recentcomment",
-    "archives",
-  ].includes(type) &&
-  !["taxonomy", "term"].includes(route.kind);
+const commentsEnabled = pageCommentsEnabled(type, p.comment);
 ---
 
 {route.kind === "redirect" ? (

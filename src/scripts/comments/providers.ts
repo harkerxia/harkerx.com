@@ -101,8 +101,21 @@ export const initializeOtherProviders = async (enabled: CommentProvider[]) => {
           __vue_app__?: { unmount?(): void };
         };
         const app = host.__vue_app__;
+        // Twikoo's English empty state does not use the theme dictionary.
+        const syncEmptyText = () => {
+          mount.querySelectorAll<HTMLElement>(".tk-comments-no > span").forEach((node) => {
+            if (node.textContent === "No comment") {
+              const text = commentText("empty", "No comments yet");
+              if (node.textContent !== text) node.textContent = text;
+            }
+          });
+        };
+        const emptyObserver = new MutationObserver(syncEmptyText);
+        emptyObserver.observe(mount, { childList: true, subtree: true, characterData: true });
+        syncEmptyText();
         instance = {
           destroy: () => {
+            emptyObserver.disconnect();
             if (host.__vue_app__ === app) app?.unmount?.();
           },
         };
@@ -116,8 +129,9 @@ export const initializeOtherProviders = async (enabled: CommentProvider[]) => {
         });
       if (signal.aborted) instance?.destroy?.();
       else Solitude.onPageCleanup(() => instance?.destroy?.());
-    } catch {
+    } catch (error) {
       if (signal.aborted || !mount.isConnected) continue;
+      console.warn(`Unable to initialize ${provider} comments:`, error);
       mount.dataset.initialized = "false";
       setStatus(
         mount,

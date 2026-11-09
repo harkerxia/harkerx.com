@@ -28,8 +28,11 @@ export const dateLabel = (date: Date | string) =>
   }).format(new Date(date));
 export const isoDate = (date?: Date | string) =>
   date ? new Date(date).toISOString() : "";
+// Keep Cloudflare email protection from rewriting addresses and CDN versions.
 export const json = (value: unknown) =>
-  JSON.stringify(value).replace(/</g, "\\u003c");
+  JSON.stringify(value).replace(/[<@]/g, (character) =>
+    character === "<" ? "\\u003c" : "\\u0040",
+  );
 // A plus is valid in a path segment. Keep it literal so Astro does not encode it twice.
 export const termPath = (taxonomy: string, name: string) =>
   `/${taxonomy}/${encodeURIComponent(name.toLowerCase().replace(/\s+/g, "-")).replace(/%2B/gi, "+")}/`;

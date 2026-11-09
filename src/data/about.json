@@ -7,7 +7,7 @@
       "name_prefix": "I'm",
       "name": "HarkerX",
       "photo": { "image": "/img/avatar.png", "alt": "HarkerX's illustrated profile avatar" },
-      "description": "I enjoy building practical tools, figuring out how systems work, and exploring AI. I write about what I learn, what I build, and whatever else catches my interest.",
+      "description": "Enjoy building practical tools, figuring out how systems work, and exploring AI.\nI write about what I learn, what I build, and whatever else catches my interest.",
       "links": [
         { "text": "GitHub", "url": "https://github.com/harkerxia", "icon": "fab fa-github", "external": true },
         { "text": "LinkedIn", "url": "https://www.linkedin.com/in/harkerxia/", "icon": "fab fa-linkedin", "external": true },
@@ -15,7 +15,7 @@
         { "text": "Email", "url": "mailto:harkerxia@gmail.com", "icon": "fas fa-envelope" }
       ],
       "pursuit": {
-        "label": "Beyond the code",
+        "label": "Beyond the Code",
         "lines": ["A few things", "I'm into"],
         "rotating_words": ["generals.io", "Anime", "Novels", "Instrumental music"],
         "description": "And down the rabbit hole I go..."
@@ -24,7 +24,7 @@
     {
       "type": "skills_career",
       "skills": {
-        "label": "Technical stack",
+        "label": "Technical Stack",
         "title": "Things I work with",
         "items": [
           { "name": "C / C++", "icon": "fas fa-code", "color": "#5969a8" },
@@ -45,7 +45,7 @@
         ]
       },
       "career": {
-        "label": "The voyage so far",
+        "label": "The Voyage So Far",
         "title": "Charting my course",
         "summary": [
           {
@@ -164,7 +164,7 @@
     },
     {
       "type": "story",
-      "label": "About this site",
+      "label": "About This Site",
       "title": "HarkerX Harbor",
       "content": "**A harbor for all kinds of thoughts.**\n\nJust writing stuff. Stay if you like.\n\nI started blogging in 2022. HarkerX Harbor is where I keep notes on life and code, share projects, and collect ideas worth revisiting.\n\nSome posts are practical; others are just me thinking out loud. There's no fixed theme here, just whatever I'm learning, building, or curious about at the time.",
       "tags": ["Astro", "TypeScript", "Markdown", "Twikoo", "Cloudflare R2", "GitHub Pages"],
