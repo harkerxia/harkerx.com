@@ -1,6 +1,34 @@
 import { Solitude } from '../core/api';
 import { lifecycle } from '../core/lifecycle';
 export const sidebarFn = () => {
+  const connect = document.querySelector<HTMLElement>(
+    '#blog_name .back-home-button',
+  );
+  const connectTrigger =
+    connect?.querySelector<HTMLButtonElement>('.back-home-trigger');
+  if (connect && connectTrigger) {
+    const setConnectOpen = (open: boolean) => {
+      connect.classList.toggle('is-open', open);
+      connectTrigger.setAttribute('aria-expanded', String(open));
+    };
+    lifecycle.listen(connectTrigger, 'click', () => {
+      setConnectOpen(!connect.classList.contains('is-open'));
+    });
+    lifecycle.listen(document, 'pointerdown', (event) => {
+      if (event.target instanceof Node && !connect.contains(event.target))
+        setConnectOpen(false);
+    });
+    lifecycle.listen(connect, 'click', (event) => {
+      if (event.target instanceof Element && event.target.closest('a'))
+        setConnectOpen(false);
+    });
+    lifecycle.listen(document, 'keydown', (event) => {
+      if (event.key === 'Escape' && connect.classList.contains('is-open')) {
+        setConnectOpen(false);
+        connectTrigger.focus();
+      }
+    });
+  }
   const $toggleMenu = document.getElementById('toggle-menu');
   const $mobileSidebarMenus = document.getElementById('sidebar-menus');
   const $menuMask = document.getElementById('menu-mask');
@@ -10,13 +38,46 @@ export const sidebarFn = () => {
     $body.style.overflow = isOpen ? 'hidden' : '';
     Solitude[isOpen ? 'fadeIn' : 'fadeOut']($menuMask, 0.5);
     $mobileSidebarMenus.classList.toggle('open', isOpen);
+    $toggleMenu
+      .querySelector('a')
+      ?.setAttribute('aria-expanded', String(isOpen));
   };
   const closeMobileSidebar = () => {
     if ($mobileSidebarMenus.classList.contains('open')) {
       toggleMobileSidebar(false);
     }
   };
-  if (!$toggleMenu || !$mobileSidebarMenus || !$menuMask) return;
+  const menuTrigger = $toggleMenu.querySelector('a');
+  menuTrigger?.setAttribute('aria-controls', 'sidebar-menus');
+  menuTrigger?.setAttribute('aria-expanded', 'false');
+  $mobileSidebarMenus
+    .querySelectorAll<HTMLButtonElement>('[data-mobile-submenu]')
+    .forEach((trigger) => {
+      const submenu = document.getElementById(
+        trigger.getAttribute('aria-controls') || '',
+      );
+      if (!submenu) return;
+      lifecycle.listen(trigger, 'click', () => {
+        submenu.hidden = !submenu.hidden;
+        trigger.setAttribute('aria-expanded', String(!submenu.hidden));
+      });
+    });
+  lifecycle.listen($mobileSidebarMenus, 'click', (event) => {
+    if (
+      event.target instanceof Element &&
+      event.target.closest('a[href]:not([data-solitude-prevent="true"])')
+    )
+      closeMobileSidebar();
+  });
+  lifecycle.listen(document, 'keydown', (event) => {
+    if (
+      event.key === 'Escape' &&
+      $mobileSidebarMenus.classList.contains('open')
+    ) {
+      closeMobileSidebar();
+      menuTrigger?.focus();
+    }
+  });
   lifecycle.listen($toggleMenu, 'click', (event) => {
     event.preventDefault();
     toggleMobileSidebar(true);

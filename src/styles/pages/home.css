@@ -224,7 +224,7 @@
   color: var(--efu-white);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   #home_center {
     padding: 0 1rem;
   }
@@ -258,6 +258,7 @@
     opacity: 1;
     visibility: visible;
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
   .home-center-banner-item.has-banner-cover .home-center-cover-img {
     object-position: 70% center;

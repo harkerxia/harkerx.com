@@ -966,6 +966,8 @@
 }
 
 .back-home-button {
+  position: relative;
+  flex-shrink: 0;
   width: 35px;
   height: 35px;
   padding: 0 !important;
@@ -980,9 +982,31 @@
   }
 }
 
-@media screen and (max-width: 768px) {
-  .back-home-button {
-    display: none;
+.back-home-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.back-home-trigger:focus-visible {
+  outline: 2px solid var(--efu-theme);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 900px) {
+  #nav .back-home-button {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    margin-right: 0;
   }
 }
 
@@ -996,9 +1020,9 @@
   color: var(--efu-nav-hover-text);
 }
 
-.back-home-button:hover .back-menu-list-groups,
-.back-home-button:focus-within .back-menu-list-groups {
+.back-home-button.is-open .back-menu-list-groups {
   display: flex;
+  visibility: visible;
   opacity: 1;
   top: 45px;
   pointer-events: auto;
@@ -1007,18 +1031,42 @@
 }
 
 @media screen and (min-width: 768px) {
-  .back-home-button:hover .back-menu-list-groups,
-  .back-home-button:focus-within .back-menu-list-groups {
+  .back-home-button.is-open .back-menu-list-groups {
     left: 0;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .back-home-button:hover .back-menu-list-groups,
-  .back-home-button:focus-within .back-menu-list-groups {
+  .back-home-button.is-open .back-menu-list-groups {
     padding-bottom: 8px;
     box-shadow: var(--efu-shadow-border);
     left: 0;
+  }
+}
+
+@media (hover: hover) {
+  .back-home-button:hover .back-menu-list-groups {
+    display: flex;
+    visibility: visible;
+    opacity: 1;
+    top: 45px;
+    left: 0;
+    pointer-events: auto;
+    transform: scale(1);
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #nav .back-home-button .back-menu-list-groups {
+    width: min(342px, calc(100vw - 24px));
+    left: 0;
+  }
+  #nav .back-home-button .back-menu-list {
+    width: 100%;
+  }
+  #nav .back-home-button .back-menu-item {
+    width: calc(50% - 16px);
+    min-height: 44px;
   }
 }
 
@@ -1032,6 +1080,7 @@
 }
 
 .back-home-button .back-menu-list-groups {
+  visibility: hidden;
   top: 45px;
   transform: scale(0.8);
   transform-origin: top left;

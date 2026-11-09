@@ -33,7 +33,36 @@ export const initHomeCenter = () => {
   if (!banner || !titleLink || !titleTag) return;
   let activeIndex = 0;
   let scrollFrame = 0;
-  lifecycle.add(() => cancelAnimationFrame(scrollFrame));
+  let resizeFrame = 0;
+  let settleTimer: ReturnType<typeof setTimeout>;
+  let touching = false;
+  let loopEnabled = false;
+  const mobile = window.matchMedia('(max-width: 900px)');
+  const clones: HTMLElement[] = [];
+  const slideWidth = () => banners[0]?.getBoundingClientRect().width || 0;
+  const scrollToIndex = (
+    index: number,
+    behavior: ScrollBehavior = 'instant',
+  ) => {
+    banner.scrollTo({
+      left: slideWidth() * (index + Number(loopEnabled)),
+      behavior,
+    });
+  };
+  const settleLoop = () => {
+    if (!loopEnabled || touching) return;
+    const width = slideWidth();
+    if (!width) return;
+    const slot = Math.round(banner.scrollLeft / width);
+    // Rebase only after scrolling settles, onto an identical original slide.
+    if (Math.abs(banner.scrollLeft - slot * width) > 1) return;
+    if (slot === 0) scrollToIndex(banners.length - 1);
+    else if (slot === banners.length + 1) scrollToIndex(0);
+  };
+  const scheduleSettle = () => {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settleLoop, 180);
+  };
   const getCachedColor = (src: string) => {
     try {
       const cache = JSON.parse(localStorage.getItem('Solitude') || '{}') || {};
@@ -134,9 +163,14 @@ export const initHomeCenter = () => {
     if (!color || !banners[index]) return;
     const colorOp = `color-mix(in srgb, ${color} 14%, transparent)`;
     const colorDeep = `color-mix(in srgb, ${color} 87%, transparent)`;
-    banners[index].style.setProperty('--home-center-theme', color);
-    banners[index].style.setProperty('--home-center-theme-op', colorOp);
-    banners[index].style.setProperty('--home-center-theme-op-deep', colorDeep);
+    [
+      banners[index],
+      ...clones.filter((clone) => Number(clone.dataset.index) === index),
+    ].forEach((slide) => {
+      slide.style.setProperty('--home-center-theme', color);
+      slide.style.setProperty('--home-center-theme-op', colorOp);
+      slide.style.setProperty('--home-center-theme-op-deep', colorDeep);
+    });
     items[index]?.style.setProperty('--item-theme', color);
     items[index]?.style.setProperty('--item-theme-op', colorOp);
     items[index]?.style.setProperty('--item-theme-op-deep', colorDeep);
@@ -193,9 +227,10 @@ export const initHomeCenter = () => {
       item.classList.toggle('active', isActive);
       item.setAttribute('aria-current', String(isActive));
     });
-    indicators.forEach((indicator, indicatorIndex) =>
-      indicator.classList.toggle('active', indicatorIndex === index),
-    );
+    indicators.forEach((indicator, indicatorIndex) => {
+      indicator.classList.toggle('active', indicatorIndex === index);
+      indicator.setAttribute('aria-current', String(indicatorIndex === index));
+    });
     const selected = banners[index];
     const selectedStyle = getComputedStyle(selected);
     const color = selectedStyle.getPropertyValue('--home-center-theme').trim();
@@ -228,22 +263,10 @@ export const initHomeCenter = () => {
     lifecycle.listen(item, 'mouseenter', () => select(index));
     lifecycle.listen(item, 'focusin', () => select(index));
   });
-  banners.forEach((item, index) => {
-    let pointerType = '';
-    lifecycle.listen(
-      item,
-      'pointerdown',
-      (event) => (pointerType = event.pointerType),
-      true,
-    );
+  const bindBanner = (item: HTMLElement) => {
+    // Native touch scrolling suppresses clicks; an actual tap opens the article.
     lifecycle.listen(item, 'click', (event) => {
-      if (pointerType === 'touch' && window.innerWidth <= 768) {
-        event.preventDefault();
-        select(index);
-      } else {
-        navigate(item.dataset.link || '', event);
-      }
-      pointerType = '';
+      navigate(item.dataset.link || '', event);
     });
     lifecycle.listen(item, 'keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
@@ -251,22 +274,98 @@ export const initHomeCenter = () => {
         navigate(item.dataset.link || '', event);
       }
     });
+  };
+  banners.forEach(bindBanner);
+  if (banners.length > 1) {
+    [banners.length - 1, 0].forEach((index) => {
+      const clone = banners[index].cloneNode(true) as HTMLElement;
+      clone.dataset.loopClone = 'true';
+      clone.setAttribute('aria-hidden', 'true');
+      clone.removeAttribute('role');
+      clone.tabIndex = -1;
+      clone.querySelectorAll('img').forEach((image) => {
+        image.loading = 'eager';
+        image.alt = '';
+      });
+      clones.push(clone);
+      bindBanner(clone);
+    });
+  }
+  const updateLayout = () => {
+    clearTimeout(settleTimer);
+    cancelAnimationFrame(scrollFrame);
+    touching = false;
+    loopEnabled = mobile.matches && clones.length === 2;
+    if (loopEnabled) {
+      if (!clones[0].isConnected) {
+        banner.prepend(clones[0]);
+        banner.append(clones[1]);
+      }
+    } else clones.forEach((clone) => clone.remove());
+    banner.dataset.mobileLoop = String(loopEnabled);
+    if (mobile.matches) scrollToIndex(activeIndex);
+    else banner.scrollTo({ left: 0, behavior: 'instant' });
+  };
+  let previousWidth = 0;
+  const resizeObserver = new ResizeObserver(() => {
+    const width = banner.getBoundingClientRect().width;
+    if (Math.abs(width - previousWidth) < 0.1) return;
+    previousWidth = width;
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(updateLayout);
+  });
+  resizeObserver.observe(banner);
+  lifecycle.listen(mobile, 'change', updateLayout);
+  lifecycle.listen(
+    banner,
+    'touchstart',
+    () => {
+      touching = true;
+      clearTimeout(settleTimer);
+    },
+    { passive: true },
+  );
+  const finishTouch = () => {
+    touching = false;
+    settleLoop();
+    scheduleSettle();
+  };
+  lifecycle.listen(banner, 'touchend', finishTouch, { passive: true });
+  lifecycle.listen(banner, 'touchcancel', finishTouch, { passive: true });
+  lifecycle.listen(banner, 'scrollend', settleLoop);
+  lifecycle.add(() => {
+    cancelAnimationFrame(scrollFrame);
+    cancelAnimationFrame(resizeFrame);
+    clearTimeout(settleTimer);
+    resizeObserver.disconnect();
+    clones.forEach((clone) => clone.remove());
+    delete container.dataset.initialized;
   });
   indicators.forEach((indicator, index) => {
     lifecycle.listen(indicator, 'click', (event) => {
       event.preventDefault();
       select(index);
-      banner.scrollTo({ left: banner.clientWidth * index, behavior: 'smooth' });
+      if (mobile.matches)
+        scrollToIndex(
+          index,
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'instant'
+            : 'smooth',
+        );
     });
   });
   lifecycle.listen(banner, 'scroll', () => {
     cancelAnimationFrame(scrollFrame);
     scrollFrame = requestAnimationFrame(() => {
-      if (window.innerWidth > 768 || !banner.clientWidth) return;
-      select(Math.round(banner.scrollLeft / banner.clientWidth));
+      const width = slideWidth();
+      if (!mobile.matches || !width) return;
+      const slot = Math.round(banner.scrollLeft / width) - Number(loopEnabled);
+      select((slot + banners.length) % banners.length);
+      scheduleSettle();
     });
   });
   select(0);
+  updateLayout();
   banners.forEach((item, index) => {
     const configuredColor = item.dataset.color?.trim();
     if (configuredColor) {

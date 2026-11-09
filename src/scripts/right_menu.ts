@@ -251,11 +251,11 @@ document.addEventListener("contextmenu", (ele) => {
   });
   rm.globalEvent = ele;
   const target = ele.target;
-  if (!(target instanceof HTMLElement)) return;
-  const link = target instanceof HTMLAnchorElement ? target.href : "";
+  if (!(target instanceof Element)) return;
+  const link = target.closest<HTMLAnchorElement>("a[href]")?.href || "";
   const src = target instanceof HTMLImageElement ? target.currentSrc : "";
   const tagName = target.tagName.toLowerCase();
-  const cls = target.className.toLowerCase();
+  const cls = (target.getAttribute("class") || "").toLowerCase();
   const display =
     !!(selectTextNow && window.getSelection()) ||
     !!link ||

@@ -53,8 +53,14 @@ navButtons.sort(
         {Object.keys(cfg.nav.group).length > 0 && (
           <div
             class="back-home-button tw:flex tw:items-center tw:justify-center"
-            tabindex="-1"
           >
+            <button
+              class="back-home-trigger"
+              type="button"
+              aria-label="Navigation links"
+              aria-expanded="false"
+              aria-controls="nav-connect-links"
+            >
             <svg
               class="back-home-button-icon"
               viewBox="0 0 24 24"
@@ -63,7 +69,8 @@ navButtons.sort(
             >
               <path d="M6.75 2.5C9.1 2.5 11 4.4 11 6.75V11H6.75a4.25 4.25 0 1 1 0-8.5ZM6.75 13H11v4.25A4.25 4.25 0 1 1 6.75 13ZM17.25 2.5a4.25 4.25 0 0 1 0 8.5H13V6.75a4.25 4.25 0 0 1 4.25-4.25ZM13 13h4.25A4.25 4.25 0 1 1 13 17.25Z" />
             </svg>
-            <div class="back-menu-list-groups tw:[.back-home-button_&]:absolute tw:[.back-home-button_&]:flex-col">
+            </button>
+            <div id="nav-connect-links" class="back-menu-list-groups tw:[.back-home-button_&]:absolute tw:[.back-home-button_&]:flex-col">
               {Object.entries(cfg.nav.group)
                 .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
                 .map(([name, items]) => (

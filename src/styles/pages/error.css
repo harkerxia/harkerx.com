@@ -137,6 +137,7 @@
 }
 
 #body-wrap.error .aside-list .aside-list-item .content .title {
+  text-align: center;
   -webkit-line-clamp: 2;
   overflow: hidden;
   display: -webkit-box;

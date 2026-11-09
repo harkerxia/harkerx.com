@@ -333,6 +333,7 @@
 }
 
 #sidebar #sidebar-menus {
+  visibility: hidden;
   position: fixed;
   top: 16px;
   right: 8px;
@@ -340,7 +341,7 @@
   max-width: 90vw;
   height: calc(100% - 32px);
   background: var(--efu-maskbgdeep);
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0s linear 0.3s;
   z-index: 1004;
   border: var(--style-border-always);
   padding-bottom: 44px;
@@ -414,56 +415,68 @@
   color: var(--efu-secondtext);
 }
 
+/* Mobile navigation buttons and the Library disclosure. */
 #sidebar #sidebar-menus .menus_items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 0 16px;
 }
 
 #sidebar #sidebar-menus .menus_items .site-page {
-  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 24px;
+  padding: 12px 16px;
   color: var(--efu-fontcolor);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 720;
+  line-height: 1.4;
+  text-align: left;
+  background: var(--efu-card-bg);
+  border: var(--style-border-always);
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-#sidebar #sidebar-menus .menus_items .menus_item > .site-page {
-  font-size: 12px;
-  color: var(--efu-secondtext);
+#sidebar #sidebar-menus .menus_items .site-page:focus-visible {
+  outline: 2px solid var(--efu-theme);
+  outline-offset: 2px;
 }
 
-#sidebar #sidebar-menus .menus_items .expand {
-  position: absolute;
-  top: 0.78em;
-  right: 0.4rem;
-  transition: transform 0.3s ease 0s;
+#sidebar #sidebar-menus .menus_items .mobile-menu-chevron {
+  margin-left: auto;
+  font-size: 14px;
+  transition: transform 0.2s ease;
 }
 
-#sidebar #sidebar-menus .menus_items .expand.hide {
-  transform: rotate(90deg) !important;
+#sidebar #sidebar-menus [aria-expanded="true"] .mobile-menu-chevron {
+  transform: rotate(180deg);
 }
 
 #sidebar #sidebar-menus .menus_items .menus_item_child {
-  margin: 0 -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0 0 0 12px;
   list-style: none;
 }
 
-#sidebar #sidebar-menus .menus_items .menus_item_child .site-page.child {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px;
-  border-radius: 8px;
-  border: var(--style-border-always);
-  background: var(--efu-card-bg);
+#sidebar #sidebar-menus .menus_items .menus_item_child[hidden] {
+  display: none;
 }
 
 #sidebar #sidebar-menus .menus_items .menus_item_child li {
-  width: calc(50% - 8px);
-  margin: 4px;
+  width: 100%;
+  margin: 0;
 }
 
-#sidebar #sidebar-menus .menus_items .menus_item_child .site-page.child span {
-  line-height: 1;
-  margin-top: 8px;
+#sidebar #sidebar-menus .menus_items .menus_item_child .site-page.child {
+  min-height: 44px;
+  font-size: 16px;
 }
 
 #sidebar #sidebar-menus > hr {
@@ -471,6 +484,8 @@
 }
 
 #sidebar #sidebar-menus.open {
+  visibility: visible;
+  transition-delay: 0s;
   transform: scale(1);
   opacity: 1;
   pointer-events: auto;

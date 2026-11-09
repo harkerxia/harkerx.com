@@ -1,23 +1,34 @@
 ---
 import { config, url } from '../lib/site';
+interface Props {
+  mobile?: boolean;
+}
+const { mobile = false } = Astro.props;
 ---
 
 <div class="menus_items tw:[#nav_&]:relative tw:[#nav_&]:text-center tw:[#nav_&]:flex tw:[#nav_&]:flex-row tw:[#nav_&]:justify-center tw:[#nav_&]:box-border">
-  {config.menus.map((item) => (
+  {config.menus.map((item, index) => {
+    const Tag = mobile && item.children ? 'button' : 'a';
+    return (
     <div class="menus_item tw:[#nav_.menus\_items_&]:flex tw:[#nav_.menus\_items_&]:flex-col tw:[#nav_.menus\_items_&]:items-center tw:[#nav_.menus\_items_&]:relative">
-      <a
+      <Tag
+        type={Tag === 'button' ? 'button' : undefined}
+        aria-expanded={mobile && item.children ? 'false' : undefined}
+        aria-controls={mobile && item.children ? `mobile-menu-${index}` : undefined}
+        data-mobile-submenu={mobile && item.children ? 'true' : undefined}
         class="site-page tw:[#nav_&]:relative tw:[#nav_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.menus\_items_&]:relative tw:[#sidebar_#sidebar-menus_.menus\_items_&]:block tw:[#sidebar_#sidebar-menus_.menus\_items_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.menus\_items_.menus\_item_>_&]:flex"
-        href={item.children || item.action ? '#' : url(item.url)}
-        data-solitude-action={item.children ? 'noop' : item.action}
+        href={Tag === 'button' ? undefined : item.children || item.action ? '#' : url(item.url)}
+        data-solitude-action={item.children ? (mobile ? undefined : 'noop') : item.action}
         data-solitude-prevent={
-          item.children || item.action ? 'true' : undefined
+          (!mobile && item.children) || item.action ? 'true' : undefined
         }
       >
         {item.icon && <i class={`solitude ${item.icon}`} />}
         <span>{item.name}</span>
-      </a>
+        {mobile && item.children && <i class="mobile-menu-chevron fas fa-chevron-down" aria-hidden="true" />}
+      </Tag>
       {item.children && (
-        <ul class="menus_item_child tw:[#nav_.menus\_items_.menus\_item_&]:absolute tw:[#nav_.menus\_items_.menus\_item_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_.menus\_items_&]:flex tw:[#sidebar_#sidebar-menus_.menus\_items_&]:flex-row tw:[#sidebar_#sidebar-menus_.menus\_items_&]:flex-wrap">
+        <ul id={mobile ? `mobile-menu-${index}` : undefined} hidden={mobile ? true : undefined} class="menus_item_child tw:[#nav_.menus\_items_.menus\_item_&]:absolute tw:[#nav_.menus\_items_.menus\_item_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_.menus\_items_&]:flex tw:[#sidebar_#sidebar-menus_.menus\_items_&]:flex-row tw:[#sidebar_#sidebar-menus_.menus\_items_&]:flex-wrap">
           {item.children.map((child) => (
             <li>
               <a
@@ -34,5 +45,6 @@ import { config, url } from '../lib/site';
         </ul>
       )}
     </div>
-  ))}
+    );
+  })}
 </div>

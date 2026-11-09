@@ -203,10 +203,10 @@
 
 #about-page .about-pursuit-card { justify-content: flex-start; background: var(--efu-card-bg); }
 
-#about-page .about-pursuit-card h2 { display: flex; flex-direction: column; font-size: 36px; }
+#about-page .about-pursuit-card h2 { display: flex; flex-direction: column; margin-top: 6px; font-size: 36px; }
 
 #about-page .about-pursuit-note {
-  margin: 8px 0 0;
+  margin: 12px 0 0;
   color: var(--efu-secondtext);
   font-size: 14px;
   font-weight: 400;
@@ -545,6 +545,14 @@
 #about-page .about-story-content strong { color: var(--efu-fontcolor); }
 
 #about-page .about-story-content > p:first-child { font-size: 22px; line-height: 1.5; }
+
+#about-page .about-story-content .about-site-motto {
+  color: rgba(153, 153, 153, .85);
+  font-size: 14px;
+  line-height: 1.6;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(153, 153, 153, .3);
+}
 
 #about-page .about-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 24px; }
 
