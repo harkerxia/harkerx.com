@@ -19,6 +19,18 @@ jobs:
 
       - name: Install, build, and upload your site
         uses: withastro/action@v6
+        with:
+          build-cmd: pnpm check && pnpm build
+
+      - name: Save generated README files
+        uses: actions/upload-artifact@v7
+        with:
+          name: recent-posts-readme
+          path: |
+            README.md
+            README.zh-CN.md
+          if-no-files-found: error
+          retention-days: 1
 
   deploy:
     needs: build
@@ -31,3 +43,50 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  update-readme:
+    needs: [build, deploy]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the current main branch
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Check that this deployment is still current
+        id: current
+        env:
+          BUILT_SHA: ${{ github.sha }}
+        run: |
+          if [ "$(git rev-parse HEAD)" = "$BUILT_SHA" ]; then
+            echo "update=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "A newer commit exists; its deployment will update the READMEs."
+          fi
+
+      - name: Download generated README files
+        if: steps.current.outputs.update == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: recent-posts-readme
+          path: ${{ runner.temp }}/recent-posts-readme
+
+      - name: Commit recent posts only when changed
+        if: steps.current.outputs.update == 'true'
+        env:
+          GENERATED_READMES: ${{ runner.temp }}/recent-posts-readme
+        run: |
+          cp "$GENERATED_READMES/README.md" README.md
+          cp "$GENERATED_READMES/README.zh-CN.md" README.zh-CN.md
+          if git diff --quiet -- README.md README.zh-CN.md; then
+            echo "Recent posts are already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- README.md README.zh-CN.md
+          git commit -m "docs: update recent posts"
+          git push origin HEAD:main

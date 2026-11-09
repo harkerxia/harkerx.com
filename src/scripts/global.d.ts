@@ -1,4 +1,4 @@
-import type { SolitudeAPI } from './api-types';
+import type { SolitudeAPI } from "./api-types";
 export interface TypeItInstance {
   go(): TypeItInstance;
   destroy(): void;
@@ -85,7 +85,6 @@ declare global {
       options: Record<string, unknown>,
     ) => { destroy(): void };
     home_subtitle?: string[];
-    loadTwoComment?: () => void;
     updatePostsBasedOnComments?: () => void;
     md5?: (value: string) => string;
     initializeCommentBarrage?: (...args: unknown[]) => void;

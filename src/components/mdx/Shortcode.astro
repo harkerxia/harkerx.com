@@ -1,8 +1,8 @@
 ---
-import { randomUUID } from 'node:crypto';
-import { getPosts, contentPath } from '../../lib/content';
-import { cfg, t, url } from '../../lib/site';
-import type { ShortcodeProps } from '../../lib/page-types';
+import { randomUUID } from "node:crypto";
+import { getPosts, contentPath } from "../../lib/content";
+import { cfg, t, url } from "../../lib/site";
+import type { ShortcodeProps } from "../../lib/page-types";
 export interface Props extends ShortcodeProps {
   kind: string;
 }
@@ -10,60 +10,60 @@ const { kind, ...p } = Astro.props;
 const id = p.id ?? `solitude-${kind}-${randomUUID()}`;
 const src = p.url ?? p.src;
 const external =
-  typeof (p.url ?? p.link) === 'string' &&
-  /^https?:/.test(p.url ?? p.link ?? '');
-const type = p.type ?? 'default';
+  typeof (p.url ?? p.link) === "string" &&
+  /^https?:/.test(p.url ?? p.link ?? "");
+const type = p.type ?? "default";
 const icons: Record<string, string> = {
-  info: 'circle-info',
-  blue: 'circle-info',
-  danger: 'circle-exclamation',
-  red: 'circle-exclamation',
-  warning: 'triangle-exclamation',
-  success: 'circle-check',
-  green: 'circle-check',
-  primary: 'star',
-  purple: 'star',
-  orange: 'bell',
-  disabled: 'ban',
+  info: "circle-info",
+  blue: "circle-info",
+  danger: "circle-exclamation",
+  red: "circle-exclamation",
+  warning: "triangle-exclamation",
+  success: "circle-check",
+  green: "circle-check",
+  primary: "star",
+  purple: "star",
+  orange: "bell",
+  disabled: "ban",
 };
-const inline = kind === 'hideInline';
-const HideTag = inline ? 'span' : 'div';
-const TextTag = kind === 'p' ? 'p' : 'span';
+const inline = kind === "hideInline";
+const HideTag = inline ? "span" : "div";
+const TextTag = kind === "p" ? "p" : "span";
 const host =
-  kind === 'gitea'
-    ? String(p.host ?? p.server ?? '').replace(/\/$/, '')
+  kind === "gitea"
+    ? String(p.host ?? p.server ?? "").replace(/\/$/, "")
     : `https://${kind}.com`;
 const endpoint =
-  kind === 'github'
+  kind === "github"
     ? `https://api.github.com/repos/${p.repo}`
-    : kind === 'gitlab'
-      ? `https://gitlab.com/api/v4/projects/${encodeURIComponent(p.repo ?? '')}`
-      : kind === 'gitee'
+    : kind === "gitlab"
+      ? `https://gitlab.com/api/v4/projects/${encodeURIComponent(p.repo ?? "")}`
+      : kind === "gitee"
         ? `https://gitee.com/api/v5/repos/${p.repo}`
         : `${host}/api/v1/repos/${p.repo}`;
-const allSeriesPosts = kind === 'series' ? await getPosts() : [];
+const allSeriesPosts = kind === "series" ? await getPosts() : [];
 const seriesName =
   p.name ??
   allSeriesPosts.find((post) => url(contentPath(post)) === Astro.url.pathname)
     ?.data.series[0];
 const seriesPosts = allSeriesPosts
-  .filter((post) => post.data.series.includes(seriesName ?? ''))
+  .filter((post) => post.data.series.includes(seriesName ?? ""))
   .sort((a, b) => +a.data.date - +b.data.date);
 ---
 
-{['note', 'subnote'].includes(kind) && (
+{["note", "subnote"].includes(kind) && (
   <aside
-    class={`solitude-tag note ${kind === 'subnote' ? 'subnote' : ''} ${type} ${p.style ?? 'flat'} no-icon has-icon`}
+    class={`solitude-tag note ${kind === "subnote" ? "subnote" : ""} ${type} ${p.style ?? "flat"} no-icon has-icon`}
   >
     <span class="note-icon" aria-hidden="true">
-      <i class={`fas fa-${icons[type] ?? 'note-sticky'}`} />
+      <i class={`fas fa-${icons[type] ?? "note-sticky"}`} />
     </span>
     <div class="note-content">
       <slot />
     </div>
   </aside>
 )}
-{kind === 'fold' && (
+{kind === "fold" && (
   <details class="solitude-tag tag-fold" open={p.open === true}>
     <summary class="tag-fold-summary">
       <span class="tag-fold-title">{p.title}</span>
@@ -74,9 +74,9 @@ const seriesPosts = allSeriesPosts
     </div>
   </details>
 )}
-{['hideInline', 'hideBlock', 'hideToggle'].includes(kind) && (
+{["hideInline", "hideBlock", "hideToggle"].includes(kind) && (
   <HideTag
-    class={`solitude-tag tag-hide tag-hide-${kind === 'hideToggle' ? 'toggle' : inline ? 'inline' : 'block'}`}
+    class={`solitude-tag tag-hide tag-hide-${kind === "hideToggle" ? "toggle" : inline ? "inline" : "block"}`}
   >
     <button
       type="button"
@@ -84,21 +84,21 @@ const seriesPosts = allSeriesPosts
       aria-expanded="false"
       aria-controls={id}
     >
-      {p.title ?? p.text ?? 'Click'}
+      {p.title ?? p.text ?? "Click"}
     </button>
     <HideTag id={id} class="tag-hide-content" hidden>
       <slot />
     </HideTag>
   </HideTag>
 )}
-{kind === 'tabs' && (
+{kind === "tabs" && (
   <div class="solitude-tag tag-tabs tabs" id={id} data-solitude-tabs>
     <div class="tab-contents">
       <slot />
     </div>
   </div>
 )}
-{kind === 'tab' && (
+{kind === "tab" && (
   <section
     class="tab-item-content"
     id={id}
@@ -108,7 +108,7 @@ const seriesPosts = allSeriesPosts
     <slot />
   </section>
 )}
-{kind === 'gallery' && (
+{kind === "gallery" && (
   <div
     class="solitude-tag tag-gallery gallery-container"
     data-columns={p.columns}
@@ -116,18 +116,18 @@ const seriesPosts = allSeriesPosts
     <slot />
   </div>
 )}
-{kind === 'galleryItem' && (
+{kind === "galleryItem" && (
   <div class="solitude-tag tag-gallery-item gallery-item">
-    <img class="nolazyload" src={url(p.src)} alt={p.alt ?? ''} loading="lazy" />
+    <img class="nolazyload" src={url(p.src)} alt={p.alt ?? ""} loading="lazy" />
   </div>
 )}
-{kind === 'galleryGroup' && (
+{kind === "galleryGroup" && (
   <figure class="solitude-tag tag-gallery-group gallery-group">
     {p.img && (
       <img
         class="gallery-group-img no-lightbox"
         src={url(p.img)}
-        alt={p.title ?? p.name ?? ''}
+        alt={p.title ?? p.name ?? ""}
       />
     )}
     <figcaption>
@@ -139,51 +139,51 @@ const seriesPosts = allSeriesPosts
     </figcaption>
   </figure>
 )}
-{kind === 'img' && (
+{kind === "img" && (
   <figure class="solitude-tag tag-image-wrap">
     <img
       class="solitude-tag tag-image"
       src={url(p.src)}
-      alt={p.alt ?? ''}
+      alt={p.alt ?? ""}
       loading="lazy"
       style={p.style}
     />
     {p.caption && <figcaption>{p.caption}</figcaption>}
   </figure>
 )}
-{kind === 'inlineImg' && (
+{kind === "inlineImg" && (
   <img
     class="solitude-tag inline-img tag-inline-image no-lightbox"
     src={url(p.src)}
-    alt={p.alt ?? ''}
+    alt={p.alt ?? ""}
     style={p.height ? `height:${p.height}` : undefined}
     loading="lazy"
   />
 )}
-{kind === 'button' && (
+{kind === "button" && (
   <a
-    class={`solitude-tag st-btn tag-button ${p.option ?? ''} ${p.icon ? 'has-icon' : ''} ${p.icon && !p.text ? 'is-icon-only' : ''}`}
-    href={url(p.url ?? '#')}
-    target={external ? '_blank' : undefined}
-    rel={external ? 'noopener noreferrer' : undefined}
+    class={`solitude-tag st-btn tag-button ${p.option ?? ""} ${p.icon ? "has-icon" : ""} ${p.icon && !p.text ? "is-icon-only" : ""}`}
+    href={url(p.url ?? "#")}
+    target={external ? "_blank" : undefined}
+    rel={external ? "noopener noreferrer" : undefined}
   >
     {p.icon && <i class={`solitude ${p.icon}`} aria-hidden="true" />}
     {p.text ? <span>{p.text}</span> : <slot />}
   </a>
 )}
-{kind === 'link' && (
+{kind === "link" && (
   <div class="solitude-tag tag-link-card">
     <a
       class="solitude-tag tag-link"
       href={url(p.url ?? p.link)}
-      target={external ? '_blank' : undefined}
-      rel={external ? 'noopener noreferrer' : undefined}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
     >
       <div class="tag-link-tips">
         <i
-          class={`fas fa-${external ? 'arrow-up-right-from-square' : 'house'}`}
+          class={`fas fa-${external ? "arrow-up-right-from-square" : "house"}`}
         />
-        {external ? t('externalLink') : t('internalLink')}
+        {external ? t("externalLink") : t("internalLink")}
       </div>
       <div class="tag-link-bottom">
         <div class="tag-link-left">
@@ -198,10 +198,10 @@ const seriesPosts = allSeriesPosts
     </a>
   </div>
 )}
-{kind === 'card' && (
+{kind === "card" && (
   <article
-    class={`solitude-tag card_box tag-card ${p.cover || p.bg ? 'has-cover' : 'no-cover'} ${p.url ? 'has-action' : 'no-action'}`}
-    style={`width:${p.width ?? '100%'};${p.height ? `height:${p.height};` : ''}`}
+    class={`solitude-tag card_box tag-card ${p.cover || p.bg ? "has-cover" : "no-cover"} ${p.url ? "has-action" : "no-action"}`}
+    style={`width:${p.width ?? "100%"};${p.height ? `height:${p.height};` : ""}`}
   >
     {(p.cover || p.bg) && (
       <div
@@ -212,12 +212,12 @@ const seriesPosts = allSeriesPosts
     )}
     <div class="card_body">
       <div class="card_top">
-        {p.icon && <i class={p.icon} />}{' '}
+        {p.icon && <i class={p.icon} />}{" "}
         {p.tag && <span class="card_tag">{p.tag}</span>}
       </div>
       <div class="card_mask card_info">
         <div class="card_content">
-          <span class="card_title">{p.title ?? p.name ?? t('untitled')}</span>
+          <span class="card_title">{p.title ?? p.name ?? t("untitled")}</span>
           <span class="card_description">
             {p.desc}
             <slot />
@@ -227,7 +227,7 @@ const seriesPosts = allSeriesPosts
           {p.star != null && (
             <div
               class="card_rating"
-              aria-label={t('cardRating').replace('{rating}', String(p.star))}
+              aria-label={t("cardRating").replace("{rating}", String(p.star))}
             >
               <i class="fa-solid fa-star" aria-hidden="true" />
               <span aria-hidden="true">{p.star} / 5</span>
@@ -237,12 +237,12 @@ const seriesPosts = allSeriesPosts
             <a
               class="card_action"
               href={url(p.url)}
-              aria-label={t('cardDetails').replace(
-                '{name}',
-                p.title ?? p.name ?? t('untitled'),
+              aria-label={t("cardDetails").replace(
+                "{name}",
+                p.title ?? p.name ?? t("untitled"),
               )}
-              target={external ? '_blank' : undefined}
-              rel={external ? 'noopener noreferrer' : undefined}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noopener noreferrer" : undefined}
             >
               <i class="fa-solid fa-arrow-right" aria-hidden="true" />
             </a>
@@ -252,7 +252,7 @@ const seriesPosts = allSeriesPosts
     </div>
   </article>
 )}
-{['github', 'gitlab', 'gitee', 'gitea'].includes(kind) && (
+{["github", "gitlab", "gitee", "gitea"].includes(kind) && (
   <article
     class="solitude-tag repo-card tag-repo"
     data-repo-provider={kind}
@@ -262,7 +262,7 @@ const seriesPosts = allSeriesPosts
     <div class="repo-card-header">
       <span class="repo-provider">
         <i
-          class={`fab fa-${['gitee', 'gitea'].includes(kind) ? 'git-alt' : kind}`}
+          class={`fab fa-${["gitee", "gitea"].includes(kind) ? "git-alt" : kind}`}
         />
         {kind}
       </span>
@@ -274,9 +274,9 @@ const seriesPosts = allSeriesPosts
       target="_blank"
       rel="noopener noreferrer"
     >
-      {p.repo?.split('/').pop()}
+      {p.repo?.split("/").pop()}
     </a>
-    <p class="repo-desc">{t('repoLoading')}</p>
+    <p class="repo-desc">{t("repoLoading")}</p>
     <div class="repo-card-footer">
       <div class="repo-gist" aria-label="Repository statistics">
         <span>
@@ -289,12 +289,12 @@ const seriesPosts = allSeriesPosts
         </span>
       </div>
       <span class="repo-status" role="status">
-        {t('loading')}
+        {t("loading")}
       </span>
     </div>
   </article>
 )}
-{kind === 'audio' && (
+{kind === "audio" && (
   <div class="solitude-tag audio tag-audio">
     <span class="tag-media-icon" aria-hidden="true">
       <i class="fas fa-music" />
@@ -304,7 +304,7 @@ const seriesPosts = allSeriesPosts
     </audio>
   </div>
 )}
-{kind === 'video' && (
+{kind === "video" && (
   <div class="solitude-tag video tag-video">
     <video
       controls
@@ -315,7 +315,7 @@ const seriesPosts = allSeriesPosts
     </video>
   </div>
 )}
-{kind === 'videos' && (
+{kind === "videos" && (
   <div class="solitude-tag videos tag-videos" data-columns={p.col ?? 2}>
     {(p.sources ?? []).map((source: string) => (
       <video controls preload="metadata">
@@ -325,37 +325,37 @@ const seriesPosts = allSeriesPosts
     <slot />
   </div>
 )}
-{kind === 'youtube' && (
+{kind === "youtube" && (
   <div class="solitude-tag video-container tag-video-embed tag-video-youtube">
     <iframe
-      src={`https://www.youtube${p.privacy === false ? '' : '-nocookie'}.com/embed/${encodeURIComponent(p.id ?? '')}`}
+      src={`https://www.youtube${p.privacy === false ? "" : "-nocookie"}.com/embed/${encodeURIComponent(p.id ?? "")}`}
       title="YouTube video player"
       loading="lazy"
       allowfullscreen
     ></iframe>
   </div>
 )}
-{kind === 'bvideo' && (
+{kind === "bvideo" && (
   <div class="solitude-tag video-container tag-video-embed tag-video-bilibili">
     <iframe
-      src={`https://player.bilibili.com/player.html?autoplay=0&bvid=${encodeURIComponent(p.bvid ?? p.id ?? '')}`}
+      src={`https://player.bilibili.com/player.html?autoplay=0&bvid=${encodeURIComponent(p.bvid ?? p.id ?? "")}`}
       title="Bilibili video player"
       loading="lazy"
       allowfullscreen
     ></iframe>
   </div>
 )}
-{kind === 'mermaid' && cfg.mermaid && (
+{kind === "mermaid" && cfg.mermaid && (
   <div class="solitude-tag tag-mermaid mermaid">
     {p.code}
     <slot />
   </div>
 )}
-{kind === 'chartjs' && cfg.chart && (
+{kind === "chartjs" && cfg.chart && (
   <div
     class:list={[
-      'solitude-tag chartjs-container tag-chart',
-      { 'chartjs-abreast': p.layout },
+      "solitude-tag chartjs-container tag-chart",
+      { "chartjs-abreast": p.layout },
     ]}
     data-chartjs-id={id}
     data-width={p.width ? `${p.width}%` : undefined}
@@ -367,7 +367,7 @@ const seriesPosts = allSeriesPosts
     {p.description && <div class="chartjs-desc">{p.description}</div>}
   </div>
 )}
-{kind === 'score' && (
+{kind === "score" && (
   <div
     class="solitude-tag abc-music-sheet tag-score"
     data-params={JSON.stringify(p.params ?? {})}
@@ -377,15 +377,15 @@ const seriesPosts = allSeriesPosts
     <slot />
   </div>
 )}
-{kind === 'typeit' && (
+{kind === "typeit" && (
   <div class="solitude-tag tag-typeit typeit">
     <span id={id} data-typeit data-speed={p.speed ?? 80}>
       <slot />
     </span>
   </div>
 )}
-{kind === 'timeline' && (
-  <div class={`solitude-tag timeline tag-timeline ${p.color ?? ''}`}>
+{kind === "timeline" && (
+  <div class={`solitude-tag timeline tag-timeline ${p.color ?? ""}`}>
     {p.title && (
       <div class="timeline-item headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
         <div class="timeline-item-title">
@@ -396,9 +396,9 @@ const seriesPosts = allSeriesPosts
     <slot />
   </div>
 )}
-{kind === 'timenode' && (
+{kind === "timenode" && (
   <div class="timeline-item solitude-tag timenode tag-timenode">
-    <div class="timeline-item-title meta tw:[#bber_&]:flex tw:[#bber_&]:items-center">
+    <div class="timeline-item-title meta tw:[#notes_&]:flex tw:[#notes_&]:items-center">
       <div class="item-circle">
         <p>{p.time}</p>
       </div>
@@ -409,10 +409,10 @@ const seriesPosts = allSeriesPosts
     </div>
   </div>
 )}
-{['checkbox', 'radio'].includes(kind) && (
-  <div class={`solitude-tag checkbox tag-choice ${p.style ?? ''}`}>
+{["checkbox", "radio"].includes(kind) && (
+  <div class={`solitude-tag checkbox tag-choice ${p.style ?? ""}`}>
     <input
-      type={kind === 'radio' ? 'radio' : 'checkbox'}
+      type={kind === "radio" ? "radio" : "checkbox"}
       checked={p.checked !== false}
       disabled
       aria-label={p.label ?? kind}
@@ -422,46 +422,46 @@ const seriesPosts = allSeriesPosts
     </span>
   </div>
 )}
-{kind === 'bubble' && (
+{kind === "bubble" && (
   <span class="solitude-tag bubble tag-bubble">
     <span class="bubble-content" tabindex="0">
       {p.text}
       <slot />
     </span>
-    <span class={`bubble-notation bg-${p.color ?? 'blue'}`}>
+    <span class={`bubble-notation bg-${p.color ?? "blue"}`}>
       {p.notation ?? p.position}
     </span>
   </span>
 )}
-{kind === 'keyboard' && (
+{kind === "keyboard" && (
   <kbd class="solitude-tag keyboard-tag tag-keyboard">
     {p.text}
     <slot />
   </kbd>
 )}
-{kind === 'label' && (
-  <mark class={`solitude-tag hl-label tag-label ${p.color ?? 'default'}`}>
+{kind === "label" && (
+  <mark class={`solitude-tag hl-label tag-label ${p.color ?? "default"}`}>
     {p.text}
     <slot />
   </mark>
 )}
-{kind === 'spoiler' && (
+{kind === "spoiler" && (
   <span
-    class={`solitude-tag spoiler tag-spoiler ${p.style ?? 'block'}-text`}
+    class={`solitude-tag spoiler tag-spoiler ${p.style ?? "block"}-text`}
     tabindex="0"
     aria-label="Hidden text"
   >
     <slot />
   </span>
 )}
-{['p', 'span'].includes(kind) && (
+{["p", "span"].includes(kind) && (
   <TextTag
-    class={`solitude-tag tag-text tag-${kind === 'p' ? 'paragraph' : 'span'} ${p.color ?? ''}`}
+    class={`solitude-tag tag-text tag-${kind === "p" ? "paragraph" : "span"} ${p.color ?? ""}`}
   >
     <slot />
   </TextTag>
 )}
-{kind === 'series' && (
+{kind === "series" && (
   <ol class="solitude-tag series-items tag-series">
     {seriesPosts.map((post) => (
       <li>
@@ -470,7 +470,7 @@ const seriesPosts = allSeriesPosts
     ))}
   </ol>
 )}
-{kind === 'flink' && (
+{kind === "flink" && (
   <div class="solitude-tag flink tag-flink">
     {(p.groups ?? []).map((g) => (
       <>
@@ -488,7 +488,7 @@ const seriesPosts = allSeriesPosts
               >
                 <img
                   class="flink-avatar cf-friends-avatar no-lightbox"
-                  src={url(item.avatar ?? '/img/default_avatar.avif')}
+                  src={url(item.avatar ?? "/img/icons/favicon.png")}
                   alt=""
                   loading="lazy"
                 />

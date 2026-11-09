@@ -1,6 +1,6 @@
 // Keep chronological DOM order while packing cards into the shortest column.
 // Observing each card also handles delayed images, fonts and music players.
-class SolitudeBrevity extends HTMLElement {
+class SolitudeNotes extends HTMLElement {
   #observer?: ResizeObserver;
   #frame = 0;
 
@@ -10,7 +10,7 @@ class SolitudeBrevity extends HTMLElement {
     const cards = Array.from(list.querySelectorAll<HTMLElement>('.item'));
     const layout = () => {
       const styles = getComputedStyle(list);
-      const columns = Number(styles.getPropertyValue('--bber-columns')) || 1;
+      const columns = Number(styles.getPropertyValue('--notes-columns')) || 1;
       const gap = parseFloat(styles.columnGap) || 8;
       const width = (list.clientWidth - gap * (columns - 1)) / columns;
       cards.forEach((card) => {
@@ -41,6 +41,6 @@ class SolitudeBrevity extends HTMLElement {
   }
 }
 
-if (!customElements.get('solitude-brevity')) {
-  customElements.define('solitude-brevity', SolitudeBrevity);
+if (!customElements.get('solitude-notes')) {
+  customElements.define('solitude-notes', SolitudeNotes);
 }

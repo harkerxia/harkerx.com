@@ -1,5 +1,5 @@
 ---
-import { cfg, t } from '../lib/site';
+import { cfg, t } from "../lib/site";
 interface Props {
   enabled?: boolean;
 }
@@ -11,29 +11,29 @@ const { enabled = true } = Astro.props;
     <div class="comment-head">
       <div class="comment-headline">
         <i class="solitude fas fa-comments" />
-        <span>{t('comments')}</span>
+        <span>{t("comments")}</span>
       </div>
     </div>
     <div class="comment-wrap">
       {cfg.comment.use
-        .split(',')
+        .split(",")
         .map((name) => name.trim())
         .map((name) =>
-          name === 'giscus' ? (
+          name === "giscus" ? (
             <div class="comment-item giscus-comment" />
-          ) : name === 'twikoo' ? (
-            <div class="comment-item" id="twikoo" />
-          ) : name === 'waline' ? (
+          ) : name === "twikoo" ? (
+            <div class="comment-item" id="twikoo-container" />
+          ) : name === "waline" ? (
             <div class="comment-item" id="waline-wrap" />
-          ) : name === 'valine' ? (
+          ) : name === "valine" ? (
             <div
               class:list={[
-                'comment-item vcomment',
-                { 'valine-theme-style': cfg.valine.style },
+                "comment-item vcomment",
+                { "valine-theme-style": cfg.valine.style },
               ]}
               id="vcomment"
             />
-          ) : name === 'artalk' ? (
+          ) : name === "artalk" ? (
             <div class="comment-item" id="artalk-wrap" />
           ) : null,
         )}

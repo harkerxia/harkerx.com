@@ -1,10 +1,40 @@
 import { Solitude } from '../core/api';
+import { lifecycle } from '../core/lifecycle';
+
+export const hasPageAside = (): boolean =>
+  Boolean(document.getElementById('aside-content'));
+
+export function restoreAsideStatus(root = document.documentElement): void {
+  root.classList.toggle(
+    'hide-aside',
+    Solitude.saveToLocal.get('aside-status') === 'hide',
+  );
+}
+
+// Apply the preference before Astro displays the incoming page.
+document.addEventListener('astro:before-swap', (event) => {
+  restoreAsideStatus(event.newDocument.documentElement);
+});
+
+export const initGreeting = () => {
+  Solitude.setTimeState();
+  lifecycle.listen(document, 'visibilitychange', () => {
+    if (document.hidden) Solitude.wasPageHidden = true;
+    else Solitude.setTimeState();
+  });
+  const timer = window.setInterval(() => {
+    if (!document.hidden) Solitude.setTimeState();
+  }, 60_000);
+  lifecycle.add(() => window.clearInterval(timer));
+};
+
 export const asideActions = {
   timeoutId: undefined as ReturnType<typeof setTimeout> | undefined,
   lastWittyWord: '',
   wasPageHidden: false,
   consoleNavState: null as { fixed: boolean; visible: boolean } | null,
   switchHideAside() {
+    if (!hasPageAside()) return;
     const htmlClassList = document.documentElement.classList;
     const consoleHideAside =
       document.querySelector<HTMLElement>('#consoleHideAside');
@@ -12,6 +42,8 @@ export const asideActions = {
     Solitude.saveToLocal.set('aside-status', isHideAside ? 'show' : 'hide', 1);
     htmlClassList.toggle('hide-aside');
     consoleHideAside?.classList.toggle('on', !isHideAside);
+    Solitude.rightMenu?.updateAside();
+    Solitude.hideRightMenu?.();
   },
   initConsoleState() {
     const consoleHideAside =
@@ -108,36 +140,39 @@ export const asideActions = {
     if (el) {
       const hours = new Date().getHours();
       const lang = Solitude.config.aside.state;
-      const localData = getLocalData([
+      const nick = getLocalNickname([
         'twikoo',
         'WALINE_USER_META',
         'WALINE_USER',
         '_v_Cache_Meta',
         'ArtalkUser',
       ]);
-      function getLocalData(keys: string[]) {
-        for (let key of keys) {
-          const data = localStorage.getItem(key);
-          if (data) {
-            try {
-              return JSON.parse(data);
-            } catch (error) {
-              localStorage.removeItem(key);
+      function getLocalNickname(keys: string[]): string | null {
+        for (const key of keys) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) continue;
+            const data: unknown = JSON.parse(raw);
+            if (!data || typeof data !== 'object') continue;
+            const cached = data as Record<string, unknown>;
+            for (const value of [cached.nick, cached.display_name]) {
+              if (typeof value === 'string' && value.trim()) return value.trim();
             }
+          } catch {
+            // A stale provider cache or unavailable storage must not hide the greeting.
           }
         }
         return null;
       }
-      const nick = localData ? localData.nick || localData.display_name : null;
       const prefix = Solitude.wasPageHidden
         ? Solitude.config.aside.witty_comment.back + nick
         : Solitude.config.aside.witty_comment.prefix + nick;
       const greetings = [
         { start: 0, end: 5, text: nick ? prefix : lang.goodnight },
         { start: 6, end: 10, text: nick ? prefix : lang.morning },
-        { start: 11, end: 14, text: nick ? prefix : lang.noon },
-        { start: 15, end: 18, text: nick ? prefix : lang.afternoon },
-        { start: 19, end: 24, text: nick ? prefix : lang.night },
+        { start: 11, end: 13, text: nick ? prefix : lang.noon },
+        { start: 14, end: 17, text: nick ? prefix : lang.afternoon },
+        { start: 18, end: 23, text: nick ? prefix : lang.night },
       ];
       const greeting = greetings.find(
         (g) => hours >= g.start && hours <= g.end,

@@ -1,16 +1,16 @@
-import { cfg, config, url } from '../../lib/site';
+import { cfg, config, url } from "../../lib/site";
 export function getStaticPaths() {
-  return cfg.pwa.enable && cfg.pwa.manifest.endsWith('.webmanifest')
+  return cfg.pwa.enable && cfg.pwa.manifest.endsWith(".webmanifest")
     ? [
         {
           params: {
             parent:
-              cfg.pwa.manifest.slice(1).split('/').slice(0, -1).join('/') ||
+              cfg.pwa.manifest.slice(1).split("/").slice(0, -1).join("/") ||
               undefined,
             manifest: cfg.pwa.manifest
-              .split('/')
+              .split("/")
               .pop()!
-              .replace(/\.webmanifest$/, ''),
+              .replace(/\.webmanifest$/, ""),
           },
         },
       ]
@@ -21,19 +21,18 @@ export function GET() {
     {
       name: config.title,
       short_name: config.title,
-      start_url: url('/'),
+      start_url: url("/"),
       scope: config.base,
-      display: 'standalone',
+      display: "standalone",
       theme_color: cfg.pwa.theme_color,
       background_color: cfg.theme_color.light,
       icons: [
         {
           src: url(cfg.pwa.apple_touch_icon),
-          sizes: '180x180',
-          type: 'image/png',
+          type: "image/png",
         },
       ],
     },
-    { headers: { 'Content-Type': 'application/manifest+json' } },
+    { headers: { "Content-Type": "application/manifest+json" } },
   );
 }

@@ -1,34 +1,34 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import { applyInitialTheme } from '../scripts/theme-bootstrap';
-import { cfg, config, t, url, absolute, json } from '../lib/site';
-import { getPosts, getPages, contentPath, type Post } from '../lib/content';
-import { runtimeConfig } from '../lib/runtime-config';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Search from '../components/Search.astro';
-import Overlays from '../components/Overlays.astro';
-import Capsule from '../components/Capsule.astro';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'katex/dist/katex.min.css';
-import '../styles/main.css';
-import layerOrder from '../styles/layers.css?inline';
-import aboutStyle from '../styles/pages/about.css?url';
-import brevityStyle from '../styles/pages/brevity.css?url';
-import '../styles/astro.css';
-import '../styles/custom.css';
+import { ClientRouter } from "astro:transitions";
+import { applyInitialTheme } from "../scripts/theme-bootstrap";
+import { cfg, config, t, url, absolute, json } from "../lib/site";
+import { getPosts, getPages, contentPath, type Post } from "../lib/content";
+import { runtimeConfig } from "../lib/runtime-config";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Search from "../components/Search.astro";
+import Overlays from "../components/Overlays.astro";
+import Capsule from "../components/Capsule.astro";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "katex/dist/katex.min.css";
+import mainStyle from "../styles/main.css?url";
+import layerOrder from "../styles/layers.css?inline";
+import aboutStyle from "../styles/pages/about.css?url";
+import notesStyle from "../styles/pages/notes.css?url";
+import "../styles/astro.css";
+import "../styles/custom.css";
 interface Props {
   title?: string;
   description?: string;
   type?: string;
   post?: Post;
-  page?: import('../lib/page-types').PageMetadata;
+  page?: import("../lib/page-types").PageMetadata;
   toc?: boolean;
 }
 const {
   title = config.title,
   description = config.description,
-  type = 'page',
+  type = "page",
   post,
   page = {},
   toc = false,
@@ -38,35 +38,41 @@ const posts = await getPosts(),
 const runtime = runtimeConfig(posts, pages, { ...page, type });
 const pageConfig = {
   is_post: Boolean(post),
-  is_page: type !== 'solitude' && !post,
-  is_home: type === 'solitude',
+  is_page: type !== "solitude" && !post,
+  is_home: type === "solitude",
   page: type,
-  toc: page.toc !== false && Boolean(post || type === 'page'),
+  toc: page.toc !== false && Boolean(post || type === "page"),
   comment: page.comment !== false,
   color: page.color ?? false,
 };
+const canonicalUrl = type === "404"
+  ? absolute("/404.html")
+  : post
+    ? absolute(contentPath(post))
+    : new URL(Astro.url.pathname, config.site).href;
 const vars = {
-  'solitude-theme-light': cfg.theme_color.light,
-  'solitude-theme-dark': cfg.theme_color.dark,
-  'solitude-nav-hover-light': cfg.theme_color.nav_hover_text.light,
-  'solitude-nav-hover-dark': cfg.theme_color.nav_hover_text.dark,
-  'solitude-font-size': cfg.font.font_size,
-  'solitude-code-font-size': cfg.font.code_font_size,
-  'solitude-font-family': cfg.font.font_family,
-  'solitude-code-font-family': cfg.font.code_font_family,
-  'solitude-index-columns': String(cfg.index_post_list.column),
+  "solitude-theme-light": cfg.theme_color.light,
+  "solitude-theme-dark": cfg.theme_color.dark,
+  "solitude-nav-hover-light": cfg.theme_color.nav_hover_text.light,
+  "solitude-nav-hover-dark": cfg.theme_color.nav_hover_text.dark,
+  "solitude-font-size": cfg.font.font_size,
+  "solitude-code-font-size": cfg.font.code_font_size,
+  "solitude-font-family": cfg.font.font_family,
+  "solitude-code-font-family": cfg.font.code_font_family,
+  "solitude-index-columns": String(cfg.index_post_list.column),
 };
 const inlineVars = Object.entries(vars)
   .map(([key, value]) => `--${key}:${value}`)
-  .join(';');
+  .join(";");
 ---
 
 <!doctype html>
 <html lang={config.locale} data-theme="light" style={inlineVars}>
   <head>
     <style is:inline set:html={layerOrder}></style>
-    {type === 'about' && <link rel="stylesheet" href={aboutStyle} />}
-    {type === 'brevity' && <link rel="stylesheet" href={brevityStyle} />}
+    <link rel="stylesheet" href={mainStyle} />
+    {type === "about" && <link rel="stylesheet" href={aboutStyle} />}
+    {type === "notes" && <link rel="stylesheet" href={notesStyle} />}
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -75,32 +81,25 @@ const inlineVars = Object.entries(vars)
     <meta name="generator" content={Astro.generator} />
     <title>{type==='solitude'?config.title:`${title} | ${config.title}`}</title>
     <meta name="description" content={description} />
+    {type === "404" && <meta name="robots" content="noindex, follow" />}
     <link
       rel="canonical"
-      href={
-        post
-          ? absolute(contentPath(post))
-          : new URL(Astro.url.pathname, config.site).href
-      }
+      href={canonicalUrl}
     />
     <link
       rel="alternate"
       type="application/rss+xml"
       title={config.title}
-      href={url('/index.xml')}
+      href={url("/rss.xml")}
     />
     <link rel="icon" href={url(cfg.site.icon)} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta
       property="og:url"
-      content={
-        post
-          ? absolute(contentPath(post))
-          : new URL(Astro.url.pathname, config.site).href
-      }
+      content={canonicalUrl}
     />
-    <meta property="og:type" content={post ? 'article' : 'website'} />
+    <meta property="og:type" content={post ? "article" : "website"} />
     {(post?.data.cover || page.cover) && (
       <meta
         property="og:image"
@@ -117,11 +116,13 @@ const inlineVars = Object.entries(vars)
           sizes="180x180"
           href={url(cfg.pwa.apple_touch_icon)}
         />
-        <link
-          rel="mask-icon"
-          href={url(cfg.pwa.mask_icon)}
-          color={cfg.pwa.theme_color}
-        />
+        {cfg.pwa.mask_icon.endsWith(".svg") && (
+          <link
+            rel="mask-icon"
+            href={url(cfg.pwa.mask_icon)}
+            color={cfg.pwa.theme_color}
+          />
+        )}
         <link
           rel="icon"
           type="image/png"
@@ -155,10 +156,10 @@ const inlineVars = Object.entries(vars)
   </head>
   <body
     class:list={{
-      'solitude-memorial':
+      "solitude-memorial":
         cfg.memorial.enable &&
         cfg.memorial.date.includes(
-          new Intl.DateTimeFormat('sv-SE', { timeZone: config.timeZone })
+          new Intl.DateTimeFormat("sv-SE", { timeZone: config.timeZone })
             .format(new Date())
             .slice(5),
         ),
@@ -176,7 +177,7 @@ const inlineVars = Object.entries(vars)
     )}
     {cfg.loading.pace && <div id="navigation-progress" aria-hidden="true" />}
     <a class="skip-link" href="#content-inner">
-      {t('startReading')}
+      {t("startReading")}
     </a>
     <Overlays
       posts={posts}
@@ -185,34 +186,33 @@ const inlineVars = Object.entries(vars)
         Boolean(cfg.comment.use) &&
         page.comment !== false &&
         ![
-          'solitude',
-          'about',
-          'music',
-          'tags',
-          'categories',
-          'series',
-          'brevity',
-          'recentcomment',
-          'archives',
-          'taxonomy',
-          'term',
-          '404',
+          "solitude",
+          "about",
+          "music",
+          "tags",
+          "categories",
+          "series",
+          "notes",
+          "recentcomment",
+          "archives",
+          "taxonomy",
+          "term",
+          "404",
         ].includes(type)
       }
     />
     <div
       id="body-wrap"
-      class={type === '404' ? 'error' : post ? 'post' : 'page'}
+      class={type === "404" ? "error" : post ? "post" : "page"}
     >
       <Header title={title} post={post} />
       <slot />
-      {type !== '404' && <Footer />}
+      {type !== "404" && <Footer />}
     </div>
     <Search />
     <Capsule />
     <script>
-      import '../scripts/entry';
-      import '../scripts/tab-title';
+      import "../scripts/entry";
     </script>
     {cfg.extends.body.map((html: string) => (
       <Fragment set:html={html} />

@@ -146,6 +146,7 @@
 }
 
 .card-info .bottom-group {
+  align-items: center;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -162,7 +163,7 @@
   color: var(--profile-card-text-color);
   font-size: 20px;
   line-height: 1;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   transition: color 0.2s;
 }
 
@@ -175,13 +176,17 @@
 }
 
 .card-info .bottom-group .social-icons {
-  flex: 1;
-  gap: 5px;
+  --profile-social-size: 32px;
+  --profile-social-icon-size: 16px;
+  --profile-social-gap: 5px;
+  flex: 0 0 calc(var(--profile-social-size) * 2 + var(--profile-social-gap));
+  flex-wrap: wrap;
+  gap: var(--profile-social-gap);
 }
 
 .card-info .bottom-group .social-icons .social-icon {
   color: var(--efu-fontcolor);
-  flex: 0 0 40px;
+  flex: 0 0 var(--profile-social-size);
   transition: all 0.3s;
 }
 
@@ -197,16 +202,16 @@
 .card-info .bottom-group .social-icons .social-icon i {
   background: var(--efu-white-op);
   color: var(--efu-white);
-  flex: 0 0 40px;
-  font-size: 1rem;
-  width: 40px;
-  height: 40px;
+  flex: 0 0 var(--profile-social-size);
+  font-size: var(--profile-social-icon-size);
+  width: var(--profile-social-size);
+  height: var(--profile-social-size);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease 0s;
-  padding: 8px;
-  border-radius: 32px;
+  padding: 0;
+  border-radius: 50%;
 }
 
 [data-theme='dark'] .card-info .bottom-group .social-icons .social-icon i {
@@ -1008,12 +1013,12 @@
 
 #footer {
   background: linear-gradient(180deg, var(--efu-card-bg-none) 0, var(--efu-card-bg) 25%);
-  margin-top: 0.5rem;
+  margin-top: 24px;
 }
 
 @media screen and (max-width: 768px) {
   #footer {
-    margin-top: 0;
+    margin-top: 24px;
   }
 }
 

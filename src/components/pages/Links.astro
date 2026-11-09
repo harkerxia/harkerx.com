@@ -1,30 +1,22 @@
 ---
-import links from '../../data/links.json';
-import { cfg, t, url } from '../../lib/site';
+import linksData from "../../data/links.json";
+import { t, url } from "../../lib/site";
+import type { LinksData } from "../../lib/page-types";
+import { friendBannerPairs } from "../../lib/friend-banner";
+const links: LinksData = linksData;
 interface Props {
-  data?: {
-    links: (Omit<(typeof links.links)[number], 'link_list'> & {
-      link_list: import('../../lib/page-types').FriendLink[];
-    })[];
-  };
+  data?: LinksData;
   title?: string;
   description?: string;
-  comment?: boolean;
 }
 const {
-  title = t('links'),
-  description = '',
-  comment = true,
+  title = t("links"),
+  description = "",
   data = links,
 } = Astro.props;
-const groups: NonNullable<Props['data']>['links'] = data.links;
+const groups: NonNullable<Props["data"]>["links"] = data.links;
 const all = groups.flatMap((g) => g.link_list);
-const cycle = all.length
-  ? Array.from(
-      { length: Math.max(24, all.length * 2) },
-      (_, i) => all[i % all.length],
-    )
-  : [];
+const pairs = friendBannerPairs(all);
 ---
 
 {all.length > 0 && (
@@ -36,61 +28,53 @@ const cycle = all.length
       <div class="banners-title-small">{description}</div>
       <div class="banners-title-big">{title}</div>
     </div>
-    <div class="banner-button-group tw:[div#banners_&]:absolute tw:[div#banners_&]:flex tw:[.author-content-item_.card-content_&]:absolute">
-      <button
-        class="banner-button secondary tw:[div#banners_&]:flex tw:[div#banners_&]:items-center tw:[div#banners_&]:cursor-pointer tw:[.author-content-item_.card-content_.banner-button-group_&]:justify-center tw:[.author-content-item_.card-content_.banner-button-group_&]:flex tw:[.author-content-item_.card-content_.banner-button-group_&]:items-center tw:[.author-content-item_.card-content_.banner-button-group_&]:cursor-pointer"
-        type="button"
-        data-solitude-action="travelling"
-      >
-        <i class="solitude fas fa-tower-broadcast" />
-        <span class="banner-button-text">{t('randomLink')}</span>
-      </button>
-      <a
-        class="banner-button tw:[div#banners_&]:flex tw:[div#banners_&]:items-center tw:[div#banners_&]:cursor-pointer tw:[.author-content-item_.card-content_.banner-button-group_&]:justify-center tw:[.author-content-item_.card-content_.banner-button-group_&]:flex tw:[.author-content-item_.card-content_.banner-button-group_&]:items-center tw:[.author-content-item_.card-content_.banner-button-group_&]:cursor-pointer"
-        href={
-          cfg.comment.use && comment ? '#post-comment' : '#friend-links-apply'
-        }
-      >
-        <i class="solitude fas fa-circle-chevron-right" />
-        <span class="banner-button-text">{t('applyFriendLink')}</span>
-      </a>
-    </div>
     <div class="tags-group-all nowrapMove tw:flex" aria-label={title}>
-      <div class="tags-group-wrapper">
-        {cycle
-          .filter((_, i) => i % 2 === 0)
-          .map((_, i) => (
-            <div class="tags-group-icon-pair">
-              {cycle.slice(i * 2, i * 2 + 2).map((item) => (
-                <a
-                  class="tags-group-icon"
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={item.name}
-                >
-                  <img
-                    class="no-lightbox"
-                    src={url(item.avatar ?? '/img/default_avatar.avif')}
-                    alt=""
-                  />
-                  <span class="tags-group-title">{item.name}</span>
-                </a>
-              ))}
+      {[0, 1].map((row) => (
+        <div class:list={["tags-group-wrapper", { "tags-group-wrapper--reverse": row === 1 }]}>
+          {[0, 1].map((copy) => (
+            <div class="tags-group-sequence" aria-hidden={copy === 1 ? "true" : undefined}>
+              {pairs.map((pair) => {
+                const item = pair[row]!;
+                return (
+                  <a
+                    class="tags-group-icon"
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={item.name}
+                    aria-label={item.name}
+                    tabindex={copy === 1 ? -1 : undefined}
+                  >
+                    <img
+                      class="no-lightbox"
+                      src={url(item.avatar ?? "/img/icons/favicon.png")}
+                      alt=""
+                    />
+                  </a>
+                );
+              })}
             </div>
           ))}
-      </div>
+        </div>
+      ))}
     </div>
   </div>
 )}
+{all.length === 0 && (
+  <header class="page-title-wrap friend-links-heading">
+    <h1 class="page-title">{title}</h1>
+    {description && <p>{description}</p>}
+  </header>
+)}
 <div class="flink article-container" id="friend-links-list">
+  {all.length === 0 && <p class="friend-links-empty">{t("linksEmpty")}</p>}
   {groups.map((g) => (
     <>
       <h2>
         {g.class_name} ({g.link_list.length})
       </h2>
       <div class="flink-desc">{g.class_desc}</div>
-      {g.type === 'card' ? (
+      {g.type === "card" ? (
         <div class="site-card-group">
           {g.link_list.map((item) => (
             <div class="site-card">
@@ -118,7 +102,7 @@ const cycle = all.length
                 <div class="site-card-avatar">
                   <img
                     class="flink-avatar cf-friends-avatar no-lightbox"
-                    src={url(item.avatar ?? '/img/default_avatar.avif')}
+                    src={url(item.avatar ?? "/img/icons/favicon.png")}
                     alt=""
                   />
                   <div class="img-alt is-center">{item.name}</div>
@@ -144,7 +128,7 @@ const cycle = all.length
               >
                 <img
                   class="flink-avatar cf-friends-avatar no-lightbox"
-                  src={url(item.avatar ?? '/img/default_avatar.avif')}
+                  src={url(item.avatar ?? "/img/icons/favicon.png")}
                   alt=""
                 />
                 <div class="flink-item-info">
@@ -162,7 +146,5 @@ const cycle = all.length
       )}
     </>
   ))}
-  <div id="friend-links-apply">
-    <slot />
-  </div>
+  <slot />
 </div>

@@ -93,6 +93,11 @@
   line-height: inherit;
 }
 
+/* Keep the article heading sizes inside notes without duplicating their values. */
+.article-container.post-content aside.solitude-tag.note :is(h3, h4, h5) {
+  font-size: revert-layer;
+}
+
 .article-container aside.solitude-tag.note a {
   color: var(--tag-note-color);
 }

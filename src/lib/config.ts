@@ -1,4 +1,4 @@
-import defaults from './defaults.json';
+import defaults from "./defaults.json";
 
 export interface Link {
   name: string;
@@ -7,7 +7,7 @@ export interface Link {
   action?: string;
   children?: Link[];
 }
-export type Locale = 'zh-CN' | 'zh-TW' | 'en' | 'es';
+export type Locale = "zh-CN" | "zh-TW" | "en" | "es";
 export interface ThemeLink extends Link {
   img?: string;
   id?: string;
@@ -24,34 +24,33 @@ export interface Recommendation {
   enable?: boolean;
 }
 interface EmptyArrays {
-  'nav.group': Record<string, ThemeLink[]>;
-  'footer.group': Record<string, ThemeLink[]>;
-  'nav.right.custom': ThemeLink[];
-  'hometop.recommendList': Recommendation[];
-  'aside.my_card.witty_words': string[];
-  'aside.my_card.information': ThemeLink[];
-  'aside.tags.highlight_list': string[];
-  'post.award.list': { name: string; qrcode: string }[];
-  'post.share.list': string[];
-  'right_menu.custom_list': ThemeLink[];
-  'footer.information.left': ThemeLink[];
-  'footer.information.right': ThemeLink[];
-  'footer.links': ThemeLink[];
-  'footer.beian': { name: string; url?: string; icon?: string }[];
-  'keyboard.list': {
+  "nav.group": Record<string, ThemeLink[]>;
+  "footer.group": Record<string, ThemeLink[]>;
+  "nav.right.custom": ThemeLink[];
+  "nav.right.order": string[];
+  "hometop.recommendList": Recommendation[];
+  "aside.my_card.witty_words": string[];
+  "aside.my_card.information": ThemeLink[];
+  "aside.tags.highlight_list": string[];
+  "right_menu.custom_list": ThemeLink[];
+  "footer.information.left": ThemeLink[];
+  "footer.information.right": ThemeLink[];
+  "footer.links": ThemeLink[];
+  "footer.beian": { name: string; url?: string; icon?: string }[];
+  "keyboard.list": {
     name?: string;
     modifier: string;
     key: string;
     action?: string;
     url?: string;
   }[];
-  'memorial.date': string[];
-  'search.tags': string[];
+  "memorial.date": string[];
+  "search.tags": string[];
   verify_site: string[];
-  'extends.head': string[];
-  'extends.body': string[];
+  "extends.head": string[];
+  "extends.body": string[];
 }
-type Widen<T, P extends string = ''> = P extends keyof EmptyArrays
+type Widen<T, P extends string = ""> = P extends keyof EmptyArrays
   ? EmptyArrays[P]
   : T extends null
     ? string | null
@@ -61,7 +60,7 @@ type Widen<T, P extends string = ''> = P extends keyof EmptyArrays
         ? {
             [K in keyof T]: Widen<
               T[K],
-              P extends '' ? K & string : `${P}.${K & string}`
+              P extends "" ? K & string : `${P}.${K & string}`
             >;
           }
         : T;
@@ -84,17 +83,23 @@ export interface SiteConfig {
   menus: Link[];
   theme: ThemeConfig;
 }
+type SiteIdentity = Pick<
+  SiteConfig,
+  "site" | "title" | "description" | "author"
+>;
+type SiteConfigInput = SiteIdentity &
+  DeepPartial<Omit<SiteConfig, keyof SiteIdentity>>;
 export function mergeConfig<T>(base: T, override: DeepPartial<T>): T {
   const result = structuredClone(base) as Record<string, unknown>;
   for (const [key, value] of Object.entries(override ?? {})) {
-    if (key === '__proto__' || key === 'constructor' || key === 'prototype')
+    if (key === "__proto__" || key === "constructor" || key === "prototype")
       continue;
     result[key] =
       value &&
-      typeof value === 'object' &&
+      typeof value === "object" &&
       !Array.isArray(value) &&
       result[key] &&
-      typeof result[key] === 'object'
+      typeof result[key] === "object"
         ? mergeConfig(
             result[key] as Record<string, unknown>,
             value as Record<string, unknown>,
@@ -103,40 +108,39 @@ export function mergeConfig<T>(base: T, override: DeepPartial<T>): T {
   }
   return result as T;
 }
-export function defineSolitudeConfig(
-  input: DeepPartial<SiteConfig>,
-): SiteConfig {
-  const config = mergeConfig<SiteConfig>(
-    {
-      site: 'https://example.org',
-      base: '/',
-      title: 'Solitude',
-      description: 'A place to write, collect, and share.',
-      locale: 'en',
-      timeZone: 'UTC',
-      hasCJKLanguage: false,
-      author: { name: 'Solitude' },
-      pagination: 10,
-      menus: [],
-      theme: defaults as ThemeConfig,
-    },
-    input,
-  );
+export function defineSolitudeConfig(input: SiteConfigInput): SiteConfig {
+  const { theme, ...site } = input;
+  const config: SiteConfig = {
+    base: "/",
+    locale: "en",
+    timeZone: "UTC",
+    hasCJKLanguage: false,
+    pagination: 10,
+    menus: [],
+    ...site,
+    theme: mergeConfig<ThemeConfig>(defaults as ThemeConfig, theme ?? {}),
+  };
+  if (
+    config.theme.site.name.class === "text" &&
+    theme?.site?.name?.custom === undefined
+  ) {
+    config.theme.site.name.custom = config.title;
+  }
   if (!/^https?:\/\//.test(config.site))
-    throw new Error('site must be an absolute HTTP(S) URL');
+    throw new Error("site must be an absolute HTTP(S) URL");
   if (!Number.isInteger(config.pagination) || config.pagination < 1)
-    throw new Error('pagination must be a positive integer');
-  if (!['zh-CN', 'zh-TW', 'en', 'es'].includes(config.locale))
-    throw new Error('Unsupported locale');
-  if (!config.base.startsWith('/') || !config.base.endsWith('/'))
-    throw new Error('base must start and end with /');
-  if (!['local', 'algolia', 'docsearch'].includes(config.theme.search.type))
-    throw new Error('Unknown search provider');
-  for (const p of config.theme.comment.use.split(',').filter(Boolean))
-    if (!['twikoo', 'waline', 'valine', 'artalk', 'giscus'].includes(p.trim()))
+    throw new Error("pagination must be a positive integer");
+  if (!["zh-CN", "zh-TW", "en", "es"].includes(config.locale))
+    throw new Error("Unsupported locale");
+  if (!config.base.startsWith("/") || !config.base.endsWith("/"))
+    throw new Error("base must start and end with /");
+  if (!["local", "algolia", "docsearch"].includes(config.theme.search.type))
+    throw new Error("Unknown search provider");
+  for (const p of config.theme.comment.use.split(",").filter(Boolean))
+    if (!["twikoo", "waline", "valine", "artalk", "giscus"].includes(p.trim()))
       throw new Error(`Unknown comment provider: ${p}`);
   for (const shortcut of config.theme.keyboard.list)
     if (Boolean(shortcut.action) === Boolean(shortcut.url))
-      throw new Error('A shortcut requires exactly one of action or url');
+      throw new Error("A shortcut requires exactly one of action or url");
   return config;
 }

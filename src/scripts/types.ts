@@ -1,7 +1,7 @@
-export type SearchProvider = 'local' | 'algolia' | 'docsearch' | false;
-export type CoverColorProvider = 'local' | 'api' | 'ave' | false;
+export type SearchProvider = "local" | "algolia" | "docsearch" | false;
+export type CoverColorProvider = "local" | "api" | "ave" | false;
 export type CommentProvider =
-  'twikoo' | 'waline' | 'valine' | 'artalk' | 'giscus';
+  "twikoo" | "waline" | "valine" | "artalk" | "giscus";
 
 export interface FeatureModules {
   search: SearchProvider;
@@ -15,7 +15,7 @@ export interface FeatureModules {
 
 export interface KeyboardShortcutConfiguration {
   name?: string;
-  modifier: 'shift' | 'mod' | string;
+  modifier: "shift" | "mod" | string;
   key: string;
   action?: string;
   url?: string;
@@ -74,18 +74,11 @@ export interface HighlightConfiguration {
 }
 
 export type SolitudeSiteConfiguration = ReturnType<
-  typeof import('../lib/runtime-config').runtimeConfig
+  typeof import("../lib/runtime-config").runtimeConfig
 > & {
-  copyright?: {
-    limit: number;
-    author: string;
-    link: string;
-    source: string;
-    info: string;
-  };
   docsearch?: ReturnType<
-    typeof import('../lib/runtime-config').runtimeConfig
-  >['search']['docsearch'];
+    typeof import("../lib/runtime-config").runtimeConfig
+  >["search"]["docsearch"];
 };
 
 export interface SolitudePageConfiguration {
@@ -102,5 +95,5 @@ export interface SolitudeLifecycleEvents {
   ready: { config: SolitudeSiteConfiguration; page: SolitudePageConfiguration };
   beforeNavigate: undefined;
   afterNavigate: { page: SolitudePageConfiguration };
-  themeChange: { theme: 'light' | 'dark' };
+  themeChange: { theme: "light" | "dark" };
 }

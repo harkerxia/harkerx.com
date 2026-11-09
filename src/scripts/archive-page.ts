@@ -220,7 +220,6 @@ export const archivePageController = (() => {
           'archive-page-item-category',
           post.primaryCategory || this.labels.uncategorized,
         ),
-        createElement('span', 'archive-page-item-divider', '/'),
         createElement('span', 'archive-page-item-date', post.dateLabel),
       );
       main.append(title, meta);

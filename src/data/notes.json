@@ -1,0 +1,13 @@
+{
+  "title": "Thoughts",
+  "header": {
+    "cover": "/img/notes-banner.svg",
+    "description": "Where thoughts come to rest."
+  },
+  "items": [
+    {
+      "date": "2026-11-08",
+      "content": "Example note: A little space for ideas worth keeping. Replace this sample with your own thoughts."
+    }
+  ]
+}

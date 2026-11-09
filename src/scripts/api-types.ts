@@ -52,7 +52,6 @@ export type SolitudeAPI = typeof actions &
     hideRightMenu?(): void;
     openSearch?(): void;
     selectedText?: string;
-    travelling?(): Promise<void>;
     randomLinksList?(): Promise<void>;
     friendLinks?: { init(): void; load(): Promise<unknown> };
     registerShortcutAction?(name: string, handler: () => void): () => void;

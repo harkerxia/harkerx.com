@@ -4,10 +4,9 @@ date: 2023-02-12
 description: 本教程会详尽讲解如何从零开始搭建个人博客。
 categories: [Experience]
 tags: [Blog, Hexo, Github, Netlify, Cloudflare]
-slug: building-a-personal-blog
-# Original Hexo post had a password field. Astro Solitude does not automatically enforce it.
-# Keep as draft until you explicitly decide to publish this previously restricted article.
-draft: true
+slug: blog
+draft: false
+cover: /img/covers/blog.png
 ---
 
 **本教程会详尽讲解如何从零开始搭建个人博客。**

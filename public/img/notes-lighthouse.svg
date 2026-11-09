@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="240" viewBox="-300 100 360 240">
+  <defs>
+    <linearGradient id="lighthouse-beam" x1="0" x2="1">
+      <stop stop-color="#ffe2a0" stop-opacity="0" />
+      <stop offset="1" stop-color="#ffe2a0" stop-opacity=".22" />
+    </linearGradient>
+    <radialGradient id="lighthouse-glow">
+      <stop stop-color="#ffdc88" stop-opacity=".5" />
+      <stop offset="1" stop-color="#ffdc88" stop-opacity="0" />
+    </radialGradient>
+    <clipPath id="lighthouse-tower">
+      <path d="M-20 199H20L35 312H-35Z" />
+    </clipPath>
+  </defs>
+  <g id="lighthouse" >
+    <path d="M-17 171L-286 128V216L-17 186Z" fill="url(#lighthouse-beam)" />
+    <circle cy="178" r="34" fill="url(#lighthouse-glow)" />
+    <path
+      d="M-102 337L-68 317L-43 317L-24 305L9 309L30 304L55 317L80 322L105 337Z"
+      fill="#0b3559"
+    />
+    <path d="M-20 199H20L35 312H-35Z" fill="#e7f2ed" />
+    <path d="M0 199H20L35 312H0Z" fill="#adcbd1" />
+    <g clip-path="url(#lighthouse-tower)" fill="#245a7b">
+      <path d="M-36 223L36 238V254L-36 239Z" />
+      <path d="M-36 267L36 282V298L-36 283Z" />
+    </g>
+    <rect x="-3" y="211" width="6" height="10" rx="2" fill="#173f5c" />
+    <path d="M-5 312V295a5 5 0 0 1 10 0v17Z" fill="#173f5c" />
+    <rect x="-42" y="310" width="84" height="7" rx="2" fill="#123a59" />
+    <rect x="-23" y="162" width="46" height="32" rx="2" fill="#173b57" />
+    <rect x="-17" y="166" width="34" height="24" rx="1" fill="#ffd574" />
+    <rect x="-2" y="166" width="4" height="24" fill="#173b57" />
+    <path d="M-31 163L0 140L31 163Z" fill="#153550" />
+    <path d="M0 132v8" stroke="#153550" stroke-width="3" stroke-linecap="round" />
+    <path d="M-33 195v-8h66v8M-21 187v8M21 187v8" fill="none" stroke="#143c57" stroke-width="2" />
+    <rect x="-35" y="195" width="70" height="7" rx="2" fill="#143c57" />
+  </g>
+  <path d="M-118 334Q-58 324 8 334T112 334" fill="none" stroke="#43b7d6" stroke-width="3" opacity=".35" />
+</svg>

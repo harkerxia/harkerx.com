@@ -9,14 +9,14 @@ export interface StyleOptions {
 }
 const scriptRequests = new Map<string, Promise<HTMLScriptElement>>();
 const styleRequests = new Map<string, Promise<HTMLLinkElement>>();
-function loadElement<T extends HTMLScriptElement | HTMLLinkElement>(
+async function loadElement<T extends HTMLScriptElement | HTMLLinkElement>(
   cache: Map<string, Promise<T>>,
   selector: string,
   create: (url: string) => T,
   source: string,
   timeout = 8000,
 ): Promise<T> {
-  if (!source) return Promise.reject(new Error('A resource URL is required'));
+  if (!source) throw new Error("A resource URL is required");
   const address = new URL(source, document.baseURI).href;
   const existing = document.querySelector<T>(
     `${selector}[data-solitude-resource="${CSS.escape(address)}"]`,
@@ -26,14 +26,14 @@ function loadElement<T extends HTMLScriptElement | HTMLLinkElement>(
       if (!element.isConnected) document.head.append(element);
       return element;
     });
-  if (existing?.dataset.loaded === 'true') return Promise.resolve(existing);
+  if (existing?.dataset.loaded === "true") return existing;
   const promise = new Promise<T>((resolve, reject) => {
     const element = existing ?? create(address);
     element.dataset.solitudeResource = address;
     let timer: ReturnType<typeof setTimeout>;
     const complete = () => {
       clearTimeout(timer);
-      element.dataset.loaded = 'true';
+      element.dataset.loaded = "true";
       resolve(element);
     };
     const fail = () => {
@@ -42,8 +42,8 @@ function loadElement<T extends HTMLScriptElement | HTMLLinkElement>(
       element.remove();
       reject(new Error(`Unable to load ${address}`));
     };
-    element.addEventListener('load', complete, { once: true });
-    element.addEventListener('error', fail, { once: true });
+    element.addEventListener("load", complete, { once: true });
+    element.addEventListener("error", fail, { once: true });
     timer = setTimeout(fail, timeout);
     if (!existing) document.head.append(element);
   });
@@ -53,9 +53,9 @@ function loadElement<T extends HTMLScriptElement | HTMLLinkElement>(
 export const loadScript = (source: string, options: ScriptOptions = {}) =>
   loadElement(
     scriptRequests,
-    'script',
+    "script",
     (address) => {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = address;
       script.async = options.async ?? true;
       Object.entries(options.attributes ?? {}).forEach(([k, v]) =>
@@ -69,11 +69,11 @@ export const loadScript = (source: string, options: ScriptOptions = {}) =>
 export const loadStyle = (source: string, options: StyleOptions = {}) =>
   loadElement(
     styleRequests,
-    'link',
+    "link",
     (address) => {
-      const link = document.createElement('link');
+      const link = document.createElement("link");
       link.href = address;
-      link.rel = 'stylesheet';
+      link.rel = "stylesheet";
       if (options.id) link.id = options.id;
       return link;
     },

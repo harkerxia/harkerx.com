@@ -1,16 +1,25 @@
-import { cfg, config, t, url } from './site';
-import { contentPath, type Post, type Page } from './content';
-import links from '../data/links.json';
+import { cfg, config, t, url } from "./site";
+import { contentPath, type Post, type Page } from "./content";
+import linksData from "../data/links.json";
+import type { LinksData } from "./page-types";
+import { pageData } from "./data";
+const links: LinksData = linksData;
 export function runtimeConfig(
   posts: Post[],
   pages: Page[],
-  page: { right_menu?: boolean; type?: string },
+  page: { right_menu?: boolean; type?: string; data?: string },
 ) {
-  const total = links.links.reduce((n, g) => n + g.link_list.length, 0);
+  const inlineLinks =
+    page.type === "links" ? pageData(page.data, "links") : undefined;
+  const activeLinks = inlineLinks ?? links;
+  const total = activeLinks.links.reduce((n, g) => n + g.link_list.length, 0);
+  const globalTotal = links.links.reduce((n, g) => n + g.link_list.length, 0);
+  const asyncLinks =
+    page.type === "links" && total > cfg.page.links.async_threshold;
   const right =
     cfg.right_menu.enable &&
     page.right_menu !== false &&
-    !cfg.right_menu.exclude.includes(page.type || '');
+    !cfg.right_menu.exclude.includes(page.type || "");
   const labels = <K extends string>(
     keys: Record<K, string>,
   ): Record<K, string> =>
@@ -25,7 +34,7 @@ export function runtimeConfig(
       : (false as const),
     localsearch: {
       preload: cfg.search.local.preload,
-      path: url(cfg.search.local.CDN || '/search.xml'),
+      path: url(cfg.search.local.CDN || "/search.xml"),
     },
     algolia: cfg.search.algolia,
     random_posts: posts
@@ -34,126 +43,122 @@ export function runtimeConfig(
     randomlink: cfg.footer.randomlink,
     lazyload: { ...cfg.lazyload, error: url(cfg.lazyload.errorimg) },
     friend_links: {
-      async: total > cfg.page.links.async_threshold,
-      path: url('/links.json'),
+      data: inlineLinks,
+      async: asyncLinks,
+      path: url("/links.json"),
       total,
       placeholder: cfg.lazyload.placeholder,
-      default_avatar: url('/img/default_avatar.avif'),
-      more_url: url('/links/'),
+      default_avatar: url("/img/icons/favicon.png"),
+      more_url: url("/links/"),
       ...labels({
-        loading: 'linksLoading',
-        error: 'linksError',
-        retry: 'retry',
-        random: 'randomLink',
-        to: 'visit',
-        more: 'more',
-        default_sort: 'defaultSort',
-        random_sort: 'randomSort',
-        sort_label: 'sortLinks',
-        scroll_left: 'scrollLeft',
-        scroll_right: 'scrollRight',
+        loading: "linksLoading",
+        error: "linksError",
+        retry: "retry",
+        more: "more",
+        default_sort: "defaultSort",
+        random_sort: "randomSort",
+        sort_label: "sortLinks",
+        scroll_left: "scrollLeft",
+        scroll_right: "scrollRight",
       }),
     },
     feature_modules: {
       search: (cfg.search.enable
         ? cfg.search.type
-        : false) as import('../scripts/types').SearchProvider,
-      friend_links: total > 0,
+        : false) as import("../scripts/types").SearchProvider,
+      friend_links: asyncLinks || (cfg.footer.randomlink && globalTotal > 0),
       keyboard: cfg.keyboard.enable,
       music: cfg.capsule.enable || cfg.music.enable,
       right_menu: right,
       translate: cfg.translate.enable,
       covercolor: (cfg.post.covercolor.enable
         ? cfg.post.covercolor.mode
-        : false) as import('../scripts/types').CoverColorProvider,
+        : false) as import("../scripts/types").CoverColorProvider,
     },
     lang: {
       ui: labels({
-        recommendations: 'recommendations',
-        recommendationItem: 'recommendationItem',
-        copyEquipment: 'copyEquipment',
-        quoteEquipment: 'quoteEquipment',
-        applyFriendLink: 'applyFriendLink',
-        postUnit: 'postUnit',
-        careerStages: 'careerStages',
-        favoriteHeroes: 'favoriteHeroes',
-        externalLink: 'externalLink',
-        internalLink: 'internalLink',
-        untitled: 'untitled',
-        cardRating: 'cardRating',
-        cardDetails: 'cardDetails',
-        repoLoading: 'repoLoading',
-        loading: 'loading',
-        repoEmpty: 'repoEmpty',
-        repoUpdated: 'repoUpdated',
-        repoError: 'repoError',
-        loadFailed: 'loadFailed',
-        contentTabs: 'contentTabs',
-        musicPrevious: 'musicPrevious',
-        musicPlay: 'musicPlay',
-        musicPause: 'musicPause',
-        musicNext: 'musicNext',
-        musicMute: 'musicMute',
-        musicOrder: 'musicOrder',
-        musicLoop: 'musicLoop',
-        musicPlaylist: 'musicPlaylist',
-        musicLyrics: 'musicLyrics',
-        musicPlayTitle: 'musicPlayTitle',
-        musicPlayIndex: 'musicPlayIndex',
-        musicHall: 'musicHall',
-        unknownArtist: 'unknownArtist',
-        docsearchUnavailable: 'docsearchUnavailable',
+        recommendations: "recommendations",
+        recommendationItem: "recommendationItem",
+        postUnit: "postUnit",
+        careerStages: "careerStages",
+        favoriteHeroes: "favoriteHeroes",
+        externalLink: "externalLink",
+        internalLink: "internalLink",
+        untitled: "untitled",
+        cardRating: "cardRating",
+        cardDetails: "cardDetails",
+        repoLoading: "repoLoading",
+        loading: "loading",
+        repoEmpty: "repoEmpty",
+        repoUpdated: "repoUpdated",
+        repoError: "repoError",
+        loadFailed: "loadFailed",
+        contentTabs: "contentTabs",
+        musicPrevious: "musicPrevious",
+        musicPlay: "musicPlay",
+        musicPause: "musicPause",
+        musicNext: "musicNext",
+        musicMute: "musicMute",
+        musicOrder: "musicOrder",
+        musicLoop: "musicLoop",
+        musicPlaylist: "musicPlaylist",
+        musicLyrics: "musicLyrics",
+        musicPlayTitle: "musicPlayTitle",
+        musicPlayIndex: "musicPlayIndex",
+        musicHall: "musicHall",
+        unknownArtist: "unknownArtist",
+        docsearchUnavailable: "docsearchUnavailable",
       }),
-      theme: labels({ dark: 'themeDark', light: 'themeLight' }),
-      copy: labels({ success: 'copySuccess', error: 'copyError' }),
+      theme: labels({ dark: "themeDark", light: "themeLight" }),
+      copy: labels({ success: "copySuccess", error: "copyError" }),
       code: labels({
-        copy: 'codeCopy',
-        copied: 'codeCopied',
-        expand: 'codeExpand',
+        copy: "codeCopy",
+        copied: "codeCopied",
+        expand: "codeExpand",
       }),
       ...labels({
-        backtop: 'backTop',
-        day: 'dayUnit',
-        f12: 'developerMode',
-        totalk: 'commentHint',
+        backtop: "backTop",
+        day: "dayUnit",
+        f12: "developerMode",
+        totalk: "commentHint",
       }),
       time: labels({
-        day: 'timeDay',
-        hour: 'timeHour',
-        just: 'timeJust',
-        min: 'timeMinute',
-        month: 'timeMonth',
+        day: "timeDay",
+        hour: "timeHour",
+        just: "timeJust",
+        min: "timeMinute",
+        month: "timeMonth",
       }),
       search: labels({
-        empty: 'searchEmpty',
-        hit: 'searchHit',
-        placeholder: 'searchPlaceholder',
-        count: 'searchCount',
-        loading: 'searchLoading',
-        error: 'searchError',
-        retry: 'retry',
-        previous: 'previousPage',
-        next: 'nextPage',
+        empty: "searchEmpty",
+        hit: "searchHit",
+        placeholder: "searchPlaceholder",
+        count: "searchCount",
+        loading: "searchLoading",
+        error: "searchError",
+        retry: "retry",
+        previous: "previousPage",
+        next: "nextPage",
       }),
       comments: labels({
-        loading: 'commentsLoading',
-        empty: 'commentsEmpty',
-        error: 'commentsError',
-        image: 'commentImage',
-        link: 'commentLink',
-        code: 'commentCode',
-        emoji: 'commentEmoji',
-        anonymous: 'commentAnonymous',
-        participants: 'commentParticipants',
-        moreParticipants: 'commentMoreParticipants',
+        loading: "commentsLoading",
+        empty: "commentsEmpty",
+        error: "commentsError",
+        image: "commentImage",
+        link: "commentLink",
+        code: "commentCode",
+        emoji: "commentEmoji",
+        anonymous: "commentAnonymous",
+        participants: "commentParticipants",
+        moreParticipants: "commentMoreParticipants",
       }),
-      barrage: { title: t('comments') },
+      barrage: { title: t("comments") },
     },
     aside: {
       ...cfg.aside,
       state: cfg.aside.my_card.state,
       witty_words: cfg.aside.my_card.witty_words,
-      witty_comment: { prefix: t('hello'), back: t('welcomeBack') },
+      witty_comment: { prefix: t("hello"), back: t("welcomeBack") },
     },
     covercolor: cfg.post.covercolor,
     comment_runtime: {
@@ -163,39 +168,41 @@ export function runtimeConfig(
             (p) =>
               p.data.comment &&
               ![
-                'about',
-                'music',
-                'tags',
-                'categories',
-                'links',
-                'brevity',
-                'recentcomment',
+                "about",
+                "music",
+                "tags",
+                "categories",
+                "links",
+                "notes",
+                "recentcomment",
               ].includes(String(p.data.type)),
           )
           .map((p) => [url(contentPath(p)), p.data.title]),
       ),
-      default_avatar: url('/img/default_avatar.avif'),
-      barrage_script: url('/js/third_party/barrage.min.js'),
+      default_avatar: url("/img/icons/favicon.png"),
+      barrage_script: url("/js/third_party/barrage.min.js"),
     },
     right_menu: right
       ? {
           ...cfg.right_menu,
           ctrlOriginalMenu: cfg.right_menu.ctrlOriginalMenu
-            ? t('rightMenuCtrlOriginal')
+            ? t("rightMenuCtrlOriginal")
             : (false as const),
-          img_error: t('rightMenuImageError'),
-          mode: labels({ dark: 'rightMenuDark', light: 'rightMenuLight' }),
+          img_error: t("rightMenuImageError"),
+          img_copy_error: t("rightMenuImageCopyError"),
+          mode: labels({ dark: "rightMenuDark", light: "rightMenuLight" }),
+          aside: labels({ show: "rightMenuAsideShow", hide: "rightMenuAsideHide" }),
           barrage: labels({
-            open: 'rightMenuBarrageOpen',
-            close: 'rightMenuBarrageClose',
+            open: "rightMenuBarrageOpen",
+            close: "rightMenuBarrageClose",
           }),
           music: cfg.capsule.enable
             ? labels({
-                start: 'rightMenuMusicStart',
-                stop: 'rightMenuMusicStop',
-                back: 'rightMenuMusicBack',
-                forward: 'rightMenuMusicForward',
-                copyMusicName: 'rightMenuMusicCopy',
+                start: "rightMenuMusicStart",
+                stop: "rightMenuMusicStop",
+                back: "rightMenuMusicBack",
+                forward: "rightMenuMusicForward",
+                copyMusicName: "rightMenuMusicCopy",
               })
             : (false as const),
         }

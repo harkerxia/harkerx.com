@@ -1,0 +1,101 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">HarkerX Harbor</title>
+  <desc id="desc">
+    A blue harbor with waves and a lighthouse beneath the HarkerX Harbor name.
+  </desc>
+  <defs>
+    <linearGradient id="sky" x2="1" y2="1">
+      <stop stop-color="#102b57" />
+      <stop offset="1" stop-color="#147db3" />
+    </linearGradient>
+    <linearGradient id="sea" x2="1" y2="0">
+      <stop stop-color="#2497cb" />
+      <stop offset="1" stop-color="#43b7d6" />
+    </linearGradient>
+    <linearGradient id="lighthouse-beam" x1="0" x2="1">
+      <stop stop-color="#ffe2a0" stop-opacity="0" />
+      <stop offset="1" stop-color="#ffe2a0" stop-opacity=".22" />
+    </linearGradient>
+    <radialGradient id="lighthouse-glow">
+      <stop stop-color="#ffdc88" stop-opacity=".5" />
+      <stop offset="1" stop-color="#ffdc88" stop-opacity="0" />
+    </radialGradient>
+    <clipPath id="lighthouse-tower">
+      <path d="M-20 199H20L35 312H-35Z" />
+    </clipPath>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1200v630H0z" />
+  <circle cx="1015" cy="115" r="120" fill="#ffc848" opacity=".12" />
+  <circle cx="1015" cy="115" r="50" fill="#ffc848" opacity=".8" />
+  <path
+    d="M0 445Q200 355 400 445T800 445T1200 445V630H0z"
+    fill="url(#sea)"
+    opacity=".5"
+  />
+  <g id="lighthouse" transform="translate(1000 140)">
+    <path d="M-17 171L-286 128V216L-17 186Z" fill="url(#lighthouse-beam)" />
+    <circle cy="178" r="34" fill="url(#lighthouse-glow)" />
+    <path
+      d="M-102 337L-68 317L-43 317L-24 305L9 309L30 304L55 317L80 322L105 337Z"
+      fill="#0b3559"
+    />
+    <path d="M-20 199H20L35 312H-35Z" fill="#e7f2ed" />
+    <path d="M0 199H20L35 312H0Z" fill="#adcbd1" />
+    <g clip-path="url(#lighthouse-tower)" fill="#245a7b">
+      <path d="M-36 223L36 238V254L-36 239Z" />
+      <path d="M-36 267L36 282V298L-36 283Z" />
+    </g>
+    <rect x="-3" y="211" width="6" height="10" rx="2" fill="#173f5c" />
+    <path d="M-5 312V295a5 5 0 0 1 10 0v17Z" fill="#173f5c" />
+    <rect x="-42" y="310" width="84" height="7" rx="2" fill="#123a59" />
+    <rect x="-23" y="162" width="46" height="32" rx="2" fill="#173b57" />
+    <rect x="-17" y="166" width="34" height="24" rx="1" fill="#ffd574" />
+    <rect x="-2" y="166" width="4" height="24" fill="#173b57" />
+    <path d="M-31 163L0 140L31 163Z" fill="#153550" />
+    <path d="M0 132v8" stroke="#153550" stroke-width="3" stroke-linecap="round" />
+    <path d="M-33 195v-8h66v8M-21 187v8M21 187v8" fill="none" stroke="#143c57" stroke-width="2" />
+    <rect x="-35" y="195" width="70" height="7" rx="2" fill="#143c57" />
+  </g>
+  <path
+    d="M0 510Q200 420 400 510T800 510T1200 510V630H0z"
+    fill="#0b3660"
+    opacity=".65"
+  />
+  <text
+    x="96"
+    y="255"
+    fill="#fff"
+    font-family="system-ui, sans-serif"
+    font-weight="700"
+    font-size="100"
+    letter-spacing="-3"
+  >
+    HarkerX Harbor
+  </text>
+  <path
+    d="M100 306h96"
+    stroke="#ffc848"
+    stroke-width="8"
+    stroke-linecap="round"
+  />
+  <text
+    x="100"
+    y="360"
+    fill="#d4e9f4"
+    font-family="system-ui, sans-serif"
+    font-size="38"
+    font-weight="600"
+    letter-spacing="1"
+    opacity="0.78"
+  >
+    <tspan x="100">Just writing stuff</tspan>
+    <tspan x="100" dy="50">Stay if you like</tspan>
+  </text>
+</svg>

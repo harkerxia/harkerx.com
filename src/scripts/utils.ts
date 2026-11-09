@@ -50,11 +50,12 @@ export const utilsFn = {
     }
   },
   copy: async (text: string) => {
-    const message = await navigator.clipboard
-      .writeText(text)
-      .then(() => Solitude.config.lang.copy.success)
-      .catch(() => Solitude.config.lang.copy.error);
-    Solitude.snackbarShow(message, false, 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      Solitude.snackbarShow(Solitude.config.lang.copy.success, false, 2000);
+    } catch {
+      Solitude.snackbarShow(Solitude.config.lang.copy.error, false, 2000);
+    }
   },
   getEleTop: (ele: HTMLElement | null) => {
     if (!ele) return 0;

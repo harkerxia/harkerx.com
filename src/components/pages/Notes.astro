@@ -1,95 +1,94 @@
 ---
-import brevity from '../../data/brevity.json';
-import { cfg, config, dateLabel, t, url } from '../../lib/site';
+import notes from "../../data/notes.json";
+import { cfg, config, dateLabel, t, url } from "../../lib/site";
+import type { NotesData } from "../../lib/page-types";
 interface Props {
-  data?: {
-    title?: string;
-    items: import('../../lib/page-types').BrevityItem[];
-    header?: {
-      description?: string;
-      cover?: string;
-      button?: { text: string; link: string };
-    };
-  };
+  data?: NotesData;
 }
-const data: NonNullable<Props['data']> = Astro.props.data ?? brevity;
-const c = cfg.brevity;
+const data: NotesData = Astro.props.data ?? notes;
+const c = cfg.notes;
 const header = data.header;
 const items = data.items.slice(0, c.strip);
 ---
 
 {c.enable && (
   <>
-    <header class="author-content author-content-item single sharePage brevity-header tw:relative tw:[.author-content.author-content-item&]:overflow-hidden">
+    <header class="author-content author-content-item single sharePage notes-header tw:relative tw:[.author-content.author-content-item&]:overflow-hidden">
+      {header?.cover && (
+        <img
+          class="notes-header-cover tw:absolute tw:object-cover"
+          src={url(header.cover)}
+          alt=""
+          fetchpriority="high"
+        />
+      )}
       <img
-        class="brevity-header-cover tw:absolute tw:object-cover"
-        src={url(header?.cover || '/img/demo/cover-legacy-url-v2.webp')}
+        class="notes-header-lighthouse"
+        src={url("/img/notes-lighthouse.svg")}
         alt=""
-        fetchpriority="high"
+        aria-hidden="true"
+        decoding="async"
       />
       <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
         <div class="author-content-item-tips">
-          {header?.description || t('brevityDescription')}
+          {header?.description || t("notesDescription")}
         </div>
         <h1 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-          {t('brevity')}
+          {data.title || t("notes")}
         </h1>
-        <div class="content-bottom tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:items-center tw:[.author-content-item_&]:justify-between">
-          <div class="tips">{config.author.name}</div>
-        </div>
         <div class="banner-button-group tw:[div#banners_&]:absolute tw:[div#banners_&]:flex tw:[.author-content-item_.card-content_&]:absolute">
           <a
             class="banner-button tw:[div#banners_&]:flex tw:[div#banners_&]:items-center tw:[div#banners_&]:cursor-pointer tw:[.author-content-item_.card-content_.banner-button-group_&]:justify-center tw:[.author-content-item_.card-content_.banner-button-group_&]:flex tw:[.author-content-item_.card-content_.banner-button-group_&]:items-center tw:[.author-content-item_.card-content_.banner-button-group_&]:cursor-pointer"
-            href={url(header?.button?.link || '/archives/')}
-            aria-label={header?.button?.text || t('brevityReadMore')}
+            href={url(header?.button?.link || "/archives/")}
+            aria-label={header?.button?.text || t("notesReadMore")}
           >
             <i
               class="solitude fas fa-circle-chevron-right"
               aria-hidden="true"
             />
             <span class="banner-button-text">
-              {header?.button?.text || t('brevityReadMore')}
+              {header?.button?.text || t("notesReadMore")}
             </span>
           </a>
         </div>
       </div>
     </header>
-    <solitude-brevity id="bber" data-style={c.style} class="tw:block">
+    <solitude-notes id="notes" data-style={c.style} class="tw:block">
       <section class="timeline page-1">
-        <ul class="list waterfall tw:[#bber_&]:grid tw:[#bber_&]:relative">
+        <ul class="list waterfall tw:[#notes_&]:grid tw:[#notes_&]:relative">
           {items.map((item) => (
             <li class="item">
               {c.style === 2 && (
-                <div class="meta tw:[#bber_&]:flex tw:[#bber_&]:items-center">
+                <div class="meta tw:[#notes_&]:flex tw:[#notes_&]:items-center">
                   <img
-                    class="avatar tw:[.card-info_&]:absolute tw:[#bber_&]:object-cover"
+                    class="avatar tw:[.card-info_&]:absolute tw:[#notes_&]:object-cover"
                     src={url(cfg.aside.my_card.author.img)}
                     alt=""
                   />
                   <div class="info">
-                    <span class="bber_nick">{config.author.name}</span>
+                    <span class="notes_nick">{config.author.name}</span>
                     <time
-                      class="bber_date"
-                      datetime={item.date.replace(' ', 'T')}
+                      class="notes_date"
+                      datetime={item.date.replace(" ", "T")}
                       title={item.date}
                     >
-                      {dateLabel(item.date.replace(' ', 'T'))}
+                      {dateLabel(item.date.replace(" ", "T"))}
                     </time>
                   </div>
                 </div>
               )}
-              <div class="bber-content">
+              <div class="notes-content">
                 <p class="datacont">{item.content}</p>
                 {item.image && (
-                  <div class="bber-content-img tw:[#bber_&]:flex">
+                  <div class="notes-content-img tw:[#notes_&]:flex">
                     {(Array.isArray(item.image)
                       ? item.image
                       : [item.image]
                     ).map((img) => (
                       <img
-                        src={url(typeof img === 'string' ? img : img.url)}
+                        src={url(typeof img === "string" ? img : img.url)}
                         alt={
-                          typeof img === 'string'
+                          typeof img === "string"
                             ? item.content
                             : (img.alt ?? item.content)
                         }
@@ -101,7 +100,7 @@ const items = data.items.slice(0, c.strip);
                 )}
               </div>
               {c.music && item.aplayer && (
-                <div class="bber-music tw:[#bber_&]:overflow-hidden">
+                <div class="notes-music tw:[#notes_&]:overflow-hidden">
                   <solitude-meting
                     server={item.aplayer.server}
                     type="song"
@@ -114,7 +113,7 @@ const items = data.items.slice(0, c.strip);
                 </div>
               )}
               {item.video && (
-                <div class="bber-video tw:[#bber_&]:grid">
+                <div class="notes-video tw:[#notes_&]:grid">
                   {item.video.player && (
                     <video
                       src={url(item.video.player)}
@@ -133,29 +132,29 @@ const items = data.items.slice(0, c.strip);
               {(c.style === 1 || item.location || item.link) && (
                 <>
                   <hr />
-                  <div class="bber-bottom">
-                    <div class="bber-info tw:[#bber_&]:flex tw:[#bber_&]:flex-wrap tw:[#bber_&]:items-center">
+                  <div class="notes-bottom">
+                    <div class="notes-info tw:[#notes_&]:flex tw:[#notes_&]:flex-wrap tw:[#notes_&]:items-center">
                       {c.style === 1 && (
-                        <div class="bber-info-time">
+                        <div class="notes-info-time">
                           <i class="solitude fas fa-calendar-day" />
                           <time
-                            datetime={item.date.replace(' ', 'T')}
+                            datetime={item.date.replace(" ", "T")}
                             title={item.date}
                           >
-                            {dateLabel(item.date.replace(' ', 'T'))}
+                            {dateLabel(item.date.replace(" ", "T"))}
                           </time>
                         </div>
                       )}
                       {item.location && (
-                        <div class="bber-info-location">
+                        <div class="notes-info-location">
                           <i class="solitude fas fa-location-dot" />
                           {item.location}
                         </div>
                       )}
                       {item.link && (
-                        <a class="bber-content-link" href={url(item.link)}>
+                        <a class="notes-content-link" href={url(item.link)}>
                           <i class="solitude fas fa-link" />
-                          {t('brevityLink')}
+                          {t("notesLink")}
                         </a>
                       )}
                     </div>
@@ -165,16 +164,16 @@ const items = data.items.slice(0, c.strip);
             </li>
           ))}
         </ul>
-        <div id="bber-tips" class="tw:text-center">
+        <div id="notes-tips" class="tw:text-center">
           {items.length
-            ? t('brevityCount').replace('{count}', String(items.length))
-            : t('brevityEmpty')}
+            ? t("notesCount").replace("{count}", String(items.length))
+            : t("notesEmpty")}
         </div>
       </section>
-    </solitude-brevity>
+    </solitude-notes>
   </>
 )}
 
 <script>
-  import '../../scripts/brevity';
+  import "../../scripts/notes";
 </script>

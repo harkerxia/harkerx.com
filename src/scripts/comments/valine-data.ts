@@ -1,5 +1,5 @@
-import { Solitude } from '../core/api';
-import { commentText } from './shared';
+import { Solitude } from "../core/api";
+import { commentText } from "./shared";
 export interface ValineRecord {
   objectId?: string;
   nick?: string;
@@ -54,7 +54,7 @@ export const restoreValineStyles = () => {
   }
 };
 
-document.addEventListener('astro:after-swap', restoreValineStyles);
+document.addEventListener("astro:after-swap", restoreValineStyles);
 
 export const runtimeConfig = () =>
   (Solitude.config.comment_runtime || {}) as CommentRuntimeConfiguration;
@@ -95,16 +95,16 @@ export const requestValine = async (
 ) => {
   const config = valineConfig();
   const endpoint = new URL(
-    `${String(config.serverURLs).replace(/\/$/, '')}/1.1/classes/Comment`,
+    `${String(config.serverURLs).replace(/\/$/, "")}/1.1/classes/Comment`,
   );
   Object.entries(parameters).forEach(([key, value]) =>
     endpoint.searchParams.set(key, String(value)),
   );
   const response = await fetch(endpoint, {
     headers: {
-      'X-LC-Id': String(config.appId),
-      'X-LC-Key': String(config.appKey),
-      'Content-Type': 'application/json',
+      "X-LC-Id": String(config.appId),
+      "X-LC-Key": String(config.appKey),
+      "Content-Type": "application/json",
     },
   });
   if (!response.ok)
@@ -113,7 +113,7 @@ export const requestValine = async (
 };
 
 export const loadMd5 = () => {
-  if (typeof window.md5 === 'function') {
+  if (typeof window.md5 === "function") {
     return Promise.resolve(window.md5 as (value: string) => string);
   }
   if (md5Request) return md5Request;
@@ -121,7 +121,7 @@ export const loadMd5 = () => {
   md5Request = source
     ? Solitude.loadScript(source)
         .then(() =>
-          typeof window.md5 === 'function'
+          typeof window.md5 === "function"
             ? (window.md5 as (value: string) => string)
             : undefined,
         )
@@ -130,22 +130,22 @@ export const loadMd5 = () => {
   return md5Request;
 };
 
-export const avatarUrl = async (mail = '') => {
-  const fallback = runtimeConfig().default_avatar || '/img/default_avatar.avif';
+export const avatarUrl = async (mail = "") => {
+  const fallback = runtimeConfig().default_avatar || "/img/icons/favicon.png";
   if (!mail.trim()) return fallback;
   const md5 = await loadMd5();
   if (!md5) return fallback;
-  const root = String(Solitude.config.comment?.avatar || 'https://weavatar.com')
-    .replace(/\/$/, '')
-    .replace(/\/avatar$/, '');
+  const root = String(Solitude.config.comment?.avatar || "https://weavatar.com")
+    .replace(/\/$/, "")
+    .replace(/\/avatar$/, "");
   return `${root}/avatar/${md5(mail.trim().toLowerCase())}`;
 };
 
-export const summarize = (source = '') => {
-  const image = `[${commentText('image', 'Image')}]`;
-  const link = `[${commentText('link', 'Link')}]`;
-  const code = `[${commentText('code', 'Code')}]`;
-  const emoji = `[${commentText('emoji', 'Emoji')}]`;
+export const summarize = (source = "") => {
+  const image = `[${commentText("image", "Image")}]`;
+  const link = `[${commentText("link", "Link")}]`;
+  const code = `[${commentText("code", "Code")}]`;
+  const emoji = `[${commentText("emoji", "Emoji")}]`;
   return String(source)
     .replace(/```[\s\S]*?```/g, code)
     .replace(/<pre[\s\S]*?<\/pre>/gi, code)
@@ -154,8 +154,8 @@ export const summarize = (source = '') => {
     .replace(/\[[^\]]*\]\([^)]*\)/g, link)
     .replace(/<a\b[^>]*>[\s\S]*?<\/a>/gi, link)
     .replace(/:[a-z0-9_\u4e00-\u9fa5]+:/gi, emoji)
-    .replace(/<[^>]+>/g, '')
-    .replace(/\s+/g, ' ')
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
     .trim()
     .slice(0, 150);
 };
@@ -164,16 +164,16 @@ export const normalizeRecords = async (records: ValineRecord[]) => {
   const routes = runtimeConfig().routes || {};
   const normalized = await Promise.all(
     records.map(async (record) => {
-      const url = String(record.url || '');
+      const url = String(record.url || "");
       if (!routes[url]) return null;
       const nick =
-        String(record.nick || '').trim() ||
-        commentText('anonymous', 'Anonymous');
-      const normalizedMail = String(record.mail || '')
+        String(record.nick || "").trim() ||
+        commentText("anonymous", "Anonymous");
+      const normalizedMail = String(record.mail || "")
         .trim()
         .toLowerCase();
       return {
-        id: String(record.objectId || `${url}-${record.createdAt || ''}`),
+        id: String(record.objectId || `${url}-${record.createdAt || ""}`),
         nick,
         participantKey: normalizedMail
           ? `mail:${stableSignature(normalizedMail)}`
@@ -182,7 +182,7 @@ export const normalizeRecords = async (records: ValineRecord[]) => {
         url,
         title: routes[url],
         avatar: await avatarUrl(record.mail),
-        date: String(record.updatedAt || record.createdAt || ''),
+        date: String(record.updatedAt || record.createdAt || ""),
       } satisfies NormalizedComment;
     }),
   );
@@ -211,7 +211,7 @@ export const routeCacheSignature = () => {
   const source = routeEntries()
     .map(([path]) => path)
     .sort()
-    .join('|');
+    .join("|");
   return stableSignature(source);
 };
 
@@ -246,7 +246,7 @@ export const fetchAggregateComments = () => {
       ).map((paths) =>
         requestValine({
           where: JSON.stringify({ url: { $in: paths } }),
-          order: '-createdAt',
+          order: "-createdAt",
           limit,
         }),
       ),
@@ -291,7 +291,7 @@ export const fetchSiteComments = () => {
       while (true) {
         const response = await requestValine({
           where: JSON.stringify({ url: { $in: paths } }),
-          order: '-createdAt,objectId',
+          order: "-createdAt,objectId",
           limit: postCardPageSize,
           skip,
         });
@@ -323,7 +323,7 @@ export const fetchPostCardComments = (paths: string[]) => {
     .filter((path) => Boolean(availableRoutes[path]))
     .sort();
   if (!allowedPaths.length) return Promise.resolve([]);
-  const signature = stableSignature(allowedPaths.join('|'));
+  const signature = stableSignature(allowedPaths.join("|"));
   const activeRequest = postCardRequests.get(signature);
   if (activeRequest) return activeRequest;
   const cached = Solitude.saveToLocal.get<NormalizedComment[]>(
@@ -346,8 +346,8 @@ export const fetchPostCardComments = (paths: string[]) => {
       while (true) {
         const response = await requestValine({
           where: JSON.stringify({ url: { $in: pathGroup } }),
-          keys: 'objectId,nick,mail,url,createdAt,updatedAt',
-          order: '-createdAt',
+          keys: "objectId,nick,mail,url,createdAt,updatedAt",
+          order: "-createdAt",
           limit: postCardPageSize,
           skip,
         });
@@ -361,7 +361,7 @@ export const fetchPostCardComments = (paths: string[]) => {
       ...new Map(
         records.map((record) => [
           record.objectId ||
-            `${record.url || ''}-${record.createdAt || ''}-${record.nick || ''}`,
+            `${record.url || ""}-${record.createdAt || ""}-${record.nick || ""}`,
           record,
         ]),
       ).values(),
@@ -381,7 +381,7 @@ export const fetchPostCardComments = (paths: string[]) => {
 export const fetchAggregateCount = () => {
   if (countRequest) return countRequest;
   const cached = Solitude.saveToLocal.get(countCacheKey());
-  if (typeof cached === 'number') {
+  if (typeof cached === "number") {
     countRequest = Promise.resolve(cached);
     return countRequest;
   }
@@ -415,7 +415,7 @@ export const fetchAggregateCount = () => {
 export const fetchPageComments = async (path: string) => {
   const response = await requestValine({
     where: JSON.stringify({ url: path }),
-    order: '-createdAt',
+    order: "-createdAt",
     limit: 1000,
   });
   return normalizeRecords(response.results || []);

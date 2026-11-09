@@ -43,7 +43,9 @@ html {
   text-size-adjust: 100%;
   height: 100%;
   font-size: 20px;
-  overflow-y: overlay;
+  overflow-y: auto;
+  /* Keep long and short pages aligned when the vertical scrollbar changes. */
+  scrollbar-gutter: stable;
 }
 
 main {

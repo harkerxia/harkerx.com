@@ -1,0 +1,38 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="800"
+  height="450"
+  viewBox="0 0 800 450"
+  role="img"
+  aria-labelledby="title"
+>
+  <title id="title">Image unavailable — HarkerX Harbor</title>
+  <path fill="#eaf1f8" d="M0 0h800v450H0z" />
+  <rect
+    x="330"
+    y="160"
+    width="140"
+    height="90"
+    rx="8"
+    fill="none"
+    stroke="#71869e"
+    stroke-width="6"
+  />
+  <path
+    d="m330 235 45-42 30 28 20-18 45 42"
+    fill="none"
+    stroke="#71869e"
+    stroke-width="6"
+  />
+  <circle cx="433" cy="185" r="9" fill="#71869e" />
+  <text
+    x="400"
+    y="300"
+    text-anchor="middle"
+    fill="#51677f"
+    font-family="system-ui, sans-serif"
+    font-size="24"
+  >
+    Image unavailable
+  </text>
+</svg>

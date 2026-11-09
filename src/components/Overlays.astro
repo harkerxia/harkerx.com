@@ -1,46 +1,46 @@
 ---
-import { cfg, config, t, url, dateLabel, isoDate } from '../lib/site';
-import { taxonomy, wordCount, type Post } from '../lib/content';
-import Menu from './Menu.astro';
+import { cfg, t, url, dateLabel, isoDate } from "../lib/site";
+import { taxonomy, wordCount, type Post } from "../lib/content";
+import Menu from "./Menu.astro";
 interface Props {
   posts: Post[];
   comments?: boolean;
   toc?: boolean;
 }
 const { posts, comments = false, toc = false } = Astro.props;
-const tags = taxonomy(posts, 'tags');
-const categories = taxonomy(posts, 'categories');
+const tags = taxonomy(posts, "tags");
+const categories = taxonomy(posts, "categories");
 const updated = new Date();
 const actionLabels: Record<string, string> = {
-  toggleKeyboard: 'keyboardDisable',
-  showConsole: 'keyboardConsole',
-  musicToggle: 'keyboardMusic',
-  toggleTheme: 'keyboardThemeDark',
-  openSearch: 'keyboardSearch',
-  randomPost: 'keyboardRandomPost',
+  toggleKeyboard: "keyboardDisable",
+  showConsole: "keyboardConsole",
+  musicToggle: "keyboardMusic",
+  toggleTheme: "keyboardThemeDark",
+  openSearch: "keyboardSearch",
+  randomPost: "keyboardRandomPost",
 };
 const months = [
   ...new Set(posts.map((p) => p.data.date.toISOString().slice(0, 7))),
 ].slice(0, 5);
 const contextItems = [
-  ['copytext', 'clone', 'rightMenuCopy'],
-  ['pastetext', 'clipboard', 'rightMenuPaste'],
+  ["copytext", "clone", "rightMenuCopy"],
+  ["pastetext", "clipboard", "rightMenuPaste"],
   ...(cfg.comment.use
-    ? [['commenttext', 'comment-medical', 'rightMenuComment']]
+    ? [["commenttext", "comment-medical", "rightMenuComment"]]
     : []),
-  ['newwindow', 'window-maximize', 'rightMenuNew'],
-  ['copylink', 'link', 'rightMenuLink'],
-  ['copyimg', 'clone', 'rightMenuImage'],
-  ['downloadimg', 'cloud-arrow-down', 'rightMenuDownloadImage'],
+  ["newwindow", "window-maximize", "rightMenuNew"],
+  ["copylink", "link", "rightMenuLink"],
+  ["copyimg", "clone", "rightMenuImage"],
+  ["downloadimg", "cloud-arrow-down", "rightMenuDownloadImage"],
   ...(cfg.search.enable
-    ? [['search', 'magnifying-glass', 'rightMenuSearch']]
+    ? [["search", "magnifying-glass", "rightMenuSearch"]]
     : []),
   ...(cfg.capsule.enable
     ? [
-        ['music-toggle', 'play', 'rightMenuMusicStart'],
-        ['music-back', 'backward', 'rightMenuMusicBack'],
-        ['music-forward', 'forward', 'rightMenuMusicForward'],
-        ['music-copyMusicName', 'clone', 'rightMenuMusicCopy'],
+        ["music-toggle", "play", "rightMenuMusicStart"],
+        ["music-back", "backward", "rightMenuMusicBack"],
+        ["music-forward", "forward", "rightMenuMusicForward"],
+        ["music-copyMusicName", "clone", "rightMenuMusicCopy"],
       ]
     : []),
 ];
@@ -66,16 +66,16 @@ const contextItems = [
             >
               <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
                 <div class="author-content-item-tips">
-                  {t('recentComments')}
+                  {t("recentComments")}
                 </div>
                 <div class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                  {t('comments')}
+                  {t("comments")}
                   {cfg.recent_comments.enable && (
                     <a
                       class="recent-comment-more tw:[.card-recent-comment_&]:inline-flex tw:[.card-recent-comment_&]:items-center tw:[.card-recent-comment_&]:justify-center tw:[#console_&]:flex tw:[#console_&]:items-center"
                       href={url(cfg.recent_comments.page)}
-                      title={t('more')}
-                      aria-label={t('more')}
+                      title={t("more")}
+                      aria-label={t("more")}
                     >
                       <i class="solitude fas fa-circle-chevron-right" />
                     </a>
@@ -89,7 +89,7 @@ const contextItems = [
                 aria-busy="true"
               >
                 <div class="comment-loading tw:[.card-recent-comment_&]:inline-flex tw:[.card-recent-comment_&]:items-center">
-                  {t('commentsLoading')}
+                  {t("commentsLoading")}
                 </div>
               </div>
             </div>
@@ -103,9 +103,9 @@ const contextItems = [
                 data-solitude-action="hideConsole"
               >
                 <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
-                  <div class="author-content-item-tips">{t('tags')}</div>
+                  <div class="author-content-item-tips">{t("tags")}</div>
                   <div class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                    {t('explore')}
+                    {t("explore")}
                   </div>
                 </div>
                 <div class="card-tag-cloud tw:overflow-hidden tw:relative tw:flex tw:flex-row tw:flex-wrap tw:[#console_.console-card.tags_&]:flex tw:[#console_.console-card.tags_&]:flex-wrap tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-row tw:[#sidebar_#sidebar-menus_&]:flex-wrap">
@@ -126,7 +126,7 @@ const contextItems = [
                 <ul class="card-archive-list tw:[#console_.console-card.history_&]:flex tw:[#console_.console-card.history_&]:flex-row tw:[#console_.console-card.history_&]:flex-wrap">
                   {months.map((month) => (
                     <li class="item">
-                      <a href={url('/archives/')}>
+                      <a href={url("/archives/")}>
                         <span class="date">{month}</span>
                         <div class="count-group tw:[#console_.console-card.history_.card-archive-list_a_&]:flex tw:[#console_.console-card.history_.card-archive-list_a_&]:flex-row">
                           <span class="count tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
@@ -137,21 +137,21 @@ const contextItems = [
                             }
                           </span>
                           <span class="unit tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
-                            {t('postUnit')}
+                            {t("postUnit")}
                           </span>
                         </div>
                       </a>
                     </li>
                   ))}
                   <li class="item">
-                    <a href={url('/archives/')}>
-                      <span class="date">{t('allPosts')}</span>
+                    <a href={url("/archives/")}>
+                      <span class="date">{t("allPosts")}</span>
                       <div class="count-group tw:[#console_.console-card.history_.card-archive-list_a_&]:flex tw:[#console_.console-card.history_.card-archive-list_a_&]:flex-row">
                         <span class="count tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
                           {posts.length}
                         </span>
                         <span class="unit tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
-                          {t('postUnit')}
+                          {t("postUnit")}
                         </span>
                       </div>
                     </a>
@@ -167,7 +167,7 @@ const contextItems = [
           <button
             class="darkmode_switchbutton tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:cursor-pointer"
             data-solitude-action="toggleTheme"
-            aria-label={t('toggleTheme')}
+            aria-label={t("toggleTheme")}
           >
             <i class="solitude fas fa-circle-half-stroke" />
           </button>
@@ -179,7 +179,7 @@ const contextItems = [
           <button
             class="asideSwitch"
             data-solitude-action="switchHideAside"
-            aria-label={t('toggleAside')}
+            aria-label={t("toggleAside")}
           >
             <i class="solitude fas fa-arrows-left-right-to-line" />
           </button>
@@ -193,7 +193,7 @@ const contextItems = [
               class="keyboardSwitch"
               type="button"
               data-solitude-action="switchKeyboard"
-              aria-label={t('keyboardToggle')}
+              aria-label={t("keyboardToggle")}
               aria-pressed="false"
             >
               <i class="solitude fas fa-keyboard" />
@@ -208,7 +208,7 @@ const contextItems = [
             <button
               class="music-switch"
               data-solitude-action="musicToggle"
-              aria-label={t('keyboardMusic')}
+              aria-label={t("keyboardMusic")}
             >
               <i class="solitude fas fa-compact-disc" />
             </button>
@@ -241,7 +241,7 @@ const contextItems = [
     class="tw:flex tw:flex-col"
   >
     <div class="keyboardTitle" id="keyboard-title">
-      {t('keyboardTitle')}
+      {t("keyboardTitle")}
     </div>
     <div
       class="keyboardList tw:[#keyboard-tips_&]:flex tw:[#keyboard-tips_&]:flex-col"
@@ -254,19 +254,19 @@ const contextItems = [
           data-shortcut-index={index}
           data-shortcut-action={item.action}
           data-shortcut-custom-label={String(Boolean(item.name))}
-          data-theme-light-label={t('keyboardThemeLight')}
-          data-theme-dark-label={t('keyboardThemeDark')}
+          data-theme-light-label={t("keyboardThemeLight")}
+          data-theme-dark-label={t("keyboardThemeDark")}
         >
           <div class="keyGroup tw:[#keyboard-tips_&]:flex tw:[#keyboard-tips_&]:items-center">
             <kbd class="key">
-              {item.modifier === 'mod' ? '⌘/Ctrl' : 'Shift'}
+              {item.modifier === "mod" ? "⌘/Ctrl" : "Shift"}
             </kbd>
             <kbd class="key">{item.key}</kbd>
           </div>
           <div class="keyContent">
             <span class="content">
               {item.name ??
-                t(actionLabels[item.action ?? ''] ?? item.action ?? '')}
+                t(actionLabels[item.action ?? ""] ?? item.action ?? "")}
             </span>
           </div>
         </div>
@@ -279,9 +279,9 @@ const contextItems = [
   <div id="sidebar-menus" class="tw:[#sidebar_&]:overflow-hidden">
     <div class="site-data tw:flex tw:justify-between">
       {[
-        { name: 'archives', path: '/archives/', count: posts.length },
-        { name: 'categories', path: '/categories/', count: categories.length },
-        { name: 'tags', path: '/tags/', count: tags.length },
+        { name: "archives", path: "/archives/", count: posts.length },
+        { name: "categories", path: "/categories/", count: categories.length },
+        { name: "tags", path: "/tags/", count: tags.length },
       ].map((item) => (
         <div class="data-item is-center tw:[.site-data_&]:flex tw:[.site-data_&]:justify-start">
           <div class="data-item-link">
@@ -295,12 +295,12 @@ const contextItems = [
         </div>
       ))}
       {cfg.comment.sidebar &&
-        cfg.comment.use.toLowerCase().includes('valine') && (
+        cfg.comment.use.toLowerCase().includes("valine") && (
           <div class="data-item is-center tw:[.site-data_&]:flex tw:[.site-data_&]:justify-start">
             <div class="data-item-link">
               <a href={url(cfg.recent_comments.page)}>
                 <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
-                  {t('comments')}
+                  {t("comments")}
                 </div>
                 <div class="length-num" id="valine_allcount">
                   <i class="solitude fas fa-spinner fa-spin" />
@@ -310,7 +310,7 @@ const contextItems = [
           </div>
         )}
     </div>
-    <span class="sidebar-menu-item-title">{t('sidebarFeatures')}</span>
+    <span class="sidebar-menu-item-title">{t("sidebarFeatures")}</span>
     <div class="sidebar-menu-item tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:flex-col">
       <button
         type="button"
@@ -318,11 +318,11 @@ const contextItems = [
         data-solitude-action="toggleTheme"
       >
         <i class="solitude fas fa-circle-half-stroke" />
-        <span>{t('displayMode')}</span>
+        <span>{t("displayMode")}</span>
       </button>
     </div>
     <Menu />
-    <span class="sidebar-menu-item-title">{t('tags')}</span>
+    <span class="sidebar-menu-item-title">{t("tags")}</span>
     <div class="card-tags">
       <div class="card-tag-cloud tw:overflow-hidden tw:relative tw:flex tw:flex-row tw:flex-wrap tw:[#console_.console-card.tags_&]:flex tw:[#console_.console-card.tags_&]:flex-wrap tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-row tw:[#sidebar_#sidebar-menus_&]:flex-wrap">
         {tags.slice(0, cfg.aside.tags.limit).map((tag) => (
@@ -330,7 +330,7 @@ const contextItems = [
             href={url(tag.path)}
             class={
               cfg.aside.tags.highlight_list.includes(tag.name)
-                ? 'highlight'
+                ? "highlight"
                 : undefined
             }
           >
@@ -340,28 +340,28 @@ const contextItems = [
         ))}
       </div>
       {tags.length >= cfg.aside.tags.limit && (
-        <a class="more-tags-btn" href={url('/tags/')}>
-          {t('moreTags')}
+        <a class="more-tags-btn" href={url("/tags/")}>
+          {t("moreTags")}
         </a>
       )}
     </div>
-    <span class="sidebar-menu-item-title">{t('siteInformation')}</span>
+    <span class="sidebar-menu-item-title">{t("siteInformation")}</span>
     <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
       {cfg.aside.siteinfo.postcount && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('posts')}</div>
+          <div class="item-name">{t("posts")}</div>
           <div class="item-count">{posts.length}</div>
         </div>
       )}
       {cfg.aside.siteinfo.runtimeenable && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('uptime')}</div>
+          <div class="item-name">{t("uptime")}</div>
           <div class="item-count runtimeshow" />
         </div>
       )}
       {cfg.aside.siteinfo.updatetime && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('lastUpdated')}</div>
+          <div class="item-name">{t("lastUpdated")}</div>
           <time class="item-count" datetime={isoDate(updated)}>
             {dateLabel(updated)}
           </time>
@@ -369,9 +369,9 @@ const contextItems = [
       )}
       {cfg.aside.siteinfo.wordcount && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('totalWords')}</div>
+          <div class="item-name">{t("totalWords")}</div>
           <div class="item-count">
-            {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
+            {posts.reduce((n, p) => n + wordCount(p.body ?? ""), 0)}
           </div>
         </div>
       )}
@@ -396,7 +396,7 @@ const contextItems = [
           class="mode darkmode_switchbutton tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:cursor-pointer"
           type="button"
           data-solitude-action="toggleTheme"
-          aria-label={t('toggleTheme')}
+          aria-label={t("toggleTheme")}
         >
           <i class="solitude fas fa-circle-half-stroke" />
         </button>
@@ -406,7 +406,7 @@ const contextItems = [
           class="aside pc"
           type="button"
           data-solitude-action="switchHideAside"
-          aria-label={t('toggleAside')}
+          aria-label={t("toggleAside")}
         >
           <i class="solitude fas fa-arrows-left-right-to-line" />
         </button>
@@ -420,7 +420,7 @@ const contextItems = [
           type="button"
           data-solitude-action="toggleTargetClass"
           data-solitude-target="#rightside-config-hide"
-          aria-label={t('settings')}
+          aria-label={t("settings")}
         >
           <i class="solitude fas fa-gear" />
         </button>
@@ -432,7 +432,7 @@ const contextItems = [
           data-solitude-toc-toggle
           aria-controls="card-toc"
           aria-expanded="false"
-          aria-label={t('toc')}
+          aria-label={t("toc")}
         >
           <i class="solitude fas fa-list" />
         </button>
@@ -443,7 +443,7 @@ const contextItems = [
           type="button"
           data-solitude-action="scrollTo"
           data-solitude-target="post-comment"
-          aria-label={t('comments')}
+          aria-label={t("comments")}
         >
           <i class="solitude fas fa-comment" />
         </button>
@@ -453,13 +453,13 @@ const contextItems = [
 )}
 {cfg.right_menu.enable && (
   <>
-    <nav id="rightMenu" aria-label={t('rightMenuLabel')}>
+    <nav id="rightMenu" aria-label={t("rightMenuLabel")}>
       <div class="rightMenu-group rightMenu-small">
         {[
-          ['backward', 'arrow-left', 'rightMenuBack'],
-          ['forward', 'arrow-right', 'rightMenuForward'],
-          ['refresh', 'arrows-rotate', 'rightMenuRefresh'],
-          ['top', 'arrow-up', 'backTop'],
+          ["backward", "arrow-left", "rightMenuBack"],
+          ["forward", "arrow-right", "rightMenuForward"],
+          ["refresh", "arrows-rotate", "rightMenuRefresh"],
+          ["top", "arrow-up", "backTop"],
         ].map(([id, icon, label]) => (
           <button
             class="rightMenu-item"
@@ -488,7 +488,7 @@ const contextItems = [
       <div class="rightMenu-group rightMenu-line rightMenuOther">
         {cfg.right_menu.custom_list.map((item) => (
           <button
-            class={`rightMenu-item ${item.class ?? ''}`}
+            class={`rightMenu-item ${item.class ?? ""}`}
             id={item.id}
             type="button"
             data-solitude-action="runConfiguredAction"
@@ -498,6 +498,18 @@ const contextItems = [
             <span>{item.name}</span>
           </button>
         ))}
+        <button
+          class="rightMenu-item"
+          id="menu-aside"
+          type="button"
+          data-solitude-action="switchHideAside"
+          aria-controls="aside-content"
+          hidden
+          style="display:none"
+        >
+          <i class="solitude fas fa-table-columns" aria-hidden="true" />
+          <span class="menu-aside-text">{t("rightMenuAsideHide")}</span>
+        </button>
         {cfg.comment.use &&
           cfg.comment.commentBarrage &&
           cfg.right_menu.commentBarrage && (
@@ -508,7 +520,7 @@ const contextItems = [
             >
               <i class="solitude fas fa-comment" />
               <span class="menu-commentBarrage-text">
-                {t('rightMenuBarrageClose')}
+                {t("rightMenuBarrageClose")}
               </span>
             </button>
           )}
@@ -519,12 +531,12 @@ const contextItems = [
           data-solitude-action="switchDarkMode"
         >
           <i class="solitude fas fa-circle-half-stroke" />
-          <span class="menu-darkmode-text">{t('rightMenuDark')}</span>
+          <span class="menu-darkmode-text">{t("rightMenuDark")}</span>
         </button>
         {cfg.right_menu.translate && (
           <button class="rightMenu-item" id="menu-translate" type="button">
             <i class="solitude fas fa-language" />
-            <span>{t('rightMenuToTraditional')}</span>
+            <span>{t("rightMenuToTraditional")}</span>
           </button>
         )}
       </div>

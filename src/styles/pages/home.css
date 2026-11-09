@@ -226,7 +226,6 @@
 
 @media (max-width: 768px) {
   #home_center {
-    margin: 0 auto 0.5rem;
     padding: 0 1rem;
   }
   .home-center-content {
@@ -446,7 +445,11 @@
     background: transparent;
   }
   .home-main-flow > .home-category-bar {
-    margin: 0 auto 0.5rem;
+    margin: 0 auto var(--home-section-gap);
+    padding: 0 1rem;
+  }
+  .home-main-flow > .home-category-bar .category-bar-items {
+    padding: 0;
   }
   #category-bar {
     height: auto;

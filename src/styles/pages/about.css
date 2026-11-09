@@ -16,7 +16,7 @@
 }
 
 #about-page .about-page-title {
-  margin: 60px 0 64px;
+  margin: 52px 0 40px;
   color: var(--efu-fontcolor);
   font-size: 48px;
   font-weight: 700;
@@ -25,14 +25,14 @@
 }
 
 #about-page .author-page-content {
-  gap: 10px;
+  gap: 16px;
 }
 
 #about-page .author-content,
 #about-page .about-row {
   display: flex;
   width: 100%;
-  gap: 10px;
+  gap: 16px;
   margin: 0;
 }
 
@@ -117,7 +117,7 @@
   margin: 0;
   font-size: 36px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 #about-page .author-content-item-title { margin-bottom: 10px; }
@@ -126,7 +126,8 @@
   margin: 0;
   color: var(--efu-secondtext);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1.7;
 }
 
 #about-page .about-card-button {
@@ -150,25 +151,27 @@
   outline-offset: 2px;
 }
 
-#about-page .about-row--intro > :first-child { width: calc((100% - 10px) * .5624); }
+#about-page .about-row--intro > :first-child { width: calc((100% - 16px) * .5624); }
 
-#about-page .about-row--intro > :last-child { width: calc((100% - 10px) * .4376); }
+#about-page .about-row--intro > :last-child { width: calc((100% - 16px) * .4376); }
 
-#about-page .about-row--intro > * { height: 206px; }
+#about-page .about-row--intro > * { min-height: 300px; height: auto; padding: 32px 40px; }
 
-#about-page .about-row--skills-career > * { width: calc(50% - 5px); height: 450px; }
+#about-page .about-row--skills-career > * { width: calc(50% - 8px); min-height: 450px; height: auto; }
 
-#about-page .about-row--personality-photo > :first-child { width: calc((100% - 10px) * .5868); }
+#about-page .about-row--personality-photo > :first-child { width: calc((100% - 16px) * .5868); }
 
-#about-page .about-row--personality-photo > :last-child { width: calc((100% - 10px) * .4132); }
+#about-page .about-row--personality-photo > :last-child { width: calc((100% - 16px) * .4132); }
 
 #about-page .about-row--personality-photo > * { height: 240px; }
 
-#about-page .about-row--values > * { width: calc(50% - 5px); height: 200px; }
+#about-page .about-row--personality-photo > :only-child { width: 100%; }
 
-#about-page .about-row--interests > * { width: calc(50% - 5px); height: 300px; }
+#about-page .about-row--values > * { width: calc(50% - 8px); height: 200px; }
 
-#about-page .about-row--stats-profile > * { width: calc((100% - 20px) / 3); height: 380px; }
+#about-page .about-row--interests > * { width: calc(50% - 8px); height: 300px; }
+
+#about-page .about-row--stats-profile > * { width: calc((100% - 32px) / 3); height: 380px; }
 
 #about-page .about-intro-card,
 #about-page .about-pursuit-card {
@@ -179,28 +182,44 @@
 
 #about-page .about-intro-card {
   color: #fff;
-  background: linear-gradient(120deg, #5b27ff 0, #00d4ff 100%);
+  background: linear-gradient(125deg, #315e86 0, #4f7fa6 100%);
   background-size: 200%;
 }
 
 #about-page .about-intro-card .about-card-copy { color: rgba(255,255,255,.82); }
 
-#about-page .about-intro-card h2 { margin: .4rem 0; color: #fff; font-size: 36px; }
+#about-page .about-intro-card h2 { margin: 8px 0 12px; color: #fff; font-size: 44px; }
+
+#about-page .about-intro-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+
+#about-page .about-intro-heading > div { min-width: 0; }
+
+#about-page .about-intro-avatar { flex: 0 0 auto; width: 80px; height: 80px; object-fit: cover; border: 2px solid rgba(255,255,255,.55); border-radius: 50%; }
 
 #about-page .about-intro-card .inline-word { color: #fff; text-shadow: 0 4px 16px rgba(20,34,126,.3); }
 
-#about-page .about-pursuit-card { background: var(--efu-card-bg); }
+#about-page .about-pursuit-card { justify-content: flex-start; background: var(--efu-card-bg); }
 
 #about-page .about-pursuit-card h2 { display: flex; flex-direction: column; font-size: 36px; }
 
+#about-page .about-pursuit-note {
+  margin: 8px 0 0;
+  color: var(--efu-secondtext);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
 #about-page .about-word-mask {
-  height: 1.2em;
+  height: 1.5em;
+  line-height: 1.4;
   color: var(--efu-theme);
 }
 
 #about-page [data-about-word] {
   position: absolute;
   inset: 0;
+  white-space: nowrap;
   opacity: 0;
   transform: translateY(70%);
   transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1);
@@ -230,7 +249,7 @@
 
 #about-page .skills-marquee-icon img { width: 66px; height: 66px; object-fit: contain; }
 
-#about-page .skills-list { top: 0; right: 0; left: 0; width: 100%; height: 300px; align-content: flex-start; margin: 10px 0 0; padding: 0; list-style: none; opacity: 0; scrollbar-width: none; transition: opacity .25s ease; }
+#about-page .skills-list { top: 0; right: 0; left: 0; width: 100%; height: 300px; overflow: auto; align-content: flex-start; margin: 10px 0 0; padding: 0; list-style: none; opacity: 0; scrollbar-width: none; transition: opacity .25s ease; }
 
 #about-page .skills-list::-webkit-scrollbar { display: none; }
 
@@ -241,8 +260,6 @@
 #about-page .skill-icon img { width: 22px; height: 22px; object-fit: contain; }
 
 #about-page .skill-name { font-size: 16px; font-weight: 700; line-height: 32px; text-overflow: ellipsis; }
-
-#about-page .skill-info--more { height: 50px; padding: 8px 0; font-size: 20px; background: transparent; border-color: transparent; }
 
 @media (hover: hover) {
   #about-page .skills:hover .skills-marquee { opacity: 0; }
@@ -259,6 +276,7 @@
 
 #about-page .careers {
   --career-track-inset: 64px;
+  --career-milestone-width: 8px;
   background: var(--efu-card-bg);
 }
 
@@ -268,25 +286,25 @@
 
 #about-page .careers-summary span { width: 16px; height: 16px; flex: 0 0 auto; background: var(--career-color); border-radius: 50%; }
 
-#about-page .career-timeline { right: -40px; bottom: -8px; left: -40px; height: 170px; }
+#about-page .career-timeline { position: relative; flex: 0 0 170px; width: calc(100% + 80px); height: 170px; margin: 28px -40px -8px; }
 
-#about-page .career-track-label { top: 6px; left: calc(var(--career-track-inset) + 8px); margin: 0; color: var(--career-track-color); font-size: 18px; font-weight: 900; line-height: 24px; letter-spacing: .02em; }
+#about-page .career-track-label { top: 24px; transform: translateY(-100%); left: calc(var(--career-track-inset) + 8px); margin: 0; color: var(--career-track-color); font-size: 18px; font-weight: 900; line-height: 24px; letter-spacing: .02em; }
 
 #about-page .career-timeline-axis { z-index: 0; top: 48px; right: 0; left: 0; height: 4px; background: color-mix(in srgb, var(--efu-fontcolor) 88%, transparent); }
 
 #about-page .career-track { z-index: 2; top: 34px; right: var(--career-track-inset); left: var(--career-track-inset); height: 32px; margin: 0; padding: 0; list-style: none; background: color-mix(in srgb, var(--efu-fontcolor) 9%, transparent); border-radius: 999px; box-shadow: 0 7px 15px color-mix(in srgb, var(--career-track-color) 18%, transparent); }
 
-#about-page .career-event { position: absolute; top: 0; bottom: 0; left: var(--career-left); width: var(--career-width); outline: none; }
+#about-page .career-event { position: absolute; z-index: 0; top: 0; bottom: 0; left: var(--career-left); width: var(--career-width); outline: none; }
 
 #about-page .career-event-bar { width: 100%; height: 100%; background: var(--career-color); transition: filter .2s ease, box-shadow .2s ease; }
 
-#about-page .career-event--point { top: 50%; bottom: auto; width: 14px; height: 14px; transform: translate(-50%, -50%); }
+#about-page .career-event--milestone { z-index: 1; width: var(--career-milestone-width); transform: translateX(-50%); }
 
-#about-page .career-event--point .career-event-bar { border: 3px solid var(--efu-card-bg); border-radius: 50%; box-shadow: 0 0 0 4px color-mix(in srgb, var(--career-color) 24%, transparent); }
-
-#about-page .career-event:focus-visible { z-index: 3; }
+#about-page .career-event--milestone .career-event-bar { border: 0; border-radius: 0; box-shadow: none; }
 
 #about-page .career-event:focus-visible .career-event-bar { filter: saturate(1.15) brightness(1.08); box-shadow: inset 0 0 0 3px color-mix(in srgb, #fff 68%, transparent), 0 0 0 3px color-mix(in srgb, var(--career-color) 30%, transparent); }
+
+#about-page .career-event--milestone:focus-visible .career-event-bar { box-shadow: 0 0 0 3px color-mix(in srgb, var(--career-color) 45%, transparent); }
 
 #about-page .career-timeline-tick { z-index: 1; top: 48px; width: 4px; height: 45px; background: color-mix(in srgb, var(--efu-fontcolor) 88%, transparent); border-radius: 0 0 3px 3px; }
 
@@ -303,11 +321,15 @@
 #about-page .career-timeline-years span:last-child { right: 0; transform: translateX(50%); }
 
 @media (hover: hover) {
-  #about-page .career-event:hover { z-index: 3; }
-  #about-page .career-event:hover .career-event-bar { filter: saturate(1.12) brightness(1.08); box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 42%, transparent); }
+  #about-page .career-event:hover .career-event-bar { filter: saturate(1.12) brightness(1.08); }
+  #about-page .career-event:not(.career-event--milestone):hover .career-event-bar { box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 42%, transparent); }
 }
 
-#about-page .personality-type { margin: 0; color: var(--personality-color); font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: normal; }
+#about-page .personalities { justify-content: center; background: color-mix(in srgb, var(--personality-color) 8%, var(--efu-card-bg)); }
+
+#about-page .personalities::after { position: absolute; right: 16px; bottom: -30px; content: attr(data-personality-type); color: var(--personality-color); font-size: 130px; font-weight: 900; line-height: 1; opacity: .08; pointer-events: none; }
+
+#about-page .personality-type { margin: 10px 0 0; color: var(--personality-color); font-size: 64px; font-weight: 700; line-height: 1.1; letter-spacing: -.03em; }
 
 #about-page .personalities > .personality-image {
   position: absolute;
@@ -509,7 +531,7 @@
 
 #about-page .about-profile-list dd { min-width: 0; margin: 0; overflow-wrap: anywhere; font-size: .82rem; font-weight: 800; line-height: 1.35; text-align: right; }
 
-#about-page .about-story { width: 100%; min-height: 422px; height: auto; background: var(--efu-card-bg); }
+#about-page .about-story { width: 100%; min-height: 0; height: auto; padding: 32px 40px; background: var(--efu-card-bg); }
 
 #about-page .about-story .author-content-item-title { max-width: 780px; font-size: 36px; }
 
@@ -517,20 +539,68 @@
 
 #about-page .about-story-content p { margin: 16px 0; }
 
-#about-page .about-story-content strong { color: #e8b84a; }
+#about-page .about-story-content strong { color: var(--efu-fontcolor); }
+
+#about-page .about-story-content > p:first-child { font-size: 22px; line-height: 1.5; }
+
+#about-page .about-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 24px; }
+
+#about-page .about-links a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 8px 14px; color: var(--efu-fontcolor); font-size: 14px; font-weight: 600; line-height: 1.4; background: var(--efu-background); border: var(--style-border-always); border-radius: 10px; transition: background .2s ease, color .2s ease; }
+
+#about-page .about-links a:hover { color: var(--efu-theme); background: var(--efu-theme-op-light); }
+
+#about-page .about-intro-card .about-links a { color: #fff; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.25); }
+
+#about-page .about-intro-card .about-links a:hover { background: rgba(255,255,255,.23); }
+
+#about-page .about-projects { margin: 12px 0; }
+
+#about-page .about-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; padding: 16px 0 24px; }
+
+#about-page .about-section-heading h2 { font-size: 30px; }
+
+#about-page .about-text-link { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; color: var(--efu-secondtext); font-size: 14px; font-weight: 600; }
+
+#about-page .about-text-link:hover { color: var(--efu-theme); }
+
+#about-page .about-project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+
+#about-page .about-project-card { display: flex; flex-direction: column; min-height: 260px; padding: 28px 32px; }
+
+#about-page .about-project-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+#about-page .about-project-icon { display: grid; flex: 0 0 auto; width: 42px; height: 42px; place-items: center; color: var(--project-color); font-size: 20px; background: color-mix(in srgb, var(--project-color) 12%, var(--efu-card-bg)); border-radius: 12px; }
+
+#about-page .about-project-meta > span:not(.about-project-icon) { padding: 4px 9px; color: var(--efu-secondtext); font-size: 12px; font-weight: 600; line-height: 1.5; background: var(--efu-background); border: var(--style-border-always); border-radius: 999px; }
+
+#about-page .about-project-card h3 { margin: 18px 0 0; font-size: 24px; line-height: 1.3; }
+
+#about-page .about-project-card h3 a { color: inherit; }
+
+#about-page .about-project-card h3 a:hover { color: var(--efu-theme); }
+
+#about-page .about-project-card h3 i { margin-left: 10px; color: var(--efu-secondtext); font-size: 13px; vertical-align: middle; }
+
+#about-page .about-project-description { flex: 1; margin: 12px 0 24px; color: var(--efu-secondtext); font-size: 16px; line-height: 1.7; }
+
+#about-page .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+#about-page .about-tags li { margin: 0; padding: 4px 10px; color: var(--efu-secondtext); font-size: 12px; font-weight: 500; line-height: 1.5; background: var(--efu-background); border: var(--style-border-always); border-radius: 7px; }
+
+#about-page .about-story .about-tags { margin-top: 24px; }
 
 @media (max-width: 768px) {
   #content-inner:has(#about-page) { padding-right: 0; padding-left: 0; }
   #page:has(#about-page) { margin-top: 20px; padding: 0 20px; }
-  #about-page { width: 100%; max-width: 350px; }
-  #about-page .about-page-title { margin: 60px 0 64px; font-size: 40px; }
+  #about-page { width: 100%; max-width: none; }
+  #about-page .about-page-title { margin: 36px 0 32px; font-size: 36px; }
   #about-page .about-row { flex-direction: column; }
   #about-page .about-row > * { width: 100% !important; }
   #about-page .author-content-item { padding: 20px; border-radius: 12px; }
-  #about-page .about-row--intro > :first-child { height: 200px; }
-  #about-page .about-row--intro > :last-child { height: 206px; }
+  #about-page .about-row--intro > :first-child { min-height: 300px; height: auto; }
+  #about-page .about-row--intro > :last-child { min-height: 240px; height: auto; }
   #about-page .about-row--skills-career > :first-child { height: 450px; }
-  #about-page .about-row--skills-career > :last-child { height: 450px; }
+  #about-page .about-row--skills-career > :last-child { height: auto; }
   #about-page .about-row--personality-photo > :first-child { height: 300px; }
   #about-page .about-row--personality-photo > :last-child { height: 220px; }
   #about-page .about-row--values > :first-child { height: 152px; }
@@ -540,22 +610,23 @@
   #about-page .about-row--stats-profile > :nth-child(2) { height: 240px; }
   #about-page .about-row--stats-profile > :nth-child(3) { height: 340px; }
   #about-page .about-intro-card h2 { font-size: 36px; }
-  #about-page .about-pursuit-card h2 { font-size: 36px; }
+  #about-page .about-intro-avatar { width: 60px; height: 60px; }
+  #about-page .about-intro-heading { gap: 12px; }
+  #about-page .about-pursuit-card h2 { font-size: 32px; }
   #about-page .skills-style-group { margin: 0; }
-  #about-page .skills-list { overflow: auto; }
   #about-page .skill-info { height: 46px; margin: 8px 8px 0 0; padding: 6px 10px 6px 6px; }
   #about-page .skill-name { font-size: 14px; }
   #about-page .careers { --career-track-inset: 36px; }
   #about-page .careers-summary { gap: 8px; margin-top: 18px; font-size: 13px; line-height: 20px; }
   #about-page .careers-summary li { gap: 9px; }
   #about-page .careers-summary span { width: 13px; height: 13px; }
-  #about-page .career-timeline { right: -20px; bottom: -5px; left: -20px; height: 156px; }
-  #about-page .career-track-label { top: 8px; left: calc(var(--career-track-inset) + 6px); font-size: 16px; }
+  #about-page .career-timeline { flex-basis: 156px; width: calc(100% + 40px); height: 156px; margin: 28px -20px -5px; }
+  #about-page .career-track-label { top: 26px; left: calc(var(--career-track-inset) + 6px); font-size: 16px; }
   #about-page .career-timeline-axis { top: 61px; height: 3px; }
   #about-page .career-track { top: 49px; height: 27px; }
   #about-page .career-timeline-tick { top: 61px; width: 3px; height: 39px; }
   #about-page .career-timeline-years { top: 108px; font-size: 16px; }
-  #about-page .personality-type { font-size: 36px; }
+  #about-page .personality-type { font-size: 56px; }
   #about-page .personalities::before { right: -12%; bottom: -12px; width: 72%; height: 62%; }
   #about-page .personalities > .personality-image { right: 0; bottom: 0; width: 100%; height: 72%; }
   #about-page .personalities > .personality-image--avatar { right: 12px; bottom: 12px; width: 58%; height: 58%; }
@@ -580,6 +651,17 @@
   #about-page .about-profile-list { margin-top: 1rem; }
   #about-page .about-profile-list div { padding: .58rem .65rem; }
   #about-page .about-profile-list dd { font-size: .76rem; }
+  #about-page .about-section-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+  #about-page .about-section-heading h2 { font-size: 28px; }
+  #about-page .about-project-grid { grid-template-columns: minmax(0, 1fr); }
+  #about-page .about-project-card { min-height: 0; }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  #about-page .about-row--skills-career > .skills { height: auto; min-height: 360px; }
+  #about-page .skills-style-group { flex: auto; height: auto; }
+  #about-page .skills-marquee { display: none; }
+  #about-page .skills-list { position: static; height: auto; margin-top: 16px; overflow: visible; opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -591,7 +673,3 @@
 
 }
 
-#about-page .about-glow-host.is-about-glow-active {
-  --about-glow-opacity: 1;
-
-}

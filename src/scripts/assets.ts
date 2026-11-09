@@ -14,8 +14,8 @@ export async function prepareAssets() {
   if (
     c.capsule.enable ||
     (c.music.enable && Solitude.page.page === 'music') ||
-    (c.brevity.music &&
-      Boolean(document.querySelector<HTMLElement>('#bber solitude-meting')))
+    (c.notes.music &&
+      Boolean(document.querySelector<HTMLElement>('#notes solitude-meting')))
   ) {
     styles.push(cdn.aplayer_css);
     await Solitude.loadScript(cdn.aplayer_js).catch(() => {});

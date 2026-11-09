@@ -1,6 +1,6 @@
 ---
-import { render } from 'astro:content';
-import Base from './Base.astro';
+import { render } from "astro:content";
+import Base from "./Base.astro";
 import {
   cfg,
   config,
@@ -9,54 +9,51 @@ import {
   absolute,
   dateLabel,
   termPath,
-} from '../lib/site';
-import { getPosts, taxonomy, contentPath, type Post } from '../lib/content';
-import type { Route } from '../lib/routes';
-import { pageData } from '../lib/data';
-import { components } from '../components/mdx';
-import Aside from '../components/Aside.astro';
-import HomeTop from '../components/HomeTop.astro';
-import CategoryBar from '../components/CategoryBar.astro';
-import PostCard from '../components/PostCard.astro';
-import Pagination from '../components/Pagination.astro';
-import PostMeta from '../components/PostMeta.astro';
-import Copyright from '../components/Copyright.astro';
-import Comments from '../components/Comments.astro';
-import About from '../components/pages/About.astro';
-import Links from '../components/pages/Links.astro';
-import Equipment from '../components/pages/Equipment.astro';
-import Brevity from '../components/pages/Brevity.astro';
-import Archive from '../components/pages/Archive.astro';
-import RecentComments from '../components/pages/RecentComments.astro';
-import MessageBarrage from '../components/pages/MessageBarrage.astro';
+} from "../lib/site";
+import { getPosts, taxonomy, contentPath, type Post } from "../lib/content";
+import type { Route } from "../lib/routes";
+import { pageData } from "../lib/data";
+import { components } from "../components/mdx";
+import Aside from "../components/Aside.astro";
+import HomeTop from "../components/HomeTop.astro";
+import CategoryBar from "../components/CategoryBar.astro";
+import PostCard from "../components/PostCard.astro";
+import Pagination from "../components/Pagination.astro";
+import PostMeta from "../components/PostMeta.astro";
+import Comments from "../components/Comments.astro";
+import About from "../components/pages/About.astro";
+import Links from "../components/pages/Links.astro";
+import Notes from "../components/pages/Notes.astro";
+import Archive from "../components/pages/Archive.astro";
+import RecentComments from "../components/pages/RecentComments.astro";
+import MessageBarrage from "../components/pages/MessageBarrage.astro";
 interface Props {
   route: Route;
 }
 const { route } = Astro.props;
 const posts = await getPosts();
 const fullEntry = route.entry;
-if (fullEntry && !fullEntry.filePath?.endsWith('.mdx') && !fullEntry.rendered)
+if (fullEntry && !fullEntry.filePath?.endsWith(".mdx") && !fullEntry.rendered)
   throw new Error(`Content rendering failed: ${fullEntry.filePath}`);
 const result = fullEntry ? await render(fullEntry) : null;
 const Content = result?.Content;
 const headings = result?.headings ?? [];
-const p: import('../lib/page-types').PageMetadata = route.entry?.data ?? {};
-const type = route.kind === 'home' ? 'solitude' : (route.type ?? route.kind);
-const post = route.kind === 'post' ? (route.entry as Post) : undefined;
+const p: import("../lib/page-types").PageMetadata = route.entry?.data ?? {};
+const type = route.kind === "home" ? "solitude" : (route.type ?? route.kind);
+const post = route.kind === "post" ? (route.entry as Post) : undefined;
 const hideAside =
   p.aside === false ||
   [
-    'about',
-    'music',
-    'tags',
-    'categories',
-    'links',
-    'kit',
-    'brevity',
-    'recentcomment',
-    'message',
+    "about",
+    "music",
+    "tags",
+    "categories",
+    "links",
+    "notes",
+    "recentcomment",
+    "message",
   ].includes(type) ||
-  route.kind === 'taxonomy';
+  route.kind === "taxonomy";
 const index = post ? posts.findIndex((item) => item.id === post.id) : -1;
 const previous = posts[index + 1],
   next = posts[index - 1];
@@ -77,18 +74,18 @@ const related = post
 const commentsEnabled =
   p.comment !== false &&
   ![
-    'about',
-    'music',
-    'tags',
-    'categories',
-    'brevity',
-    'recentcomment',
-    'archives',
+    "about",
+    "music",
+    "tags",
+    "categories",
+    "notes",
+    "recentcomment",
+    "archives",
   ].includes(type) &&
-  !['taxonomy', 'term'].includes(route.kind);
+  !["taxonomy", "term"].includes(route.kind);
 ---
 
-{route.kind === 'redirect' ? (
+{route.kind === "redirect" ? (
   <html lang={config.locale}>
     <head>
       <meta charset="utf-8" />
@@ -114,7 +111,7 @@ const commentsEnabled =
       (post ? cfg.aside.toc.post : cfg.aside.toc.page)
     }
   >
-    {route.kind === 'home' ? (
+    {route.kind === "home" ? (
       <div class="home-main-flow tw:flex tw:flex-col">
         {cfg.hometop.enable && route.current === 1 && (
           <div id="home_top">
@@ -135,7 +132,7 @@ const commentsEnabled =
                   <PostCard post={post} index={i} newest={posts[0]?.id} />
                 ))}
                 {!route.posts?.length && (
-                  <p class="empty-state">{t('archiveEmpty')}</p>
+                  <p class="empty-state">{t("archiveEmpty")}</p>
                 )}
                 <Pagination current={route.current!} total={route.total!} />
               </div>
@@ -145,119 +142,127 @@ const commentsEnabled =
         </main>
       </div>
     ) : post ? (
-    <main class="layout tw:[.layout&]:relative" id="content-inner">
-      <div class="post-column">
-        <div id="post">
-          {post.data.not_cover && <PostMeta post={post} />}
-          <article class="post-content article-container">
-            {Content && <Content components={components} />}
-          </article>
-          <div class="post-tools-right tw:[#post_&]:flex tw:[#post_&]:items-center tw:[#post_&]:flex-row tw:[#post_&]:justify-between tw:[#post_&]:flex-wrap">
-            <div class="tag_share">
-              <div class="post-meta__tag-list tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:flex tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:flex-row tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:items-center tw:[#post_.post-tools-right_.tag\_share_&]:flex tw:[#post_.post-tools-right_.tag\_share_&]:flex-wrap tw:[#post_.post-tools-right_.tag\_share_&]:flex-row">
-                {post.data.tags.map((tag) => (
-                  <a
-                    class="post-meta__tags tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_.post-meta\_\_tag-list_&]:flex tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_.post-meta\_\_tag-list_&]:flex-row tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_.post-meta\_\_tag-list_&]:items-center tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_&]:flex tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_&]:items-center tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_&]:whitespace-nowrap"
-                    href={url(termPath('tags', tag))}
-                  >
-                    <span class="tags-punctuation tw:[span&]:flex tw:[span&]:items-center tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_.post-meta\_\_tags_span&]:flex tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_.post-meta\_\_tags_span&]:items-center">
-                      <i class="solitude fas fa-hashtag" />
-                      {tag}
-                      <span class="tagsPageCount tw:[span&]:text-center">
-                        {posts.filter((p) => p.data.tags.includes(tag)).length}
+      <main class="layout tw:[.layout&]:relative" id="content-inner">
+        <div class="post-column">
+          <div id="post">
+            {post.data.not_cover && <PostMeta post={post} />}
+            <article class="post-content article-container">
+              {Content && <Content components={components} />}
+            </article>
+            <div class="post-tools-right tw:[#post_&]:flex tw:[#post_&]:items-center tw:[#post_&]:flex-row tw:[#post_&]:justify-between tw:[#post_&]:flex-wrap">
+              <div class="tag_share">
+                <div class="post-meta__tag-list tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:flex tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:flex-row tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_&]:items-center tw:[#post_.post-tools-right_.tag\_share_&]:flex tw:[#post_.post-tools-right_.tag\_share_&]:flex-wrap tw:[#post_.post-tools-right_.tag\_share_&]:flex-row">
+                  {post.data.tags.map((tag) => (
+                    <a
+                      class="post-meta__tags tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_.post-meta\_\_tag-list_&]:flex tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_.post-meta\_\_tag-list_&]:flex-row tw:[.post_#post-info_#post-firstinfo_.meta-firstline_.tag\_share_.post-meta\_\_tag-list_&]:items-center tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_&]:flex tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_&]:items-center tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_&]:whitespace-nowrap"
+                      href={url(termPath("tags", tag))}
+                    >
+                      <span class="tags-punctuation tw:[span&]:flex tw:[span&]:items-center tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_.post-meta\_\_tags_span&]:flex tw:[#post_.post-tools-right_.tag\_share_.post-meta\_\_tag-list_.post-meta\_\_tags_span&]:items-center">
+                        <i class="solitude fas fa-hashtag" />
+                        {tag}
+                        <span class="tagsPageCount tw:[span&]:text-center">
+                          {
+                            posts.filter((p) => p.data.tags.includes(tag))
+                              .length
+                          }
+                        </span>
                       </span>
-                    </span>
-                  </a>
-                ))}
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          
-          {cfg.related_post.enable && related.length > 0 && (
-            <section class="relatedPosts" aria-labelledby="related-posts-title">
-              <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
-                <i class="solitude fas fa-star" />
-                <span id="related-posts-title">{t('relatedPostsLead')}</span>
-                <button
-                  class="relatedPosts-random tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:cursor-pointer"
-                  type="button"
-                  data-solitude-action="randomPost"
-                >
-                  {t('browseRandomly')}
-                </button>
-              </div>
-              <div class="relatedPosts-list tw:flex tw:flex-col">
-                {related.map((item) => (
-                  <article class="relatedPosts-item tw:[.relatedPosts_&]:relative tw:[.relatedPosts_&]:overflow-hidden">
-                    <a class="relatedPosts-link" href={url(contentPath(item))}>
-                      <img
-                        class="cover"
-                        src={url(item.data.cover ?? cfg.post.default.cover[0])}
-                        alt=""
-                        loading="lazy"
-                      />
-                      <div class="content is-center">
-                        <div class="title">{item.data.title}</div>
-                        <time class="date">
-                          {dateLabel(
-                            cfg.related_post.date_type === 'updated'
-                              ? (item.data.lastmod ?? item.data.date)
-                              : item.data.date,
+
+            {cfg.related_post.enable && related.length > 0 && (
+              <section
+                class="relatedPosts"
+                aria-labelledby="related-posts-title"
+              >
+                <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
+                  <i class="solitude fas fa-star" />
+                  <span id="related-posts-title">{t("relatedPostsLead")}</span>
+                  <button
+                    class="relatedPosts-random tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:cursor-pointer"
+                    type="button"
+                    data-solitude-action="randomPost"
+                  >
+                    {t("browseRandomly")}
+                  </button>
+                </div>
+                <div class="relatedPosts-list tw:flex tw:flex-col">
+                  {related.map((item) => (
+                    <article class="relatedPosts-item tw:[.relatedPosts_&]:relative tw:[.relatedPosts_&]:overflow-hidden">
+                      <a
+                        class="relatedPosts-link"
+                        href={url(contentPath(item))}
+                      >
+                        <img
+                          class="cover"
+                          src={url(
+                            item.data.cover ?? cfg.post.default.cover[0],
                           )}
-                        </time>
-                      </div>
-                    </a>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-        
-        <nav class="post-page-switch" aria-label="Post navigation">
-          {previous ? (
-            <a
-              class="post-page-switch__card"
-              href={url(contentPath(previous))}
-              title={previous.data.title}
-            >
-              <span class="post-page-switch__label">上一篇</span>
-              <span class="post-page-switch__title">
-                {previous.data.title}
-              </span>
-            </a>
-          ) : (
-            <span class="post-page-switch__card is-disabled">
-              <span class="post-page-switch__label">上一篇</span>
-              <span class="post-page-switch__title">没有更早的文章了</span>
-            </span>
-          )}
-
-          {next ? (
-            <a
-              class="post-page-switch__card"
-              href={url(contentPath(next))}
-              title={next.data.title}
-            >
-              <span class="post-page-switch__label">下一篇</span>
-              <span class="post-page-switch__title">
-                {next.data.title}
-              </span>
-            </a>
-          ) : (
-            <span class="post-page-switch__card is-disabled">
-              <span class="post-page-switch__label">下一篇</span>
-              <span class="post-page-switch__title">已经是最新文章了</span>
-            </span>
-          )}
-        </nav>
-
-        {commentsEnabled && cfg.comment.use && (
-          <div class="post-comments-card">
-            <Comments enabled={commentsEnabled} />
+                          alt=""
+                          loading="lazy"
+                        />
+                        <div class="content is-center">
+                          <div class="title">{item.data.title}</div>
+                          <time class="date">
+                            {dateLabel(
+                              cfg.related_post.date_type === "updated"
+                                ? (item.data.lastmod ?? item.data.date)
+                                : item.data.date,
+                            )}
+                          </time>
+                        </div>
+                      </a>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
-        )}
-        
+
+          <nav class="post-page-switch" aria-label="Post navigation">
+            {previous ? (
+              <a
+                class="post-page-switch__card"
+                href={url(contentPath(previous))}
+                title={previous.data.title}
+              >
+                <span class="post-page-switch__label">上一篇</span>
+                <span class="post-page-switch__title">
+                  {previous.data.title}
+                </span>
+              </a>
+            ) : (
+              <span class="post-page-switch__card is-disabled">
+                <span class="post-page-switch__label">上一篇</span>
+                <span class="post-page-switch__title">没有更早的文章了</span>
+              </span>
+            )}
+
+            {next ? (
+              <a
+                class="post-page-switch__card"
+                href={url(contentPath(next))}
+                title={next.data.title}
+              >
+                <span class="post-page-switch__label">下一篇</span>
+                <span class="post-page-switch__title">{next.data.title}</span>
+              </a>
+            ) : (
+              <span class="post-page-switch__card is-disabled">
+                <span class="post-page-switch__label">下一篇</span>
+                <span class="post-page-switch__title">已经是最新文章了</span>
+              </span>
+            )}
+          </nav>
+
+          {commentsEnabled && cfg.comment.use && (
+            <div class="post-comments-card">
+              <Comments enabled={commentsEnabled} />
+            </div>
+          )}
         </div>
 
         <Aside
@@ -267,7 +272,7 @@ const commentsEnabled =
           headings={p.toc === false ? [] : headings}
         />
       </main>
-    ) : type === 'archives' ? (
+    ) : type === "archives" ? (
       <main
         class="layout layout--archive tw:[.layout&]:flex-col tw:[.layout&]:relative"
         id="content-inner"
@@ -284,12 +289,12 @@ const commentsEnabled =
       </main>
     ) : (
       <main
-        class:list={['layout', { 'hide-aside': hideAside }]}
+        class:list={["layout", { "hide-aside": hideAside }]}
         id="content-inner"
         class="tw:[.layout&]:relative"
       >
-        <div id={route.kind === 'term' ? 'tag' : 'page'}>
-          {route.kind === 'taxonomy' ? (
+        <div id={route.kind === "term" ? "tag" : "page"}>
+          {route.kind === "taxonomy" ? (
             <>
               <h1 class="page-title tw:[#page_h1&]:text-center">
                 {route.title}
@@ -310,7 +315,7 @@ const commentsEnabled =
                 </div>
               </div>
             </>
-          ) : route.kind === 'term' ? (
+          ) : route.kind === "term" ? (
             <>
               <div class="article-sort-title">{route.title}</div>
               <div class="article-sort">
@@ -341,22 +346,19 @@ const commentsEnabled =
                 ))}
               </div>
             </>
-          ) : type === 'about' ? (
-            <About data={pageData(p.data, 'about')} />
-          ) : type === 'links' ? (
+          ) : type === "about" ? (
+            <About data={pageData(p.data, "about")} />
+          ) : type === "links" ? (
             <Links
-              data={pageData(p.data, 'links')}
+              data={pageData(p.data, "links")}
               title={route.title}
-              description={String(p.description ?? '')}
-              comment={p.comment}
+              description={String(p.description ?? "")}
             >
               {Content && <Content components={components} />}
             </Links>
-          ) : type === 'kit' ? (
-            <Equipment data={pageData(p.data, 'kit')} comment={p.comment} />
-          ) : type === 'brevity' ? (
-            <Brevity data={pageData(p.data, 'brevity')} />
-          ) : type === 'music' && cfg.music.enable ? (
+          ) : type === "notes" ? (
+            <Notes data={pageData(p.data, "notes")} />
+          ) : type === "music" && cfg.music.enable ? (
             <>
               <div id="Music-bg" />
               <div id="Music-page" class="tw:relative tw:overflow-hidden">
@@ -372,10 +374,10 @@ const commentsEnabled =
                 />
               </div>
               <div class="Music-loading">
-                <div>{t('playerLoading')}</div>
+                <div>{t("playerLoading")}</div>
               </div>
             </>
-          ) : type === 'recentcomment' ? (
+          ) : type === "recentcomment" ? (
             <RecentComments title={route.title} page={p} />
           ) : (
             <>
@@ -388,10 +390,10 @@ const commentsEnabled =
               <article class="post-content article-container">
                 {Content && <Content components={components} />}
               </article>
-              {type === 'music' && !cfg.music.enable && (
-                <p>{t('musicSetup')}</p>
+              {type === "music" && !cfg.music.enable && (
+                <p>{t("musicSetup")}</p>
               )}
-              {type === 'message' && cfg.envelope.enable && <MessageBarrage />}
+              {type === "message" && cfg.envelope.enable && <MessageBarrage />}
             </>
           )}
           <Comments enabled={commentsEnabled} />

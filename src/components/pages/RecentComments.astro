@@ -1,11 +1,11 @@
 ---
-import { cfg, t, url } from '../../lib/site';
+import { cfg, t, url } from "../../lib/site";
 interface Props {
   title: string;
-  page?: import('../../lib/page-types').PageMetadata;
+  page?: import("../../lib/page-types").PageMetadata;
 }
 const { title, page = {} } = Astro.props;
-const cover = page.cover || '/img/demo/cover-pagination-v2.webp';
+const cover = page.cover || cfg.page.default.cover[0];
 const tip = page.desc || page.description;
 ---
 
@@ -15,7 +15,7 @@ const tip = page.desc || page.description;
       class="author-content author-content-item single sharePage tw:[.author-content.author-content-item&]:overflow-hidden"
       style={{
         background: `url(${JSON.stringify(url(cover))}) no-repeat center`,
-        backgroundSize: 'cover',
+        backgroundSize: "cover",
       }}
     >
       <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
@@ -51,7 +51,7 @@ const tip = page.desc || page.description;
       aria-live="polite"
       aria-busy="true"
     >
-      {t('commentsLoading')}
+      {t("commentsLoading")}
     </div>
   </>
 )}

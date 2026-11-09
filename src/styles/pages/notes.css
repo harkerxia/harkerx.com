@@ -1,0 +1,232 @@
+/* Short essays share the theme's banner and card tokens. */
+body[data-type='notes'] #page {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.notes-header {
+  --notes-button-bg: rgba(128, 128, 128, 0.2);
+  --notes-button-hover-bg: rgba(255, 255, 255, 0.2);
+  isolation: isolate;
+  min-height: 240px;
+  height: 240px;
+  color: var(--efu-white);
+  background: linear-gradient(125deg, #315e86, #4f7fa6);
+}
+
+.notes-header-cover {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.notes-header-lighthouse {
+  position: absolute;
+  right: 0px;
+  bottom: 0;
+  width: 300px;
+  height: 200px;
+  max-width: none;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.notes-header .author-content-item-title {
+  color: inherit;
+  line-height: 1.4;
+  margin-top: 0;
+}
+
+.notes-header .card-content .banner-button-group {
+  left: 1.8rem;
+  right: auto;
+  bottom: 1.2rem;
+}
+
+.notes-header .card-content .banner-button-group .banner-button {
+  width: auto;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, .4);
+  background: var(--notes-button-bg);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(8, 30, 50, .16), inset 0 1px 0 rgba(255, 255, 255, .12);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+.notes-header .card-content .banner-button-group .banner-button:hover {
+  background: var(--notes-button-hover-bg);
+  color: #fff;
+}
+
+.notes-header .banner-button-text {
+  display: inline;
+}
+
+.notes-header .card-content .banner-button-group .banner-button i {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.notes-header .banner-button:focus-visible {
+  outline: 2px solid var(--efu-white);
+  outline-offset: 4px;
+}
+
+#notes {
+  --notes-gap: 8px;
+  --notes-radius: 12px;
+  --notes-padding: 20px;
+  --notes-thumb-height: 100px;
+  --notes-meta-icon-size: 12px;
+  width: 100%;
+  margin-top: var(--notes-gap);
+}
+
+#notes .waterfall {
+  /* This list uses its own layout, so it does not wait for the gallery reveal. */
+  opacity: 1;
+  --notes-columns: 3;
+  grid-template-columns: repeat(var(--notes-columns), minmax(0, 1fr));
+  align-items: start;
+  gap: var(--notes-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#notes .item {
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0;
+  padding: var(--notes-padding) var(--notes-padding) 10px;
+  border: var(--style-border-always);
+  border-radius: var(--notes-radius);
+  background: var(--efu-card-bg);
+  box-shadow: var(--efu-shadow-border);
+  overflow-wrap: anywhere;
+  transition: border-color .3s, box-shadow .3s;
+}
+
+#notes .item:hover,
+#notes .item:focus-within {
+  border-color: var(--efu-main);
+}
+
+#notes .datacont {
+  margin: 0;
+  color: var(--efu-fontcolor);
+  font-size: 16px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+#notes .notes-content-img {
+  gap: 10px;
+  margin: 10px 0;
+  overflow-x: auto;
+  border-radius: var(--notes-radius);
+}
+
+#notes .notes-content-img img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: var(--notes-thumb-height);
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: var(--notes-radius);
+}
+
+#notes .notes-content-img a {
+  flex-shrink: 0;
+  border-radius: var(--notes-radius);
+}
+
+#notes hr {
+  width: 100%;
+  height: 0;
+  margin: var(--notes-gap) 0;
+  border: 0;
+  border-top: 1px dashed var(--efu-theme-op);
+}
+
+#notes hr::before { display: none; }
+
+#notes .notes-info {
+  gap: var(--notes-gap);
+  font-size: 12px;
+  line-height: 2;
+}
+
+#notes .notes-info-time,
+#notes .notes-info-location,
+#notes .notes-content-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background: var(--efu-gray-op);
+  color: var(--efu-fontcolor);
+}
+
+#notes .notes-info .solitude {
+  font-size: var(--notes-meta-icon-size);
+  line-height: 1;
+}
+
+#notes .notes-content-link {
+  background: color-mix(in srgb, var(--efu-red) 13%, transparent);
+  color: var(--efu-secondtext);
+}
+
+#notes .notes-content-link:hover {
+  background: var(--efu-main);
+  color: var(--efu-white);
+}
+
+#notes a:focus-visible {
+  outline: 2px solid var(--efu-main);
+  outline-offset: 3px;
+}
+
+#notes .meta { gap: 10px; margin-bottom: 12px; }
+#notes .avatar { width: 40px; height: 40px; border-radius: 50%; }
+#notes .info { display: flex; flex-direction: column; }
+#notes .notes_nick { font-weight: 700; }
+#notes .notes_date { color: var(--efu-secondtext); font-size: 12px; }
+#notes[data-style='2'] .waterfall { --notes-columns: 1; }
+
+#notes .notes-music {
+  min-height: 82px;
+  margin: 10px 0;
+  border: var(--style-border-always);
+  border-radius: var(--notes-radius);
+}
+#notes .aplayer { margin: 0; background: var(--efu-card-bg); color: var(--efu-fontcolor); box-shadow: none; }
+#notes .aplayer-lrc { display: none; }
+#notes .notes-video { gap: var(--notes-gap); margin: 10px 0; }
+#notes .notes-video :is(video, iframe) { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--notes-radius); }
+#notes-tips { margin: 20px 0; color: var(--efu-secondtext); font-size: 14px; }
+
+@media (max-width: 1300px) {
+  #notes .waterfall { --notes-columns: 2; }
+}
+
+@media (max-width: 768px) {
+  .notes-header-lighthouse { right: 0; width: 240px; height: 160px; }
+  body[data-type='notes'] .layout#content-inner { padding: 0 16px; }
+  #notes .waterfall { --notes-columns: 1; }
+  #notes .item { padding: 16px var(--notes-padding); }
+  #notes .notes-content-link { min-height: 44px; }
+  .notes-header .card-content .banner-button-group { left: 1rem; right: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #notes .item { transition: none; }
+}

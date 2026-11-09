@@ -6,57 +6,6 @@
   font-size: 20px;
 }
 
-#post-comment .comment-head #comment-switch {
-  display: inline-block;
-  float: right;
-  margin: 0.1rem auto 0;
-  padding: 0.2rem 0.8rem;
-  width: max-content;
-  border-radius: 5px;
-  background: #f6f8fa;
-}
-
-#post-comment .comment-head #comment-switch .first-comment {
-  color: #307af6;
-}
-
-#post-comment .comment-head #comment-switch .second-comment {
-  color: #ff7242;
-}
-
-#post-comment .comment-head #comment-switch .switch-btn {
-  position: relative;
-  display: inline-block;
-  margin: -4px 0.4rem 0;
-  width: 42px;
-  height: 22px;
-  border-radius: 34px;
-  background-color: #307af6;
-  vertical-align: middle;
-  cursor: pointer;
-  transition: all 0.4s ease;
-}
-
-#post-comment .comment-head #comment-switch .switch-btn::before {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: #fff;
-  content: "";
-  transition: all 0.4s ease;
-}
-
-#post-comment .comment-head #comment-switch .switch-btn.move {
-  background-color: #ff7242;
-}
-
-#post-comment .comment-head #comment-switch .switch-btn.move::before {
-  transform: translateX(20px);
-}
-
 .post-comment {
   background: var(--efu-card-bg);
 }
@@ -84,17 +33,6 @@
   }
 }
 
-#post-comment > div.comment-head > div.comment-privacy {
-  display: block;
-  justify-content: space-between;
-  margin-left: 8px;
-  font-size: 13px;
-}
-
-#post-comment > div.comment-head > div.comment-privacy a:hover {
-  color: var(--efu-main);
-}
-
 #post-comment blockquote {
   background: var(--efu-secondbg);
   border: var(--style-border);
@@ -105,25 +43,13 @@
   border-radius: 8px;
 }
 
-#post-comment.move .comment-head .count span:first-child {
-  display: none;
+/* Avoid paragraph margins adding extra space inside comment quotes. */
+#post-comment blockquote > :first-child {
+  margin-top: 0;
 }
 
-#post-comment.move .comment-head .count span:last-child {
-  display: inline-block;
-}
-
-#post-comment.move #switch-btn::before {
-  transform: translateX(20px);
-}
-
-#post-comment.move .comment-wrap > div:first-child {
-  display: none;
-}
-
-#post-comment.move .comment-wrap > div:last-child {
-  display: block;
-  animation: 0.5s ease 0s 1 normal none running tabshow;
+#post-comment blockquote > :last-child {
+  margin-bottom: 0;
 }
 
 #post-comment .comment-head {
@@ -132,55 +58,8 @@
   position: relative;
 }
 
-#post-comment .comment-head .count span:last-child {
-  display: none;
-}
-
-#post-comment .comment-head .comment-switch {
-  display: inline-block;
-  float: right;
-  margin: 2px auto 0;
-  padding: 4px 16px;
-  width: max-content;
-  user-select: none;
-}
-
-#post-comment .comment-head .comment-switch #switch-btn {
-  position: relative;
-  display: inline-block;
-  margin: 0 8px 0;
-  width: 42px;
-  height: 22px;
-  border-radius: 34px;
-  background-color: var(--efu-main);
-  vertical-align: middle;
-  cursor: pointer;
-  transition: 0.4s;
-  border: var(--style-border-always);
-}
-
-#post-comment .comment-head .comment-switch #switch-btn::before {
-  position: absolute;
-  bottom: 3px;
-  left: 4px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: #fff;
-  content: '';
-  transition: 0.4s;
-}
-
-#post-comment .comment-wrap > div:last-child {
-  display: none;
-}
-
 #post-comment .comment-wrap > div:first-child {
   animation: 0.5s ease 0s 1 normal none running tabshow;
-}
-
-#post-comment .comment-wrap > div:first-child:last-child {
-  display: block;
 }
 
 #owo-big {
@@ -231,7 +110,7 @@
   right: 0;
   max-width: 500px;
   color: #4a4a4a;
-  border: 1px solid rgba(144,147,153,0.31);
+  border: 1px solid rgba(144, 147, 153, 0.31);
   top: 6.7rem;
   z-index: 1000;
   animation: 0.3s ease 0.1s 1 normal both running donate_effcet;
@@ -315,12 +194,18 @@
   }
 }
 
-#vcomment.valine-theme-style .vreply-wrapper .vrow .vcol.text-right:not(.vctrl) {
+#vcomment.valine-theme-style
+  .vreply-wrapper
+  .vrow
+  .vcol.text-right:not(.vctrl) {
   bottom: 31px;
 }
 
 @media screen and (max-width: 768px) {
-  #vcomment.valine-theme-style .vreply-wrapper .vrow .vcol.text-right:not(.vctrl) {
+  #vcomment.valine-theme-style
+    .vreply-wrapper
+    .vrow
+    .vcol.text-right:not(.vctrl) {
     bottom: 117px;
   }
 }
@@ -507,4 +392,87 @@
   border: var(--style-border);
   border-top: var(--style-border);
   box-shadow: var(--efu-shadow-border);
+}
+
+/* Move nickname, comment and metadata slightly upward */
+#twikoo .tk-comment .tk-main {
+  position: relative;
+  top: -8px;
+}
+
+/* Spacing between nickname and comment text */
+#twikoo .tk-comment .tk-content {
+  margin-top: 2px !important;
+}
+
+/* Remove default paragraph spacing */
+#twikoo .tk-comment .tk-content p:first-child {
+  margin-top: 0 !important;
+}
+
+/* Hide Twikoo footer attribution */
+#twikoo .tk-footer {
+  display: none !important;
+}
+
+/* Hide browser and operating system information */
+#twikoo .tk-extras {
+  display: none !important;
+}
+
+/* Twikoo: smaller comment count heading */
+#twikoo .tk-comments-title,
+#twikoo .tk-comments-count {
+  font-size: 18px !important;
+}
+
+/* Separate comment editor from comment list */
+#twikoo .tk-comments-container {
+  margin-top: 24px;
+  padding-top: 32px;
+  border-top: 1px solid var(--efu-card-border, #e3e8f2);
+}
+
+#twikoo .tk-comments-no {
+  flex: none;
+  padding: 18px 0 12px;
+}
+
+/* Space between comment icon and title */
+#post-comment .comment-headline i {
+  margin-right: 8px;
+}
+
+#twikoo .tk-submit {
+  margin-top: 28px;
+}
+
+#twikoo .tk-meta-input {
+  margin-bottom: 16px;
+}
+
+#twikoo .tk-textarea__inner {
+  min-height: 120px;
+}
+
+#twikoo .tk-submit > .tk-row.actions {
+  margin-top: 24px;
+}
+
+#twikoo .tk-meta {
+  align-items: baseline;
+  column-gap: 12px;
+  row-gap: 4px;
+}
+
+/* Compensate for the smaller timestamp font's visual height. */
+#twikoo .tk-meta > .tk-time {
+  position: relative;
+  top: -1px;
+}
+
+/* Move ordinary comment paragraphs without moving quotes or metadata. */
+#twikoo .tk-comment .tk-content > span > p {
+  position: relative;
+  top: -3px;
 }

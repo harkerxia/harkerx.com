@@ -1,123 +1,22 @@
-/* Links, equipment, and site-card presentation. */
-#equipment {
-  margin-top: 26px;
+/* Links and site-card presentation. */
+.friend-links-heading {
+  margin: 32px 0 24px;
+  text-align: center;
 }
 
-#equipment .equipment-item .equipment-item-title {
-  line-height: 1;
-}
-
-#equipment .equipment-item + .equipment-item .equipment-item-title {
-  margin-top: 40px;
-}
-
-#equipment .equipment-item .equipment-item-description {
-  line-height: 1;
-  margin: 4px 0 20px;
+.friend-links-heading p {
+  margin: 0;
   color: var(--efu-secondtext);
 }
 
-#equipment .equipment-item .equipment-item-content {
-  margin: 0 -8px;
-}
-
-#equipment .equipment-item .equipment-item-content-item {
-  width: calc(25% - 12px);
-  min-height: 400px;
-  margin: 8px 6px;
-  border: var(--style-border-always);
-  border-radius: 16px;
+#friend-links-list .friend-links-empty {
+  margin: 0 0 24px;
+  padding: 32px 20px;
+  color: var(--efu-secondtext);
+  text-align: center;
   background: var(--efu-card-bg);
-  box-shadow: var(--efu-shadow-border);
-  user-select: none;
-}
-
-@media screen and (max-width: 1200px) {
-  #equipment .equipment-item .equipment-item-content-item {
-    width: calc(50% - 12px);
-  }
-}
-
-@media screen and (max-width: 768px) {
-  #equipment .equipment-item .equipment-item-content-item {
-    width: 100%;
-  }
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-cover {
-  width: 100%;
-  height: 200px;
-  background: var(--efu-secondbg);
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-cover .equipment-item-content-item-image {
-  object-fit: contain;
-  width: auto;
-  height: auto;
-  max-width: 64%;
-  max-height: 64%;
-}
-
-#equipment .equipment-item:not(:first-child) .equipment-item-content-item .equipment-item-content-item-cover .equipment-item-content-item-image {
-  max-width: 48%;
-  max-height: 48%;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info {
-  padding: 8px 16px 16px 16px;
-  margin-top: 12px;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-name {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 8px;
-  text-overflow: ellipsis;
-  width: fit-content;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-name:hover,
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-name:focus-visible {
-  color: var(--efu-vip);
-  cursor: pointer;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-specification {
-  font-size: 12px;
-  color: var(--efu-secondtext);
-  line-height: 1;
-  margin-bottom: 12px;
-  text-overflow: ellipsis;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-description {
-  line-height: 20px;
-  color: var(--efu-secondtext);
-  height: 60px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  font-size: 14px;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-toolbar {
-  bottom: 12px;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-toolbar .equipment-item-content-item-link {
-  font-size: 12px;
-  background: var(--efu-gray-op);
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
-#equipment .equipment-item .equipment-item-content-item .equipment-item-content-item-info .equipment-item-content-item-toolbar .equipment-item-content-item-link:hover {
-  background: var(--efu-main);
-  color: var(--efu-white);
+  border: var(--style-border-always);
+  border-radius: 12px;
 }
 
 .flink#banners {
@@ -128,34 +27,64 @@ body[data-type=links] {
   overflow-x: clip;
 }
 
-.tags-group-title {
-  font-size: 14px;
-  color: var(--efu-card-bg);
-  background: var(--efu-lighttext);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  border-radius: 120px;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: 0.3s;
-}
-
-.flink .tags-group-icon:hover .tags-group-title,
-body[data-type=links] .flink .tags-group-icon:focus-visible .tags-group-title {
-  opacity: 1;
-  backdrop-filter: saturate(180%) blur(20px);
-}
-
 body[data-type=links] .flink .tags-group-icon:focus-visible {
   outline: 3px solid var(--efu-theme-op);
   outline-offset: 4px;
 }
 
+.flink .tags-group-all.nowrapMove {
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 7rem;
+}
+
 .flink .tags-group-all.nowrapMove .tags-group-wrapper {
-  animation: rowleft 120s linear infinite;
+  width: max-content;
+  flex-shrink: 0;
+  margin-top: 0;
+  animation: rowleft 160s linear infinite;
+}
+
+.flink .tags-group-all.nowrapMove .tags-group-wrapper--reverse {
+  animation-direction: reverse;
+}
+
+.flink .tags-group-all:has(.tags-group-icon:hover) .tags-group-wrapper {
+  animation-play-state: paused;
+}
+
+.flink .tags-group-sequence {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* Preserve the second row's original stagger independently of hover scaling. */
+.flink .tags-group-wrapper--reverse .tags-group-sequence {
+  transform: translateX(-60px);
+}
+
+.flink .tags-group-sequence > .tags-group-icon {
+  flex-shrink: 0;
+  margin-top: 0;
+  margin-left: 1rem;
+  transform: none;
+  transition: transform 0.2s ease;
+}
+
+.flink .tags-group-sequence > .tags-group-icon:hover {
+  transform: scale(1.05);
+}
+
+@media screen and (max-width: 768px) {
+  .flink .tags-group-all.nowrapMove {
+    padding-top: 7.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flink .tags-group-all.nowrapMove .tags-group-wrapper {
+    animation: none;
+  }
 }
 
 .flink.article-container {
@@ -716,7 +645,8 @@ body[data-type=links] .article-container .site-card-group .site-card:focus-withi
 .article-container .flink-list-item a .flink-item-name {
   text-align: left;
   font-size: 19px;
-  line-height: 20px;
+  line-height: 1.5;
+  flex-shrink: 0;
   color: var(--efu-fontcolor);
   display: block;
   padding: 0 10px 0 0;
@@ -729,10 +659,11 @@ body[data-type=links] .article-container .site-card-group .site-card:focus-withi
 
 .article-container .flink-list-item a .flink-item-desc {
   white-space: normal;
-  padding: 5px 10px 16px 0;
+  padding: 4px 10px 0 0;
   color: var(--efu-fontcolor);
   text-align: left;
-  height: 40px;
+  line-height: 1.35;
+  height: auto;
   text-overflow: ellipsis;
   opacity: 0.7;
   display: -webkit-box;
@@ -808,54 +739,6 @@ div#banners {
 
 div#banners:not(.flink):hover {
   box-shadow: var(--efu-shadow-main);
-}
-
-div#banners .banner-button-group {
-  right: 2rem;
-  top: 2rem;
-}
-
-@media screen and (max-width: 768px) {
-  div#banners .banner-button-group {
-    display: none;
-  }
-}
-
-div#banners .banner-button {
-  padding: 8px 12px;
-  min-height: 50px;
-  background: var(--efu-fontcolor);
-  border-radius: 12px;
-  color: var(--efu-card-bg);
-  z-index: 1;
-  transition: 0.3s;
-  box-shadow: var(--efu-shadow-black);
-  font: inherit;
-  line-height: 32px;
-}
-
-div#banners .banner-button.secondary {
-  background: var(--efu-secondbg);
-  border: var(--style-border-always);
-  color: var(--efu-lighttext);
-  margin-right: 1rem;
-  box-shadow: var(--efu-shadow-border);
-}
-
-div#banners .banner-button:hover,
-body[data-type=links] div#banners .banner-button:focus-visible {
-  background: var(--efu-theme);
-  color: var(--efu-white);
-}
-
-body[data-type=links] div#banners .banner-button:focus-visible {
-  outline: 3px solid var(--efu-theme-op);
-  outline-offset: 3px;
-}
-
-div#banners .banner-button i {
-  margin-right: 8px;
-  font-size: 1rem;
 }
 
 .banners-title {
@@ -999,18 +882,6 @@ div#banners .bannerText {
   margin-bottom: 12px;
 }
 
-.author-content.author-content-item.sharePage::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: var(--efu-black);
-  opacity: 0.3;
-  z-index: 1;
-  top: 0;
-  left: 0;
-}
-
 .author-content-item {
   flex: 4;
   border-radius: 12px;
@@ -1098,4 +969,10 @@ div#banners .bannerText {
 .author-content-item .card-content .banner-button-group .banner-button i {
   margin-right: 8px;
   font-size: 22px;
+}
+
+/* Introductory copy below the Friends list. */
+#friend-links-list > p {
+  font-size: 16px;
+  opacity: 0.8;
 }

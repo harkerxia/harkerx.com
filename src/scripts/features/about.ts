@@ -22,6 +22,28 @@ export const initAboutPage = () => {
   const words = Array.from(
     aboutPage.querySelectorAll<HTMLElement>('[data-about-word]'),
   );
+  if (words.length) {
+    // Shrink only overflowing words while preserving the animation window.
+    const signal = lifecycle.signal;
+    const fitWords = () => {
+      if (signal.aborted) return;
+      words.forEach((word) => {
+        word.style.removeProperty('font-size');
+        const available = word.clientWidth;
+        if (!available || word.scrollWidth <= available) return;
+        const size = parseFloat(getComputedStyle(word).fontSize);
+        const fittingSize = (size * (available - 1)) / word.scrollWidth;
+        word.style.fontSize = `${Math.floor(fittingSize * 100) / 100}px`;
+      });
+    };
+    fitWords();
+    const wordObserver = new ResizeObserver(fitWords);
+    new Set(words.map((word) => word.parentElement!)).forEach((mask) => {
+      wordObserver.observe(mask);
+    });
+    lifecycle.add(() => wordObserver.disconnect());
+    void document.fonts.ready.then(fitWords);
+  }
   if (words.length > 1 && !reduceMotion) {
     let wordIndex = 0;
     const rotateWord = () => {

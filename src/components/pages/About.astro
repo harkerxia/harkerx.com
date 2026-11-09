@@ -1,31 +1,38 @@
 ---
-import about from '../../data/about.json';
-import { url, json, t } from '../../lib/site';
-import { marked } from 'marked';
+import about from "../../data/about.json";
+import { url, json, t } from "../../lib/site";
+import { marked } from "marked";
+import type {
+  AboutData,
+  AboutTimeline,
+  AboutTimelineEvent,
+} from "../../lib/about-types";
 interface Props {
-  data?: import('../../lib/about-types').AboutData;
+  data?: AboutData;
 }
-const data: import('../../lib/about-types').AboutData =
-  Astro.props.data ?? about;
-const careerStyle = (
-  event: { from: number; to?: number; color?: string },
-  timeline?: { start: number; end: number },
-) => {
-  if (!timeline) return '';
+const data: AboutData = Astro.props.data ?? about;
+const careerStyle = (event: AboutTimelineEvent, timeline?: AboutTimeline) => {
+  if (!timeline) return "";
   const span = timeline.end - timeline.start || 1;
-  return `--career-left:${(100 * (event.from - timeline.start)) / span}%;--career-width:${(100 * ((event.to ?? event.from) - event.from)) / span}%;--career-color:${event.color ?? 'var(--efu-main)'}`;
+  return `--career-left:${(100 * (event.from - timeline.start)) / span}%;--career-width:${(100 * ((event.to ?? event.from) - event.from)) / span}%;--career-color:${event.color ?? "var(--efu-main)"}`;
+};
+const careerEventLabel = (event: AboutTimelineEvent) => {
+  const start = Math.floor(event.from);
+  const end = event.to === undefined ? start : Math.floor(event.to);
+  return `${event.label}, ${start === end ? start : `${start}–${end}`}`;
 };
 const allowed = [
-  'intro',
-  'skills_career',
-  'personality_photo',
-  'values',
-  'interests',
-  'stats_profile',
-  'story',
+  "intro",
+  "skills_career",
+  "personality_photo",
+  "values",
+  "interests",
+  "stats_profile",
+  "projects",
+  "story",
 ];
 if (!Array.isArray(data.sections))
-  throw new Error('About data requires sections');
+  throw new Error("About data requires sections");
 for (const section of data.sections)
   if (section.enabled !== false && !allowed.includes(section.type))
     throw new Error(`Unknown About section: ${section.type}`);
@@ -43,14 +50,35 @@ for (const section of data.sections)
       .filter((s) => s.enabled !== false)
       .map((s) => (
         <>
-          {s.type === 'intro' && (
+          {s.type === "intro" && (
             <div class="author-content about-row about-row--intro">
               <article class="author-content-item about-intro-card">
-                <p class="about-card-copy">{s.greeting}</p>
-                <h2>
-                  {s.name_prefix} <span class="inline-word">{s.name}</span>
-                </h2>
+                <div class="about-intro-heading">
+                  <div>
+                    <p class="about-card-copy">{s.greeting}</p>
+                    <h2>
+                      {s.name_prefix} <span class="inline-word">{s.name}</span>
+                    </h2>
+                  </div>
+                  {s.photo && (
+                    <img class="about-intro-avatar" src={url(s.photo.image)} alt={s.photo.alt ?? ""} width="80" height="80" />
+                  )}
+                </div>
                 <p class="about-card-copy">{s.description}</p>
+                {s.links?.length && (
+                  <nav class="about-links" aria-label="Profile links">
+                    {s.links.map((link) => (
+                      <a
+                        href={url(link.url)}
+                        target={link.external ? "_blank" : undefined}
+                        rel={link.external ? "noopener noreferrer" : undefined}
+                      >
+                        {link.icon && <i class={link.icon} aria-hidden="true" />}
+                        {link.text}
+                      </a>
+                    ))}
+                  </nav>
+                )}
               </article>
               <article class="author-content-item about-pursuit-card">
                 <p class="author-content-item-tips">{s.pursuit?.label}</p>
@@ -66,7 +94,7 @@ for (const section of data.sections)
                       (word: string, i: number) => (
                         <span
                           data-about-word
-                          data-show={i === 0 ? '' : undefined}
+                          data-show={i === 0 ? "" : undefined}
                         >
                           {word}
                         </span>
@@ -74,10 +102,13 @@ for (const section of data.sections)
                     )}
                   </span>
                 </h2>
+                {s.pursuit?.description && (
+                  <p class="about-pursuit-note">{s.pursuit.description}</p>
+                )}
               </article>
             </div>
           )}
-          {s.type === 'skills_career' && (
+          {s.type === "skills_career" && (
             <div class="author-content about-row about-row--skills-career">
               <article class="author-content-item skills" tabindex="0">
                 <div class="about-card-flow tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
@@ -97,12 +128,12 @@ for (const section of data.sections)
                               {s.skills?.items?.map((item) => (
                                 <span
                                   class="skills-marquee-icon tw:[#about-page_&]:grid"
-                                  style={`--skill-color:${item.color ?? 'var(--efu-main)'}`}
+                                  style={`--skill-color:${item.color ?? "var(--efu-main)"}`}
                                 >
                                   {item.image ? (
                                     <img src={url(item.image)} alt="" />
                                   ) : (
-                                    <i class={item.icon ?? 'fas fa-code'} />
+                                    <i class={item.icon ?? "fas fa-code"} />
                                   )}
                                 </span>
                               ))}
@@ -119,12 +150,12 @@ for (const section of data.sections)
                         <li class="skill-info tw:[#about-page_&]:flex tw:[#about-page_&]:items-center">
                           <span
                             class="skill-icon tw:[#about-page_&]:grid"
-                            style={`--skill-color:${item.color ?? 'var(--efu-main)'}`}
+                            style={`--skill-color:${item.color ?? "var(--efu-main)"}`}
                           >
                             {item.image ? (
                               <img src={url(item.image)} alt="" />
                             ) : (
-                              <i class={item.icon ?? 'fas fa-code'} />
+                              <i class={item.icon ?? "fas fa-code"} />
                             )}
                           </span>
                           <span class="skill-name tw:[#about-page_&]:overflow-hidden tw:[#about-page_&]:whitespace-nowrap">
@@ -132,12 +163,6 @@ for (const section of data.sections)
                           </span>
                         </li>
                       ))}
-                      <li
-                        class="skill-info skill-info--more tw:[#about-page_&]:flex tw:[#about-page_&]:items-center"
-                        aria-hidden="true"
-                      >
-                        …
-                      </li>
                     </ul>
                   </div>
                 </div>
@@ -151,7 +176,7 @@ for (const section of data.sections)
                   <ul class="careers-summary tw:[#about-page_&]:grid">
                     {s.career?.summary?.map((item) => (
                       <li
-                        style={`--career-color:${item.color ?? 'var(--efu-main)'}`}
+                        style={`--career-color:${item.color ?? "var(--efu-main)"}`}
                       >
                         <span aria-hidden="true" />
                         {item.name}
@@ -160,8 +185,8 @@ for (const section of data.sections)
                   </ul>
                   {s.career?.timeline && (
                     <div
-                      class="career-timeline tw:[#about-page_&]:absolute"
-                      style={`--career-track-color:${s.career.timeline.events?.[0]?.color ?? 'var(--efu-main)'}`}
+                      class="career-timeline"
+                      style={`--career-track-color:${s.career.timeline.events?.[0]?.color ?? "var(--efu-main)"}`}
                       role="group"
                       aria-label={
                         s.career.timeline.aria_label ?? s.career.title
@@ -178,17 +203,18 @@ for (const section of data.sections)
                       <i class="career-timeline-tick career-timeline-tick--end tw:[#about-page_&]:absolute" />
                       <ul
                         class="career-track tw:[#about-page_&]:absolute tw:[#about-page_&]:overflow-hidden"
-                        aria-label={t('careerStages')}
+                        aria-label={t("careerStages")}
                       >
                         {s.career.timeline.events?.map((event) => (
                           <li
                             class:list={[
-                              'career-event',
-                              { 'career-event--point': !event.to },
+                              "career-event",
+                              { "career-event--milestone": event.to === undefined },
                             ]}
                             style={careerStyle(event, s.career?.timeline)}
                             tabindex="0"
-                            aria-label={`${event.label}，${event.period ?? `${event.from} — ${event.to ?? event.from}`}`}
+                            aria-label={careerEventLabel(event)}
+                            title={careerEventLabel(event)}
                           >
                             <span
                               class="career-event-bar tw:[#about-page_&]:block"
@@ -215,16 +241,20 @@ for (const section of data.sections)
               </article>
             </div>
           )}
-          {s.type === 'personality_photo' && (
+          {s.type === "personality_photo" && (
             <div class="author-content about-row about-row--personality-photo">
-              <article class="author-content-item personalities tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
+              <article
+                class="author-content-item personalities tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col"
+                data-personality-type={s.personality?.type}
+                style={`--personality-color:${s.personality?.color ?? "var(--efu-main)"}`}
+              >
                 <p class="author-content-item-tips">{s.personality?.label}</p>
                 <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
                   {s.personality?.title}
                 </h2>
                 <p
                   class="personality-type"
-                  style={`--personality-color:${s.personality?.color ?? 'var(--efu-main)'}`}
+                  style={`--personality-color:${s.personality?.color ?? "var(--efu-main)"}`}
                 >
                   {s.personality?.type}
                 </p>
@@ -232,14 +262,14 @@ for (const section of data.sections)
                   <img
                     class="personality-image nolazyload tw:[#about-page_.personalities_>_&]:absolute"
                     src={url(s.personality.image)}
-                    alt={s.personality.image_alt ?? ''}
+                    alt={s.personality.image_alt ?? ""}
                   />
-                )}{' '}
+                )}{" "}
                 {s.personality?.link && (
                   <a
                     class="personality-link tw:[#about-page_.personalities_>_&]:absolute"
                     href={url(s.personality.link.url)}
-                    target={s.personality.link.external ? '_blank' : undefined}
+                    target={s.personality.link.external ? "_blank" : undefined}
                     rel="noopener noreferrer"
                   >
                     {s.personality.link.text}
@@ -251,7 +281,7 @@ for (const section of data.sections)
                   <img
                     class="author-content-img nolazyload tw:[#about-page_.myphoto_>_&]:absolute tw:[#about-page_.myphoto_>_&]:object-cover"
                     src={url(s.photo.image)}
-                    alt={s.photo.alt ?? ''}
+                    alt={s.photo.alt ?? ""}
                   />
                   {s.photo.badge && (
                     <img
@@ -264,7 +294,7 @@ for (const section of data.sections)
               )}
             </div>
           )}
-          {s.type === 'values' && (
+          {s.type === "values" && (
             <div class="author-content about-row about-row--values">
               <article class="author-content-item maxim">
                 <p class="author-content-item-tips">{s.motto?.label}</p>
@@ -287,22 +317,22 @@ for (const section of data.sections)
               </article>
             </div>
           )}
-          {s.type === 'interests' && (
+          {s.type === "interests" && (
             <div class="author-content about-row about-row--interests">
               {s.items?.map((item) => (
                 <article
-                  class={`author-content-item interest-card interest-card--${item.variant ?? 'media'}`}
+                  class={`author-content-item interest-card interest-card--${item.variant ?? "media"}`}
                   tabindex="0"
-                  style={`--interest-background:url('${url(item.background)}');--interest-color:${item.color ?? 'var(--efu-main)'}`}
+                  style={`${item.background ? `--interest-background:url('${url(item.background)}');` : ""}--interest-color:${item.color ?? "var(--efu-main)"}`}
                 >
                   <div class="interest-card-content tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
                     <p class="author-content-item-tips">{item.label}</p>
                     <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                      {(item.title_lines ?? [item.title]).map(
-                        (line: string) => (
-                          <span>{line}</span>
-                        ),
-                      )}
+                      {(
+                        item.title_lines ?? (item.title ? [item.title] : [])
+                      ).map((line: string) => (
+                        <span>{line}</span>
+                      ))}
                       {item.mode?.image && (
                         <img
                           class="interest-mode-image tw:[#about-page_&]:object-cover"
@@ -316,7 +346,7 @@ for (const section of data.sections)
                       {item.heroes && (
                         <ul
                           class="interest-heroes tw:[#about-page_&]:flex tw:[#about-page_&]:items-center"
-                          aria-label={t('favoriteHeroes')}
+                          aria-label={t("favoriteHeroes")}
                         >
                           {item.heroes.map((hero, i: number) => (
                             <li style={`--hero-index:${i}`}>
@@ -340,7 +370,7 @@ for (const section of data.sections)
                         <a
                           class="about-card-button tw:[#about-page_&]:inline-flex tw:[#about-page_&]:items-center tw:[#about-page_&]:justify-center tw:[#about-page_&]:cursor-pointer tw:[#about-page_.interest-card_&]:relative tw:[#about-page_.interest-card_&]:whitespace-nowrap"
                           href={url(item.button.url)}
-                          target={item.button.external ? '_blank' : undefined}
+                          target={item.button.external ? "_blank" : undefined}
                           rel="noopener noreferrer"
                         >
                           {item.button.icon && <i class={item.button.icon} />}
@@ -353,7 +383,7 @@ for (const section of data.sections)
               ))}
             </div>
           )}
-          {s.type === 'stats_profile' && (
+          {s.type === "stats_profile" && (
             <div class="author-content about-row about-row--stats-profile">
               <article
                 class="author-content-item about-statistics"
@@ -439,7 +469,58 @@ for (const section of data.sections)
               </article>
             </div>
           )}
-          {s.type === 'story' && (
+          {s.type === "projects" && (
+            <section class="about-projects" aria-label={s.title}>
+              <div class="about-section-heading">
+                <div>
+                  <p class="author-content-item-tips">{s.label}</p>
+                  <h2>{s.title}</h2>
+                </div>
+                {s.links?.map((link) => (
+                  <a
+                    class="about-text-link"
+                    href={url(link.url)}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                  >
+                    {link.icon && <i class={link.icon} aria-hidden="true" />}
+                    {link.text}
+                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
+              <div class="about-project-grid">
+                {s.projects?.map((project) => (
+                  <article
+                    class="author-content-item about-project-card"
+                    style={`--project-color:${project.color ?? "var(--efu-theme)"}`}
+                  >
+                    <div class="about-project-meta">
+                      <span class="about-project-icon" aria-hidden="true">
+                        <i class={project.icon ?? "fas fa-code"} />
+                      </span>
+                      {project.status && <span>{project.status}</span>}
+                    </div>
+                    <h3>
+                      {project.url ? (
+                        <a href={url(project.url)} target="_blank" rel="noopener noreferrer">
+                          {project.name}
+                          <i class="fas fa-arrow-up-right-from-square" aria-hidden="true" />
+                        </a>
+                      ) : project.name}
+                    </h3>
+                    <p class="about-project-description">{project.description}</p>
+                    {project.tags?.length && (
+                      <ul class="about-tags" aria-label={`${project.name} technologies`}>
+                        {project.tags.map((tag) => <li>{tag}</li>)}
+                      </ul>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+          {s.type === "story" && (
             <article class="author-content-item about-story">
               <p class="author-content-item-tips">{s.label}</p>
               <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
@@ -447,8 +528,27 @@ for (const section of data.sections)
               </h2>
               <div
                 class="about-story-content"
-                set:html={marked.parse(s.content ?? '')}
+                set:html={marked.parse(s.content ?? "")}
               />
+              {s.tags?.length && (
+                <ul class="about-tags" aria-label="Site technologies">
+                  {s.tags.map((tag) => <li>{tag}</li>)}
+                </ul>
+              )}
+              {s.links?.length && (
+                <nav class="about-links" aria-label="Explore this site">
+                  {s.links.map((link) => (
+                    <a
+                      href={url(link.url)}
+                      target={link.external ? "_blank" : undefined}
+                      rel={link.external ? "noopener noreferrer" : undefined}
+                    >
+                      {link.icon && <i class={link.icon} aria-hidden="true" />}
+                      {link.text}
+                    </a>
+                  ))}
+                </nav>
+              )}
             </article>
           )}
         </>

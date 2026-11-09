@@ -2,25 +2,33 @@
   "site": {
     "name": {
       "class": "text",
-      "custom": "Solitude"
+      "custom": ""
     },
-    "icon": "/img/logo.png"
+    "icon": "/img/icons/favicon.png"
   },
   "nav": {
     "group": {},
     "right": {
       "random": true,
-      "custom": []
+      "order": ["search-button", "randomPost_button", "rss-feed", "theme-toggle"],
+      "custom": [
+        {
+          "name": "Toggle theme",
+          "icon": "fas fa-circle-half-stroke",
+          "action": "switchDarkMode",
+          "id": "theme-toggle"
+        },
+        {
+          "name": "RSS Feed",
+          "icon": "fas fa-rss",
+          "url": "/rss.xml",
+          "id": "rss-feed"
+        }
+      ]
     }
   },
   "hometop": {
     "enable": true,
-    "banner": {
-      "title": "Solitude",
-      "desc": "A fast, elegant and feature-rich Astro theme",
-      "icon": {}
-    },
-    "group": {},
     "recommendList": []
   },
   "aside": {
@@ -39,12 +47,12 @@
     },
     "my_card": {
       "author": {
-        "img": "/img/logo.png",
+        "img": "/img/avatar.png",
         "emoji": null,
         "sticker": null
       },
-      "description": "An Astro theme for expressive personal sites.",
-      "content": "Write, collect, and share with Solitude.",
+      "description": "",
+      "content": "",
       "state": {
         "morning": "Good morning",
         "noon": "Good noon",
@@ -57,8 +65,7 @@
     },
     "toc": {
       "post": true,
-      "page": true,
-      "vague": true
+      "page": true
     },
     "tags": {
       "enable": true,
@@ -70,57 +77,33 @@
       "wordcount": true,
       "updatetime": true,
       "runtimeenable": true,
-      "runtime": "2023-04-20 00:00:00"
+      "runtime": "2026-10-1 00:00:00"
     }
   },
   "page": {
-    "error": true,
-    "tags": true,
-    "categories": true,
-    "archives": 0,
     "links": {
       "async_threshold": 200
     },
     "default": {
-      "cover": [
-        "/img/default.avif"
-      ]
+      "cover": ["/img/default-cover.svg"]
     }
   },
   "post": {
     "default": {
-      "cover": [
-        "/img/default.avif"
-      ],
-      "locate": "China",
-      "copyright": {
-        "enable": true,
-        "author": "/img/logo.png",
-        "author_background": "",
-        "license": "CC BY-NC-SA 4.0",
-        "licenurl": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-      }
+      "cover": ["/img/default-cover.svg"],
+      "locate": ""
     },
     "meta": {
       "date": true,
       "updated": true,
-      "locate": true,
+      "locate": false,
       "wordcount": true,
       "readtime": true,
       "pv": false,
       "comment": false
     },
-    "award": {
-      "enable": false,
-      "list": []
-    },
-    "share": {
-      "enable": false,
-      "list": []
-    },
-    "rss": "/index.xml",
     "covercolor": {
-      "enable": false,
+      "enable": true,
       "mode": "local",
       "api": "https://api.qjqq.cn/api/Imgcolor?img=",
       "time": 43200000
@@ -162,18 +145,11 @@
   },
   "right_menu": {
     "enable": true,
-    "exclude": [
-      "music"
-    ],
+    "exclude": ["music"],
     "commentBarrage": false,
     "ctrlOriginalMenu": false,
     "translate": false,
     "music": false,
-    "limit": 50,
-    "author": "Author: ",
-    "link": "Link: ",
-    "source": "Source: Solitude",
-    "info": "",
     "img_error": "Unable to download image",
     "mode": {
       "dark": "Dark mode",
@@ -185,18 +161,11 @@
     },
     "custom_list": []
   },
-  "copy": {
-    "enable": true,
-    "copyright": {
-      "enable": false,
-      "limit": 50
-    }
-  },
   "mermaid": true,
   "chart": true,
   "typeit": true,
   "console": {
-    "enable": true,
+    "enable": false,
     "recentComment": {
       "enable": false,
       "storage": 0.2
@@ -212,7 +181,7 @@
     "translateDelay": 0
   },
   "rightside": {
-    "enable": true,
+    "enable": false,
     "hide": {
       "enable": true,
       "translate": true,
@@ -223,18 +192,13 @@
   "footer": {
     "randomlink": false,
     "information": {
-      "author": "/img/logo.png",
+      "author": "",
       "left": [],
       "right": []
     },
     "group": {},
     "links": [],
     "beian": []
-  },
-  "errorpage": {
-    "img": "/img/404.avif",
-    "text": "=awa= Page Not Found",
-    "recommendList": true
   },
   "capsule": {
     "enable": false,
@@ -259,9 +223,8 @@
   },
   "lazyload": {
     "enable": true,
-    "field": "site",
     "placeholder": "",
-    "errorimg": "/img/error_load.avif"
+    "errorimg": "/img/image-unavailable.svg"
   },
   "loading": {
     "fullpage": false,
@@ -284,31 +247,26 @@
   },
   "katex": {
     "enable": true,
-    "per_page": true,
     "copytex": true
   },
   "pwa": {
-    "enable": false,
+    "enable": true,
     "manifest": "/manifest.json",
     "theme_color": "#425aef",
-    "mask_icon": "/img/pwa/favicon.png",
-    "apple_touch_icon": "/img/pwa/favicon.png",
-    "favicon_32_32": "/img/pwa/favicon_32.png",
-    "favicon_16_16": "/img/pwa/favicon_16.png",
-    "bookmark_icon": "/img/pwa/favicon.png"
+    "mask_icon": "",
+    "apple_touch_icon": "/img/icons/favicon.png",
+    "favicon_32_32": "/img/icons/favicon-32.png",
+    "favicon_16_16": "/img/icons/favicon-16.png",
+    "bookmark_icon": "/img/icons/favicon.png"
   },
   "comment": {
-    "use": "",
+    "use": "twikoo",
     "commentBarrage": false,
     "lazyload": false,
     "count": false,
     "sidebar": false,
     "pv": false,
     "avatar": "https://weavatar.com",
-    "hot_tip": {
-      "enable": false,
-      "count": 3
-    },
     "newest_comment": {
       "enable": false,
       "storage": 0.5,
@@ -318,7 +276,6 @@
   "twikoo": {
     "envId": "",
     "region": "",
-    "style": true,
     "accessToken": "",
     "option": {}
   },
@@ -357,7 +314,7 @@
     "type": "local",
     "tags": [],
     "local": {
-      "preload": false,
+      "preload": true,
       "CDN": "/search.xml"
     },
     "algolia": {
@@ -384,11 +341,10 @@
     "loop": true,
     "page": "/message/"
   },
-  "brevity": {
-    "enable": false,
-    "home_mini": false,
+  "notes": {
+    "enable": true,
     "music": false,
-    "page": "/essay/",
+    "page": "/notes/",
     "style": 1,
     "strip": 30
   },
@@ -398,14 +354,17 @@
     "cache": 0.2,
     "page": "/recentcomments/"
   },
+  "errorpage": {
+    "img": "/img/404.png",
+    "text": "Looks like you're wandering off course...",
+    "recommendList": true
+  },
   "verify_site": [],
   "extends": {
     "head": [],
     "body": []
   },
   "cdn": {
-    "fontawesome": "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.0/css/all.min.css",
-    "snackbar": "https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js",
     "lazyload": "https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js",
     "fancyapps_css": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.css",
     "fancyapps_js": "https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.js",
@@ -413,13 +372,12 @@
     "chart": "https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js",
     "abcjs": "https://cdn.jsdelivr.net/npm/abcjs@6.6.4/dist/abcjs-basic-min.js",
     "typeit": "https://cdn.jsdelivr.net/npm/typeit@8.8.7/dist/index.umd.min.js",
-    "katex_css": "https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css",
-    "katex_copytex": "https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/contrib/copy-tex.min.js",
+    "katex_copytex": "https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/contrib/copy-tex.min.js",
     "aplayer_css": "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css",
     "aplayer_js": "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js",
     "meting_js": "https://cdn.jsdelivr.net/npm/meting@2.0.2/dist/Meting.min.js",
     "colorthief": "https://cdn.jsdelivr.net/npm/colorthief@3.4.0/dist/umd/color-thief.global.min.js",
-    "twikoo": "https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js",
+    "twikoo": "https://cdn.jsdelivr.net/npm/twikoo@2.0.17/dist/twikoo.min.js",
     "waline_css": "https://cdn.jsdelivr.net/npm/@waline/client@3.6.0/dist/waline.css",
     "waline": "https://cdn.jsdelivr.net/npm/@waline/client@3.6.0/dist/waline.umd.js",
     "valine": "https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js",

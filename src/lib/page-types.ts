@@ -84,8 +84,26 @@ export interface FriendLink {
   descr?: string;
   description?: string;
   tag?: string;
+  color?: string;
+  siteshot?: string;
 }
-export interface BrevityItem {
+export interface FriendLinkGroup {
+  class_name?: string;
+  class_desc?: string;
+  descr?: string;
+  title_link?: string;
+  title_link_text?: string;
+  type?: string;
+  sort?: string;
+  suffix?: string;
+  topimg_suffix?: string;
+  link_list: FriendLink[];
+}
+export interface LinksData {
+  links: FriendLinkGroup[];
+  banner_suffix?: string;
+}
+export interface NotesItem {
   date: string;
   content: string;
   location?: string;
@@ -96,4 +114,13 @@ export interface BrevityItem {
     | (string | { url: string; alt?: string })[];
   aplayer?: { server: string; id: string | number; type?: string };
   video?: { player?: string; bilibili?: string };
+}
+export interface NotesData {
+  title?: string;
+  items: NotesItem[];
+  header?: {
+    description?: string;
+    cover?: string;
+    button?: { text: string; link: string };
+  };
 }

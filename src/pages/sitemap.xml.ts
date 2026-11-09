@@ -1,14 +1,20 @@
-import { getRoutes } from '../lib/routes';
-import { xml } from '../lib/feeds';
-import { absolute } from '../lib/site';
+import { getRoutes } from "../lib/routes";
+import { xml } from "../lib/feeds";
+import { absolute } from "../lib/site";
 export async function GET() {
   return new Response(
     `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${(
       await getRoutes()
     )
-      .filter((r) => r.kind !== 'redirect')
-      .map((r) => `<url><loc>${xml(absolute(r.path))}</loc></url>`)
-      .join('')}</urlset>`,
-    { headers: { 'Content-Type': 'application/xml; charset=utf-8' } },
+      .filter((r) => r.kind !== "redirect")
+      .map((r) => {
+        const modified = r.entry?.data.lastmod ?? r.entry?.data.date;
+        const lastmod = modified
+          ? `<lastmod>${modified.toISOString()}</lastmod>`
+          : "";
+        return `<url><loc>${xml(absolute(r.path))}</loc>${lastmod}</url>`;
+      })
+      .join("")}</urlset>`,
+    { headers: { "Content-Type": "application/xml; charset=utf-8" } },
   );
 }

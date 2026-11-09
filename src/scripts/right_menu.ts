@@ -1,72 +1,108 @@
 /** Browser behavior preserved from Solitude Hugo; typed boundary: core/api.ts. */
-import { Solitude } from './core/api';
-let selectTextNow = '';
+import { Solitude } from "./core/api";
+import { lifecycle } from "./core/lifecycle";
+import { hasPageAside } from "./features/aside";
+let selectTextNow = "";
 let firstShowRightMenu = true;
-const selectText = () => {
-  selectTextNow = window.getSelection()?.toString() || '';
+const selectText = (event?: Event) => {
+  // Clicking the menu must not replace the selection saved when it opened.
+  if (event?.target instanceof Element && event.target.closest("#rightMenu, #rightmenu-mask")) return;
+  selectTextNow = window.getSelection()?.toString() || "";
   Solitude.selectedText = selectTextNow;
 };
 const commentsEnabled = () =>
   Boolean(Solitude.config.comment?.use && Solitude.page.comment);
-document.addEventListener('mouseup', selectText);
-document.addEventListener('dblclick', selectText);
+document.addEventListener("mouseup", selectText);
+document.addEventListener("dblclick", selectText);
+const queryMenuItems = (root: ParentNode = document) => ({
+  other: root.querySelectorAll<HTMLElement>(".rightMenuOther"),
+  plugin: root.querySelectorAll<HTMLElement>(".rightMenuPlugin"),
+  back: root.querySelector<HTMLElement>("#menu-backward"),
+  forward: root.querySelector<HTMLElement>("#menu-forward"),
+  refresh: root.querySelector<HTMLElement>("#menu-refresh"),
+  top: root.querySelector<HTMLElement>("#menu-top"),
+  copy: root.querySelector<HTMLElement>("#menu-copytext"),
+  paste: root.querySelector<HTMLElement>("#menu-pastetext"),
+  comment: root.querySelector<HTMLElement>("#menu-commenttext"),
+  new: root.querySelector<HTMLElement>("#menu-newwindow"),
+  copyLink: root.querySelector<HTMLElement>("#menu-copylink"),
+  copyImg: root.querySelector<HTMLElement>("#menu-copyimg"),
+  downloadImg: root.querySelector<HTMLElement>("#menu-downloadimg"),
+  search: root.querySelector<HTMLElement>("#menu-search"),
+  barrage: root.querySelector<HTMLElement>("#menu-commentBarrage"),
+  mode: root.querySelector<HTMLElement>("#menu-darkmode"),
+  aside: root.querySelector<HTMLElement>("#menu-aside"),
+  translate: root.querySelector<HTMLElement>("#menu-translate"),
+  music: [
+    root.querySelector<HTMLElement>("#menu-music-toggle"),
+    root.querySelector<HTMLElement>("#menu-music-back"),
+    root.querySelector<HTMLElement>("#menu-music-forward"),
+    root.querySelector<HTMLElement>("#menu-music-copyMusicName"),
+  ],
+});
+
+async function imageAsPng(source: string): Promise<Blob> {
+  const response = await fetch(source);
+  if (!response.ok) throw new Error(`Image request failed: ${response.status}`);
+  const blob = await response.blob();
+  if (!blob.size || !blob.type.startsWith("image/")) {
+    throw new Error("The response is not an image");
+  }
+  if (blob.type === "image/png") return blob;
+
+  // PNG is the interoperable image format for the system clipboard.
+  const objectUrl = URL.createObjectURL(blob);
+  try {
+    const image = new Image();
+    image.src = objectUrl;
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Image conversion is unavailable");
+    context.drawImage(image, 0, 0);
+    return await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (png) =>
+          png ? resolve(png) : reject(new Error("Image conversion failed")),
+        "image/png",
+      );
+    });
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 export const rm = {
-  mask: document.getElementById('rightmenu-mask'),
-  menu: document.getElementById('rightMenu'),
+  mask: null as HTMLElement | null,
+  menu: null as HTMLElement | null,
   width: 0,
   height: 0,
-  domhref: '',
-  domsrc: '',
+  domhref: "",
+  domsrc: "",
   globalEvent: null as MouseEvent | null,
-  menuItems: {
-    other: document.querySelectorAll<HTMLElement>('.rightMenuOther'),
-    plugin: document.querySelectorAll<HTMLElement>('.rightMenuPlugin'),
-    back: document.getElementById('menu-backward'),
-    forward: document.getElementById('menu-forward'),
-    refresh: document.getElementById('menu-refresh'),
-    top: document.getElementById('menu-top'),
-    copy: document.getElementById('menu-copytext'),
-    paste: document.getElementById('menu-pastetext'),
-    comment: document.getElementById('menu-commenttext'),
-    new: document.getElementById('menu-newwindow'),
-    copyLink: document.getElementById('menu-copylink'),
-    copyImg: document.getElementById('menu-copyimg'),
-    downloadImg: document.getElementById('menu-downloadimg'),
-    search: document.getElementById('menu-search'),
-    barrage: document.getElementById('menu-commentBarrage'),
-    mode: document.getElementById('menu-darkmode'),
-    translate: document.getElementById('menu-translate'),
-    music: [
-      document.getElementById('menu-music-toggle'),
-      document.getElementById('menu-music-back'),
-      document.getElementById('menu-music-forward'),
-      document.getElementById('menu-music-copyMusicName'),
-    ],
-  },
+  menuItems: queryMenuItems(document.createDocumentFragment()),
   showRightMenu(e: boolean, x = 0, y = 0) {
     if (!this.menu || !this.mask) return;
     this.menu.style.top = `${y}px`;
     this.menu.style.left = `${x}px`;
-    this.menu.style.display = e ? 'block' : 'none';
-    this.mask.style.display = e ? 'flex' : 'none';
-    if (e) stopMaskScroll();
+    this.menu.style.display = e ? "block" : "none";
+    this.mask.style.display = e ? "flex" : "none";
   },
   hideRightMenu() {
     this.showRightMenu(false);
   },
   reLoadSize() {
     if (!this.menu) return;
-    this.menu.style.display = 'block';
+    this.menu.style.display = "block";
     this.width = this.menu.offsetWidth;
     this.height = this.menu.offsetHeight;
-    this.menu.style.display = 'none';
+    this.menu.style.display = "none";
   },
   copyText(e: string) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(e);
-      Solitude.snackbarShow(Solitude.config.lang.copy.success, false, 2000);
-    }
     this.hideRightMenu();
+    void Solitude.copy(e);
   },
   async pasteText() {
     const target = this.globalEvent?.target;
@@ -81,9 +117,9 @@ export const rm = {
         value,
         target.selectionStart || 0,
         target.selectionEnd || 0,
-        'end',
+        "end",
       );
-      target.dispatchEvent(new Event('input', { bubbles: true }));
+      target.dispatchEvent(new Event("input", { bubbles: true }));
       return true;
     } catch {
       return false;
@@ -92,15 +128,17 @@ export const rm = {
   async downloadImage(
     this: { domsrc: string },
     imageUrl = this.domsrc,
-    filename = 'photo',
+    filename = "photo",
   ) {
     const rightConfig = Solitude.config.right_menu;
     if (!rightConfig) return;
     try {
       const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error(`Image request failed: ${response.status}`);
       const blob = await response.blob();
+      if (!blob.size) throw new Error("The image response is empty");
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = filename;
       document.body.appendChild(link);
@@ -111,18 +149,46 @@ export const rm = {
       Solitude.snackbarShow(rightConfig.img_error, false, 2000);
     }
   },
-  copyImage(this: { domsrc: string }, imgUrl = this.domsrc) {
-    window.open(imgUrl);
+  async copyImage(this: { domsrc: string }, imgUrl = this.domsrc) {
+    const rightConfig = Solitude.config.right_menu;
+    if (!rightConfig) return;
+    if (
+      !window.isSecureContext ||
+      !navigator.clipboard?.write ||
+      typeof ClipboardItem === "undefined"
+    ) {
+      Solitude.snackbarShow(rightConfig.img_copy_error, false, 3000);
+      return;
+    }
+
+    let imageFailed = false;
+    const png = imageAsPng(imgUrl).catch((error: unknown) => {
+      imageFailed = true;
+      throw error;
+    });
+    // The clipboard may reject before the image request finishes.
+    void png.catch(() => {});
+    try {
+      // Start writing within the click gesture; resolve the image asynchronously.
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+      Solitude.snackbarShow(Solitude.config.lang.copy.success, false, 2000);
+    } catch {
+      Solitude.snackbarShow(
+        imageFailed ? rightConfig.img_error : rightConfig.img_copy_error,
+        false,
+        3000,
+      );
+    }
   },
   setLabel(element: HTMLElement | null | undefined, label: string | undefined) {
     if (!element || !label) return;
     element.textContent = label;
-    element.setAttribute('title', label);
-    element.setAttribute('heotip', label);
-    const menuItem = element.closest('.rightMenu-item');
+    element.setAttribute("title", label);
+    element.setAttribute("heotip", label);
+    const menuItem = element.closest(".rightMenu-item");
     if (menuItem) {
-      menuItem.setAttribute('title', label);
-      menuItem.setAttribute('heotip', label);
+      menuItem.setAttribute("title", label);
+      menuItem.setAttribute("heotip", label);
     }
   },
   mode(darkmode: boolean) {
@@ -130,17 +196,33 @@ export const rm = {
     if (!rightConfig) return;
     const label = darkmode ? rightConfig.mode.light : rightConfig.mode.dark;
     this.setLabel(
-      document.querySelector<HTMLElement>('.menu-darkmode-text'),
+      document.querySelector<HTMLElement>(".menu-darkmode-text"),
       label,
     );
     this.hideRightMenu();
+  },
+  updateAside(): void {
+    const button = this.menuItems.aside;
+    const rightConfig = Solitude.config.right_menu;
+    if (!button || !rightConfig) return;
+    const available =
+      hasPageAside() && window.matchMedia("(min-width: 1200px)").matches;
+    button.hidden = !available;
+    button.style.display = available ? "flex" : "none";
+    if (!available) return;
+    const hidden = document.documentElement.classList.contains("hide-aside");
+    this.setLabel(
+      button.querySelector<HTMLElement>(".menu-aside-text"),
+      hidden ? rightConfig.aside.show : rightConfig.aside.hide,
+    );
+    button.setAttribute("aria-expanded", String(!hidden));
   },
   barrage(enable: boolean) {
     const rightConfig = Solitude.config.right_menu;
     if (!rightConfig) return;
     const label = enable ? rightConfig.barrage.open : rightConfig.barrage.close;
     this.setLabel(
-      document.querySelector<HTMLElement>('.menu-commentBarrage-text'),
+      document.querySelector<HTMLElement>(".menu-commentBarrage-text"),
       label,
     );
     this.hideRightMenu();
@@ -148,22 +230,12 @@ export const rm = {
 };
 Solitude.rightMenu = rm;
 Solitude.hideRightMenu = rm.hideRightMenu.bind(rm);
-rm.mode(document.documentElement.dataset.theme === 'dark');
-function stopMaskScroll() {
-  const hideMenu = rm.hideRightMenu.bind(rm);
-  Solitude.addEventListenerPjax(rm.menu, 'mousewheel', hideMenu, {
-    passive: true,
-  });
-  Solitude.addEventListenerPjax(rm.mask, 'mousewheel', hideMenu, {
-    passive: true,
-  });
-  Solitude.addEventListenerPjax(rm.mask, 'click', hideMenu, { passive: true });
-}
-document.addEventListener('contextmenu', (ele) => {
+document.addEventListener("contextmenu", (ele) => {
   const rightConfig = Solitude.config.right_menu;
   if (!rightConfig) return;
   if (!Solitude.config.right_menu || !rm.menu || !rm.mask) return;
   if (document.body.clientWidth <= 768) return;
+  rm.updateAside();
   if (rightConfig.ctrlOriginalMenu) {
     if (firstShowRightMenu) {
       firstShowRightMenu = false;
@@ -171,66 +243,67 @@ document.addEventListener('contextmenu', (ele) => {
     }
     if (ele.ctrlKey) return true;
   }
+  selectText();
   let x = ele.clientX + 10;
   let y = ele.clientY;
   Array.from(rm.menuItems.other).forEach((item) => {
-    if (item) item.style.display = 'flex';
+    if (item) item.style.display = "flex";
   });
   rm.globalEvent = ele;
   const target = ele.target;
   if (!(target instanceof HTMLElement)) return;
-  const link = target instanceof HTMLAnchorElement ? target.href : '';
-  const src = target instanceof HTMLImageElement ? target.currentSrc : '';
+  const link = target instanceof HTMLAnchorElement ? target.href : "";
+  const src = target instanceof HTMLImageElement ? target.currentSrc : "";
   const tagName = target.tagName.toLowerCase();
   const cls = target.className.toLowerCase();
   const display =
     !!(selectTextNow && window.getSelection()) ||
     !!link ||
     !!src ||
-    tagName === 'input' ||
-    tagName === 'textarea' ||
+    tagName === "input" ||
+    tagName === "textarea" ||
     cls.match(/aplayer/);
   if (rm.menuItems.copy)
     rm.menuItems.copy.style.display =
-      selectTextNow && window.getSelection() ? 'flex' : 'none';
+      selectTextNow && window.getSelection() ? "flex" : "none";
   rm.menuItems.comment &&
     (rm.menuItems.comment.style.display =
       commentsEnabled() && selectTextNow && window.getSelection()
-        ? 'flex'
-        : 'none');
+        ? "flex"
+        : "none");
   rm.menuItems.search &&
     (rm.menuItems.search.style.display =
-      selectTextNow && window.getSelection() ? 'flex' : 'none');
-  if (rm.menuItems.new) rm.menuItems.new.style.display = link ? 'flex' : 'none';
+      selectTextNow && window.getSelection() ? "flex" : "none");
+  if (rm.menuItems.new) rm.menuItems.new.style.display = link ? "flex" : "none";
   if (rm.menuItems.copyLink)
-    rm.menuItems.copyLink.style.display = link ? 'flex' : 'none';
-  rm.domhref = link || '';
+    rm.menuItems.copyLink.style.display = link ? "flex" : "none";
+  rm.domhref = link || "";
   if (rm.menuItems.copyImg)
-    rm.menuItems.copyImg.style.display = src ? 'flex' : 'none';
+    rm.menuItems.copyImg.style.display = src ? "flex" : "none";
   if (rm.menuItems.downloadImg)
-    rm.menuItems.downloadImg.style.display = src ? 'flex' : 'none';
-  rm.domsrc = src || '';
+    rm.menuItems.downloadImg.style.display = src ? "flex" : "none";
+  rm.domsrc = src || "";
   if (rm.menuItems.paste)
     rm.menuItems.paste.style.display =
-      tagName === 'input' || tagName === 'textarea' ? 'flex' : 'none';
+      tagName === "input" || tagName === "textarea" ? "flex" : "none";
   if (rightConfig.music) {
     if (cls.match(/aplayer/)) {
       rm.menuItems.music.forEach((item) => {
-        if (item) item.style.display = 'flex';
+        if (item) item.style.display = "flex";
       });
     } else {
       rm.menuItems.music.forEach((item) => {
-        if (item) item.style.display = 'none';
+        if (item) item.style.display = "none";
       });
     }
   }
   Array.from(display ? rm.menuItems.other : rm.menuItems.plugin).forEach(
     (item) => {
-      if (item) item.style.display = 'none';
+      if (item) item.style.display = "none";
     },
   );
   Array.from(display ? rm.menuItems.plugin : rm.menuItems.other).forEach(
-    (item) => (item.style.display = 'block'),
+    (item) => (item.style.display = "block"),
   );
   rm.reLoadSize();
   x = x + rm.width > window.innerWidth ? x - (rm.width + 10) : x;
@@ -241,81 +314,102 @@ document.addEventListener('contextmenu', (ele) => {
   rm.showRightMenu(true, x, y);
   ele.preventDefault();
 });
-(function () {
+// Astro replaces the menu on navigation, while this module stays cached.
+// Reacquire its elements and bind handlers for the current page lifecycle.
+export function initializeRightMenu() {
   const rightConfig = Solitude.config.right_menu;
   if (!rightConfig) return;
+  rm.mask = document.getElementById("rightmenu-mask");
+  rm.menu = document.getElementById("rightMenu");
+  rm.menuItems = queryMenuItems();
+  selectTextNow = "";
+  Solitude.selectedText = "";
+  rm.globalEvent = null;
+  if (!rm.menu || !rm.mask) return;
+  lifecycle.add(() => {
+    rm.hideRightMenu();
+    rm.menu = null;
+    rm.mask = null;
+    rm.menuItems = queryMenuItems(document.createDocumentFragment());
+    rm.globalEvent = null;
+    selectTextNow = "";
+    Solitude.selectedText = "";
+  });
+  rm.mode(document.documentElement.dataset.theme === "dark");
+  rm.updateAside();
+  const hideMenu = rm.hideRightMenu.bind(rm);
+  lifecycle.listen(rm.menu, "wheel", hideMenu, { passive: true });
+  lifecycle.listen(rm.mask, "wheel", hideMenu, { passive: true });
+  lifecycle.listen(rm.mask, "click", hideMenu);
   const addEventListener = (
     element: HTMLElement | null,
-    event: string,
+    event: keyof HTMLElementEventMap,
     handler: EventListener,
-  ) => element?.addEventListener(event, handler);
-  addEventListener(rm.menuItems.back, 'click', () => {
+  ) => lifecycle.listen(element, event, handler);
+  addEventListener(rm.menuItems.back, "click", () => {
     window.history.back();
     rm.hideRightMenu();
   });
-  addEventListener(rm.menuItems.forward, 'click', () => {
+  addEventListener(rm.menuItems.forward, "click", () => {
     window.history.forward();
     rm.hideRightMenu();
   });
-  addEventListener(rm.menuItems.refresh, 'click', () =>
+  addEventListener(rm.menuItems.refresh, "click", () =>
     window.location.reload(),
   );
-  addEventListener(rm.menuItems.top, 'click', () => {
+  addEventListener(rm.menuItems.top, "click", () => {
     Solitude.toTop();
     rm.hideRightMenu();
   });
   if (rightConfig.music) {
-    addEventListener(rm.menuItems.music[0], 'click', () => {
+    addEventListener(rm.menuItems.music[0], "click", () => {
       Solitude.musicToggle();
       rm.hideRightMenu();
     });
-    addEventListener(rm.menuItems.music[1], 'click', () => {
+    addEventListener(rm.menuItems.music[1], "click", () => {
       Solitude.musicSkipBack();
       rm.hideRightMenu();
     });
-    addEventListener(rm.menuItems.music[2], 'click', () => {
+    addEventListener(rm.menuItems.music[2], "click", () => {
       Solitude.musicSkipForward();
       rm.hideRightMenu();
     });
-    addEventListener(rm.menuItems.music[3], 'click', () => {
+    addEventListener(rm.menuItems.music[3], "click", () => {
       const title = Array.from(
-        document.querySelectorAll<HTMLElement>('.aplayer-title'),
+        document.querySelectorAll<HTMLElement>(".aplayer-title"),
       ).map((e) => e.innerText)[0];
       rm.copyText(title);
     });
   }
-  addEventListener(rm.menuItems.copy, 'click', () => {
-    if (Solitude.config.copyright && selectTextNow.length > rightConfig.limit) {
-      selectTextNow += `\n\n${rightConfig.author}\n${rightConfig.link}${window.location.href}\n${rightConfig.source}\n${rightConfig.info}`;
-    }
+  addEventListener(rm.menuItems.copy, "click", () => {
     rm.copyText(selectTextNow);
   });
-  if (Solitude.saveToLocal.get('commentBarrageSwitch') !== null) {
+  if (Solitude.saveToLocal.get("commentBarrageSwitch") !== null) {
     rm.menuItems.barrage &&
-      rm.barrage(!Solitude.saveToLocal.get('commentBarrageSwitch'));
+      rm.barrage(!Solitude.saveToLocal.get("commentBarrageSwitch"));
   }
-  addEventListener(rm.menuItems.paste, 'click', async () => {
+  addEventListener(rm.menuItems.paste, "click", async () => {
     if (await rm.pasteText()) rm.hideRightMenu();
   });
-  addEventListener(rm.menuItems.comment, 'click', () => {
+  addEventListener(rm.menuItems.comment, "click", () => {
     rm.hideRightMenu();
-    Solitude.toTalk(selectTextNow);
+    void Solitude.toTalk(selectTextNow);
   });
   addEventListener(
     rm.menuItems.new,
-    'click',
+    "click",
     () => window.open(rm.domhref) && rm.hideRightMenu(),
   );
-  addEventListener(rm.menuItems.downloadImg, 'click', () => {
+  addEventListener(rm.menuItems.downloadImg, "click", () => {
     void rm.downloadImage();
     rm.hideRightMenu();
   });
-  addEventListener(rm.menuItems.copyImg, 'click', () => {
-    rm.copyImage();
+  addEventListener(rm.menuItems.copyImg, "click", () => {
+    void rm.copyImage();
     rm.hideRightMenu();
   });
-  addEventListener(rm.menuItems.copyLink, 'click', () => {
+  addEventListener(rm.menuItems.copyLink, "click", () => {
     rm.copyText(rm.domhref);
     rm.hideRightMenu();
   });
-})();
+}

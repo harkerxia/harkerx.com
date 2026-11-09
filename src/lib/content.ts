@@ -1,8 +1,8 @@
-import type { CollectionEntry } from 'astro:content';
-import { config, t, termPath } from './site';
-import { marked } from 'marked';
-export type Post = CollectionEntry<'posts'>;
-export type Page = CollectionEntry<'pages'>;
+import type { CollectionEntry } from "astro:content";
+import { config, t, termPath } from "./site";
+import { marked } from "marked";
+export type Post = CollectionEntry<"posts">;
+export type Page = CollectionEntry<"pages">;
 export function contentPath(entry: {
   id: string;
   collection: string;
@@ -10,14 +10,14 @@ export function contentPath(entry: {
 }): string {
   const path =
     entry.data.url ??
-    (entry.collection === 'posts'
+    (entry.collection === "posts"
       ? `/p/${entry.data.slug ?? entry.id}/`
       : `/${entry.data.slug ?? entry.id}/`);
   if (
-    !path.startsWith('/') ||
-    path.startsWith('//') ||
+    !path.startsWith("/") ||
+    path.startsWith("//") ||
     /[?#\\]/.test(path) ||
-    path.split('/').includes('..')
+    path.split("/").includes("..")
   )
     throw new Error(`Invalid content URL: ${path}`);
   return path;
@@ -39,18 +39,18 @@ export function homePosts(posts: Post[]): Post[] {
     );
 }
 export async function getPosts() {
-  const { getCollection } = await import('astro:content');
+  const { getCollection } = await import("astro:content");
   return published<Post>(
-    await getCollection('posts'),
+    await getCollection("posts"),
     import.meta.env.DEV,
   ).sort((a, b) => +b.data.date - +a.data.date || a.id.localeCompare(b.id));
 }
 export async function getPages() {
-  const { getCollection } = await import('astro:content');
-  return published<Page>(await getCollection('pages'), import.meta.env.DEV);
+  const { getCollection } = await import("astro:content");
+  return published<Page>(await getCollection("pages"), import.meta.env.DEV);
 }
 export function paginate<T>(items: T[], size: number) {
-  if (size < 1 || !Number.isInteger(size)) throw new Error('Invalid page size');
+  if (size < 1 || !Number.isInteger(size)) throw new Error("Invalid page size");
   return Array.from(
     { length: Math.max(1, Math.ceil(items.length / size)) },
     (_, i) => items.slice(i * size, (i + 1) * size),
@@ -58,7 +58,7 @@ export function paginate<T>(items: T[], size: number) {
 }
 export function taxonomy(
   posts: Post[],
-  kind: 'tags' | 'categories' | 'series',
+  kind: "tags" | "categories" | "series",
 ) {
   const groups = new Map<string, Post[]>();
   for (const p of posts)
@@ -70,13 +70,16 @@ export function taxonomy(
       (a, b) => b.posts.length - a.posts.length || a.name.localeCompare(b.name),
     );
 }
+export function normalizedRoutePath(path: string): string {
+  return decodeURI(path)
+    .replace(/\/$/, "")
+    .replace(/\/index\.html$/, "")
+    .normalize("NFC");
+}
 export function assertUniquePaths(paths: string[]) {
   const used = new Set<string>();
   for (const path of paths) {
-    const key = decodeURI(path)
-      .replace(/\/$/, '')
-      .replace(/\/index\.html$/, '')
-      .normalize('NFC');
+    const key = normalizedRoutePath(path);
     if (used.has(key)) throw new Error(`Duplicate route: ${path}`);
     used.add(key);
   }
@@ -85,18 +88,18 @@ export const wordCount = (markdown: string, cjk = config.hasCJKLanguage) => {
   // Hugo's Plain includes the code render hook's language, copy and expand labels.
   const labels: string[] = [];
   marked.walkTokens(marked.lexer(markdown), (token) => {
-    if (token.type === 'code') {
-      labels.push(token.lang || 'text', t('codeExpand'));
-      if (config.theme.highlight.copy !== false) labels.push(t('codeCopy'));
+    if (token.type === "code") {
+      labels.push(token.lang || "text", t("codeExpand"));
+      if (config.theme.highlight.copy !== false) labels.push(t("codeCopy"));
     }
   });
   const text = marked
     .parse(markdown, { async: false })
-    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&nbsp;|&#160;/g, ' ')
-    .replace(/&(?:#\d+|#x[\da-f]+|\w+);/gi, 'x')
-    .concat(' ', labels.join(' '))
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;|&#160;/g, " ")
+    .replace(/&(?:#\d+|#x[\da-f]+|\w+);/gi, "x")
+    .concat(" ", labels.join(" "))
     .trim();
   if (!text) return 0;
   return cjk
@@ -109,9 +112,9 @@ export const wordCount = (markdown: string, cjk = config.hasCJKLanguage) => {
 };
 export const plainText = (text: string) =>
   text
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/!?(\[([^\]]*)\])\([^)]*\)/g, '$2')
-    .replace(/[#*_`{}]/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/!?(\[([^\]]*)\])\([^)]*\)/g, "$2")
+    .replace(/[#*_`{}]/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
