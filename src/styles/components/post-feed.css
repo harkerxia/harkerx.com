@@ -121,6 +121,18 @@
   -webkit-box-orient: vertical;
 }
 
+.recent-post-item > .recent-post-info .recent-post-info-top .article-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  margin: 8px 0 0;
+  color: var(--efu-secondtext);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .recent-post-item > .recent-post-info .recent-post-info-top .recent-post-info-top-tips {
   user-select: none;
 }
@@ -144,10 +156,6 @@
 .recent-post-item > .recent-post-info .recent-post-info-top .recent-post-info-top-tips .unvisited-post {
   color: color-mix(in srgb, var(--efu-secondtext) 82%, transparent);
   font-size: 0.5rem;
-}
-
-.recent-post-item > .recent-post-info .recent-post-info-top .recent-post-info-top-tips .original.latest-post {
-  color: color-mix(in srgb, var(--efu-secondtext) 82%, transparent);
 }
 
 .recent-post-item > .recent-post-info .recent-post-info-top .recent-post-info-top-tips .unvisited-post[hidden] {

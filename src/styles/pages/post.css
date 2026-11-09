@@ -1,4 +1,35 @@
 /* Post header, copyright, related posts, and post navigation. */
+.post #post-info .post-title:has(+ .post-description) {
+  height: auto;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.post #post-info .post-description {
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 300px - 80px);
+  margin: 0 0 0 40px;
+  color: rgba(255, 255, 255, .8);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 1200px) {
+  .post #post-info .post-description {
+    width: calc(100% - 80px);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .post #post-info .post-description {
+    width: 100%;
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+  }
+}
 @media screen and (max-width: 768px) {
   .post #post-info .post-title {
     z-index: 1;
@@ -14,6 +45,8 @@
 }
 
 .post #post-info #post-meta {
+  position: relative;
+  top: 8px;
   color: var(--efu-white);
   font-size: 95%;
   user-select: none;

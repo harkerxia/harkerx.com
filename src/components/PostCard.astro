@@ -4,9 +4,8 @@ import { contentPath, type Post } from '../lib/content';
 interface Props {
   post: Post;
   index?: number;
-  newest?: string;
 }
-const { post, index = 0, newest } = Astro.props;
+const { post, index = 0 } = Astro.props;
 const p = post.data;
 const right =
   cfg.index_post_list.direction !== 'column' &&
@@ -45,11 +44,6 @@ const right =
             {c}
           </span>
         ))}
-        {newest === post.id && (
-          <span class="original latest-post tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:flex tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:relative">
-            {t('homeNew')}
-          </span>
-        )}
         <a
           class="unvisited-post tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:flex tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:relative"
           href={url(contentPath(post))}
@@ -64,6 +58,9 @@ const right =
       >
         {p.title}
       </a>
+      {p.description?.trim() && (
+        <p class="article-description">{p.description}</p>
+      )}
     </div>
     <div class="article-meta-wrap tw:relative tw:flex tw:flex-row tw:justify-between tw:items-center tw:whitespace-nowrap">
       {p.comment && (

@@ -119,7 +119,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
             <div id="home">
               <div class="recent-posts tw:relative" id="recent-posts">
                 {route.posts?.map((post, i) => (
-                  <PostCard post={post} index={i} newest={posts[0]?.id} />
+                  <PostCard post={post} index={i} />
                 ))}
                 {!route.posts?.length && (
                   <p class="empty-state">{t("archiveEmpty")}</p>
