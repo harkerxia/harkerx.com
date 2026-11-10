@@ -220,7 +220,7 @@ async function setLanguage(
     }
   }
   Solitude.hideRightMenu?.();
-  applyLanguage();
+  // Keep the visible page unchanged; before-swap localizes the incoming document.
   restoreController?.abort();
   restoreController = new AbortController();
   const signal = restoreController.signal;

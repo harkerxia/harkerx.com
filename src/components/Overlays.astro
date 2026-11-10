@@ -1,7 +1,8 @@
 ---
 import I18n from "./I18n.astro";
+import ArticleWordTotal from "./ArticleWordTotal.astro";
 import { cfg, t, url, dateLabel, isoDate } from "../lib/site";
-import { taxonomy, wordCount, type Post } from "../lib/content";
+import { taxonomy, type Post } from "../lib/content";
 import Menu from "./Menu.astro";
 interface Props {
   posts: Post[];
@@ -373,7 +374,7 @@ const contextItems = [
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
           <div class="item-name"><I18n k="totalWords" /></div>
           <div class="item-count">
-            {posts.reduce((n, p) => n + wordCount(p.body ?? ""), 0)}
+            <ArticleWordTotal posts={posts} />
           </div>
         </div>
       )}

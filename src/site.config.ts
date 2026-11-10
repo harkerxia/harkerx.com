@@ -69,6 +69,10 @@ export default defineSolitudeConfig({
         information: socialLinks,
       },
     },
+    notes: {
+      // 1: Responsive waterfall cards; 2: Single-column feed with author and date.
+      style: 1,
+    },
     twikoo: { envId: "https://comments.harkerx.com", option: { lang: "en" } },
   },
 });

@@ -1,0 +1,21 @@
+---
+import I18n from "./I18n.astro";
+import {
+  getArticleVersions,
+  postIdentity,
+  selectArticleVersions,
+  wordCount,
+  type Post,
+} from "../lib/content";
+interface Props {
+  posts: Post[];
+}
+const { posts } = Astro.props;
+const ids = new Set(posts.map(postIdentity));
+const versions = (await getArticleVersions()).filter((post) => ids.has(postIdentity(post)));
+// Match the article lists: count each source once, falling back to Chinese when untranslated.
+const total = (locale: "en" | "zh-CN") =>
+  selectArticleVersions(versions, locale).reduce((sum, post) => sum + wordCount(post.body ?? ""), 0);
+---
+
+<I18n text={String(total("en"))} zh={String(total("zh-CN"))} />

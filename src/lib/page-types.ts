@@ -106,6 +106,7 @@ export interface LinksData {
 export interface NotesItem {
   date: string;
   content: string;
+  contentEn?: string;
   location?: string;
   link?: string;
   image?:

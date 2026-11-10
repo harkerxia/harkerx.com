@@ -306,14 +306,13 @@ export class tabs {
   static expireAddListener() {
     const { expire } = Solitude.config;
     if (!expire) return;
-    const list = document.querySelectorAll<HTMLElement>(".post-meta-date time");
-    const post_date = list.length
-      ? list[list.length - 1]
-      : document.querySelector<HTMLElement>(".datetime");
-    if (!post_date) return;
+    const modified = document.getElementById("post-info")?.dataset.postModified;
+    const published = document.querySelector<HTMLElement>(".post-meta-date time, .datetime");
+    const updatedAt = new Date(modified || published?.getAttribute("datetime") || "");
+    if (Number.isNaN(updatedAt.getTime())) return;
     const ex = Math.ceil(
       (new Date().getTime() -
-        new Date(post_date.getAttribute("datetime") || "").getTime()) /
+        updatedAt.getTime()) /
         1000 /
         60 /
         60 /

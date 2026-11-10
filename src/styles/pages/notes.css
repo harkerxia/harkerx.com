@@ -126,6 +126,7 @@ body[data-type='notes'] #page {
 }
 
 #notes .notes-content-img {
+  justify-content: safe center;
   gap: 10px;
   margin: 10px 0;
   overflow-x: auto;
@@ -199,8 +200,9 @@ body[data-type='notes'] #page {
 #notes .avatar { width: 40px; height: 40px; border-radius: 50%; }
 #notes .info { display: flex; flex-direction: column; }
 #notes .notes_nick { font-weight: 700; }
-#notes .notes_date { color: var(--efu-secondtext); font-size: 12px; }
+#notes .notes_date { color: var(--efu-secondtext); font-size: 12px; position: relative; top: -3px; }
 #notes[data-style='2'] .waterfall { --notes-columns: 1; }
+#notes[data-style='2'] .item { padding-bottom: 20px; }
 
 #notes .notes-music {
   min-height: 82px;

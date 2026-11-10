@@ -2,6 +2,7 @@ import sanitizeHtml from 'sanitize-html';
 import { cfg, config, absolute, url } from './site';
 import { contentPath, plainText, postIdentity, postLocale, type Post } from './content';
 import type { ArticleLocale } from './post-translations';
+import { siteText } from './ui-language';
 
 const xmlText = (value: unknown) =>
   String(value ?? '').replace(
@@ -219,7 +220,7 @@ export async function rss(
     '  <channel>',
     `    <title>${xml(title === config.title ? title : `${config.title} — ${title}`)}</title>`,
     `    <link>${xml(absolute(sitePath))}</link>`,
-    `    <description>${xml(config.description)}</description>`,
+    `    <description>${xml(siteText(config.description, locale))}</description>`,
     `    <language>${xml(locale)}</language>`,
     `    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,
     `    <atom:link href="${xml(absolute(feedPath))}" rel="self" type="application/rss+xml" />`,

@@ -95,7 +95,6 @@
     },
     "meta": {
       "date": true,
-      "updated": true,
       "locate": false,
       "wordcount": true,
       "readtime": true,

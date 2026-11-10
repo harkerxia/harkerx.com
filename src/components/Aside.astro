@@ -1,5 +1,6 @@
 ---
 import I18n from "./I18n.astro";
+import ArticleWordTotal from "./ArticleWordTotal.astro";
 import { cfg, config, t, url, dateLabel, isoDate } from '../lib/site';
 import TocItems, { type Heading } from './TocItems.astro';
 import AsideGroup from './AsideGroup.astro';
@@ -10,7 +11,6 @@ import {
   getArticleVersions,
   selectArticleVersions,
   taxonomy,
-  wordCount,
   type Post,
 } from '../lib/content';
 import { normalizeUiLocale } from '../lib/ui-language';
@@ -213,7 +213,7 @@ for (const heading of headings) {
                   <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
                     <div class="item-name"><I18n k="totalWords" /></div>
                     <div class="item-count">
-                      {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
+                      <ArticleWordTotal posts={posts} />
                     </div>
                   </div>
                 )}
