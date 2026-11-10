@@ -6,10 +6,14 @@ import AsideGroup from './AsideGroup.astro';
 import {
   homePosts,
   contentPath,
+  postIdentity,
+  getArticleVersions,
+  selectArticleVersions,
   taxonomy,
   wordCount,
   type Post,
 } from '../lib/content';
+import { normalizeUiLocale } from '../lib/ui-language';
 interface Props {
   posts: Post[];
   home?: boolean;
@@ -27,10 +31,13 @@ const {
 const scope = home ? cfg.aside.home : post ? cfg.aside.post : cfg.aside.page;
 const groups = [scope.noSticky.split(','), scope.Sticky.split(',')];
 const card = cfg.aside.my_card;
+const views = new Map(selectArticleVersions(await getArticleVersions(), normalizeUiLocale(config.locale))
+  .map((version) => [postIdentity(version), version]));
 const recent = (home ? homePosts(posts) : posts)
   .slice()
   .sort((a, b) => +b.data.date - +a.data.date)
-  .slice(0, 5);
+  .slice(0, 5)
+  .map((post) => views.get(postIdentity(post)) ?? post);
 const tags = taxonomy(posts, 'tags');
 const updated = new Date();
 const toc: Heading[] = [];
@@ -138,6 +145,7 @@ for (const heading of headings) {
                     class="aside-list-item"
                     href={url(contentPath(p))}
                     title={p.data.title}
+                    data-article-id={postIdentity(p)} data-article-bind="href:path;title:title"
                   >
                     {p.data.cover && (
                       <div class="thumbnail">
@@ -145,7 +153,8 @@ for (const heading of headings) {
                       </div>
                     )}
                     <div class="content">
-                      <span class="title">{p.data.title}</span>
+                      <span class="title" data-article-text="title">{p.data.title}</span>
+                      <small class="article-language-label" data-article-language hidden>中文</small>
                       <span class="categories">{p.data.categories[0]}</span>
                     </div>
                   </a>

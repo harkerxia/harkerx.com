@@ -16,17 +16,22 @@ export function renderRecentPosts(posts, locale = 'en') {
   if (posts.length > 2) throw new Error('Expected at most two recent posts');
   if (!posts.length) return `<p align="center">${locale === 'zh-CN' ? '暂无已发布文章。' : 'No published posts yet.'}</p>`;
   const cells = posts.map((post) => {
-    const link = httpUrl(post.url);
+    const version = post.versions?.[locale] ?? post.versions?.['zh-CN'] ?? post;
+    const link = httpUrl(version.url);
     const categories = post.categories.map((category) =>
       `<a href="${httpUrl(category.url)}">${escape(category.name)}</a>`,
     );
-    const metadata = [...categories, escape(post.date)].join(' · ');
+    const metadata = [
+      ...categories,
+      ...(locale === 'en' && version.locale === 'zh-CN' ? ['Chinese'] : []),
+      escape(post.date),
+    ].join(' · ');
     return `    <td align="center" valign="top" width="${100 / posts.length}%">
       <a href="${link}">
-        <img src="${httpUrl(post.cover)}" alt="${escape(post.title)}" width="360" height="200" />
+        <img src="${httpUrl(post.cover)}" alt="${escape(version.title)}" width="360" height="200" />
       </a>
       <br />
-      <a href="${link}"><strong>${escape(post.title)}</strong></a>
+      <a href="${link}"><strong>${escape(version.title)}</strong></a>
       <br />
       <sub>${metadata}</sub>
     </td>`;

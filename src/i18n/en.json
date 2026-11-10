@@ -192,5 +192,6 @@
   "youtubePlayer": "YouTube video player",
   "bilibiliPlayer": "Bilibili video player",
   "musicNotation": "Music notation",
-  "hiddenText": "Hidden text"
+  "hiddenText": "Hidden text",
+  "articleTranslationUnavailable": "This article is not available in the selected language yet."
 }

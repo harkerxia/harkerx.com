@@ -4,10 +4,16 @@
       "class_name": "Friends",
       "link_list": [
         {
-          "name": "Example Blog",
-          "link": "https://example.com/",
-          "avatar": "/img/icons/favicon.png",
-          "descr": "Example friend link. Replace it with a blog you enjoy."
+          "name": "灵长的博客园",
+          "link": "https://www.cnblogs.com/masida-hall-LZ",
+          "avatar": "https://cdn.luogu.com.cn/upload/usericon/285617.png",
+          "descr": "masida-hall-LZ"
+        },
+        {
+          "name": "Kris Hu's Blog",
+          "link": "https://blog.krishu.moe/",
+          "avatar": "https://cdn.luogu.com.cn/upload/usericon/367404.png",
+          "descr": "Kris Hu's Blog"
         }
       ]
     }

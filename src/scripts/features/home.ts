@@ -240,6 +240,7 @@ export const initHomeCenter = () => {
     const colorDeep = selectedStyle
       .getPropertyValue('--home-center-theme-op-deep')
       .trim();
+    titleLink.dataset.articleId = selected.dataset.articleId || '';
     titleLink.textContent = selected.dataset.title || '';
     titleLink.href = selected.dataset.link || '';
     titleTag.textContent = selected.dataset.label || '';

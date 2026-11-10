@@ -192,5 +192,6 @@
   "youtubePlayer": "YouTube 视频播放器",
   "bilibiliPlayer": "哔哩哔哩视频播放器",
   "musicNotation": "乐谱",
-  "hiddenText": "隐藏文字"
+  "hiddenText": "隐藏文字",
+  "articleTranslationUnavailable": "这篇文章暂时没有所选语言的译文。"
 }

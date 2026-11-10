@@ -31,3 +31,10 @@ export const setStatus = (
   status.textContent = message;
   container.replaceChildren(status);
 };
+
+// Comment storage keys stay stable; visible links follow the selected article language.
+export const publicCommentLink = (path: string): string => {
+  const versions = Solitude.config.comment_runtime?.article_links?.[path];
+  const locale = document.documentElement.dataset.uiLanguage === 'zh-CN' ? 'zh-CN' : 'en';
+  return versions?.[locale] ?? versions?.['zh-CN'] ?? path;
+};

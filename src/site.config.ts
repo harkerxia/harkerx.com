@@ -45,19 +45,19 @@ export default defineSolitudeConfig({
       recommendList: [
         {
           title: "从零开始搭建个人博客",
-          url: "/p/blog/",
+          url: "/zh/p/blog/",
           cover: "/img/covers/blog.png",
           label: "Experience",
         },
         {
           title: "史上最全翻墙教程",
-          url: "/p/vpn/",
+          url: "/zh/p/vpn/",
           cover: "/img/covers/vpn.png",
           label: "Technologies",
         },
         {
           title: "VSCode的安装及环境配置",
-          url: "/p/vscode/",
+          url: "/zh/p/vscode/",
           cover: "/img/covers/vscode.png",
           label: "Experience",
         },

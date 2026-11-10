@@ -1,5 +1,9 @@
 import {
   getPosts,
+  getArticleVersions,
+  postIdentity,
+  postLocale,
+  legacyPostPath,
   getPages,
   homePosts,
   paginate,
@@ -10,8 +14,14 @@ import {
   type Post,
   type Page,
 } from "./content";
-import { config, cfg, t } from "./site";
+import { config, cfg, t, url } from "./site";
 import { pageData } from "./data";
+export interface ArticleLanguage {
+  id: string;
+  locale: "zh-CN" | "en";
+  versions: Partial<Record<"zh-CN" | "en", string>>;
+  legacyPath: string;
+}
 export interface Route {
   path: string;
   kind: "home" | "post" | "page" | "taxonomy" | "term" | "redirect";
@@ -23,6 +33,8 @@ export interface Route {
   taxonomy?: "tags" | "categories" | "series";
   type?: string;
   target?: string;
+  shareVersions?: ArticleLanguage["versions"];
+  article?: ArticleLanguage;
 }
 export async function getRoutes(): Promise<Route[]> {
   const posts = await getPosts(),
@@ -36,14 +48,22 @@ export async function getRoutes(): Promise<Route[]> {
     current: i + 1,
     total: chunks.length,
   }));
-  for (const entry of posts)
+  const articleVersions = await getArticleVersions();
+  for (const entry of articleVersions) {
+    const id = postIdentity(entry);
+    const versions = Object.fromEntries(
+      articleVersions.filter((version) => postIdentity(version) === id)
+        .map((version) => [postLocale(version), url(contentPath(version))]),
+    );
     routes.push({
       path: contentPath(entry),
       kind: "post",
       title: entry.data.title,
       entry,
       type: "post",
+      article: { id, locale: postLocale(entry), versions, legacyPath: new URL(url(legacyPostPath(entry)), config.site).pathname },
     });
+  }
   for (const kind of ["tags", "categories", "series"] as const) {
     const groups = taxonomy(posts, kind);
     if (kind === "series" && groups.length === 0) continue;
@@ -101,23 +121,36 @@ export async function getRoutes(): Promise<Route[]> {
       entry,
       type: entry.data.type ?? "page",
     });
-  for (const entry of [...posts, ...pages])
-    for (const alias of entry.data.aliases)
-      routes.push({
-        path: contentPath({
-          id: "",
-          collection: "pages",
-          data: { url: alias },
-        }),
-        kind: "redirect",
-        title: entry.data.title,
-        target: contentPath(entry),
-      });
+  const redirects = new Map<string, { path: string; title: string; target: string; shareVersions?: ArticleLanguage["versions"] }>();
+  for (const entry of posts) {
+    if (entry.data.draft) continue;
+    const target = contentPath(entry);
+    const path = target.replace(/^\/zh\/p\//, "/p/");
+    const shareVersions = Object.fromEntries(
+      articleVersions.filter((version) => !version.data.draft && postIdentity(version) === entry.id)
+        .map((version) => [postLocale(version), url(contentPath(version))]),
+    );
+    redirects.set(normalizedRoutePath(path), { path, title: entry.data.title, target, shareVersions });
+  }
+  for (const entry of [...posts, ...pages]) {
+    const target = contentPath(entry);
+    for (const alias of entry.data.aliases) {
+      const path = contentPath({ id: "", collection: "pages", data: { url: alias } });
+      const key = normalizedRoutePath(path);
+      if (key === normalizedRoutePath(target)) continue;
+      const existing = redirects.get(key);
+      if (existing && existing.target !== target) throw new Error(`Conflicting redirect: ${path}`);
+      redirects.set(key, { ...existing, path, title: entry.data.title, target });
+    }
+  }
+  for (const redirect of redirects.values()) routes.push({ ...redirect, kind: "redirect" });
   assertUniquePaths([
     ...routes.map((r) => r.path),
     "/404.html",
     "/rss.xml",
+    "/en/rss.xml",
     "/search.xml",
+    "/en/search.xml",
     "/links.json",
     "/recent-posts.json",
     "/sitemap.xml",

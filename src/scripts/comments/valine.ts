@@ -1,7 +1,8 @@
+import { getArticleLanguage } from "../core/article";
 import { Solitude } from "../core/api";
 import { lifecycle } from "../core/lifecycle";
 import { initializeMessageBarrage } from "../message-barrage";
-import { commentText, formatCommentText, setStatus } from "./shared";
+import { commentText, formatCommentText, publicCommentLink, setStatus } from "./shared";
 import {
   commentBarrageEnabled,
   fetchAggregateComments,
@@ -149,7 +150,7 @@ export const renderAside = (
   items.forEach((comment) => {
     const item = document.createElement("a");
     item.className = "aside-list-item";
-    item.href = comment.url;
+    item.href = publicCommentLink(comment.url);
     item.title = comment.title;
     const thumbnail = document.createElement("div");
     thumbnail.className = "thumbnail";
@@ -192,7 +193,7 @@ export const createCommentCard = (comment: NormalizedComment) => {
   card.className = "comment-card";
   card.title = comment.title;
   card.dataset.solitudeAction = "navigateTo";
-  card.dataset.solitudeUrl = comment.url;
+  card.dataset.solitudeUrl = publicCommentLink(comment.url);
   const info = document.createElement("div");
   info.className = "comment-info";
   info.append(createAvatar(comment));
@@ -290,7 +291,11 @@ export const renderMessageBarrage = async () => {
       ? ""
       : commentText("empty", "No comments yet");
     status.setAttribute("aria-busy", "false");
-    initializeMessageBarrage(container, comments, createAvatar);
+    initializeMessageBarrage(
+      container,
+      comments.map((comment) => ({ ...comment, url: publicCommentLink(comment.url) })),
+      createAvatar,
+    );
   } catch {
     if (signal.aborted || !container.isConnected) return;
     status.setAttribute("aria-busy", "false");
@@ -325,7 +330,7 @@ export const initializePageBarrage = async (comments: NormalizedComment[]) => {
       nick: comment.nick,
       avatar: comment.avatar,
       id: comment.id,
-      url: comment.url,
+      url: publicCommentLink(comment.url),
     })),
   );
 };
@@ -334,7 +339,7 @@ export const initializeValineEffects = async () => {
   if (document.querySelector<HTMLElement>("#barrage[data-native-barrage]"))
     return;
   try {
-    const comments = await fetchPageComments(location.pathname);
+    const comments = await fetchPageComments(getArticleLanguage()?.legacyPath ?? location.pathname);
     await initializePageBarrage(comments);
   } catch {
     const barrage = document.querySelector<HTMLElement>(".comment-barrage");
@@ -365,7 +370,7 @@ export const mountValine = async (mount: HTMLElement) => {
       serverURLs: config.serverURLs,
       avatar: config.avatar,
       visitor: Boolean(config.visitor),
-      path: location.pathname,
+      path: getArticleLanguage()?.legacyPath ?? location.pathname,
     });
     // Valine replaces the mount element's class name while rendering. Restore
     // the theme opt-in afterwards so the Hugo output matches the Hexo styles.

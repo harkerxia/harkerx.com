@@ -2,7 +2,7 @@
 import I18n from "../components/I18n.astro";
 import Base from '../layouts/Base.astro';
 import { cfg, t, url } from '../lib/site';
-import { getPosts, contentPath } from '../lib/content';
+import { getPosts, contentPath, postIdentity } from '../lib/content';
 const posts = await getPosts();
 ---
 
@@ -32,18 +32,19 @@ const posts = await getPosts();
       <section class="aside-list" aria-label={t('recentPosts')} data-i18n-aria-label="recentPosts">
         <div class="aside-list-group">
           {posts.slice(0, 5).map((p) => (
-            <article class="aside-list-item">
-              <a class="thumbnail" href={url(contentPath(p))}>
+            <article class="aside-list-item" data-article-id={postIdentity(p)}>
+              <a class="thumbnail" href={url(contentPath(p))} data-article-bind="href:path">
                 <img
                   src={url(p.data.cover ?? cfg.post.default.cover[0])}
-                  alt={p.data.title}
+                  alt={p.data.title} data-article-bind="alt:title"
                   loading="lazy"
                 />
               </a>
               <div class="content">
-                <a class="title" href={url(contentPath(p))}>
+                <a class="title" href={url(contentPath(p))} data-article-bind="href:path" data-article-text="title">
                   {p.data.title}
                 </a>
+                <small class="article-language-label" data-article-language hidden>中文</small>
               </div>
             </article>
           ))}

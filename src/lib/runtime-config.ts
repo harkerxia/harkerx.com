@@ -5,7 +5,7 @@ import {
   uiText,
   type UiLocale,
 } from "./ui-language";
-import { contentPath, type Post, type Page } from "./content";
+import { contentPath, legacyPostPath, postIdentity, postLocale, selectArticleVersions, type Post, type Page } from "./content";
 import linksData from "../data/links.json";
 import type { LinksData } from "./page-types";
 import { pageData } from "./data";
@@ -16,8 +16,10 @@ export function runtimeConfig(
   pages: Page[],
   page: { right_menu?: boolean; type?: string; data?: string },
   locale: UiLocale = normalizeUiLocale(config.locale),
+  versions: Post[] = posts,
 ) {
   const t = (key: string) => uiText(key, locale);
+  const localizedPosts = selectArticleVersions(versions, locale);
   const inlineLinks =
     page.type === "links" ? pageData(page.data, "links") : undefined;
   const activeLinks = inlineLinks ?? links;
@@ -52,15 +54,22 @@ export function runtimeConfig(
       },
     },
     root: config.base,
+    article_paths: Object.fromEntries(posts.flatMap((post) => {
+      const legacy = new URL(url(legacyPostPath(post)), config.site).pathname;
+      return [contentPath(post), contentPath(post).replace(/^\/zh\//, "/en/"), legacyPostPath(post)]
+        .map((path) => [new URL(url(path), config.site).pathname.replace(/\/+$/, "") || "/", legacy]);
+    })),
     runtime: cfg.aside.siteinfo.runtimeenable
       ? cfg.aside.siteinfo.runtime
       : (false as const),
     localsearch: {
       preload: cfg.search.local.preload,
-      path: url(cfg.search.local.CDN || "/search.xml"),
+      path: url(cfg.search.local.CDN && cfg.search.local.CDN !== "/search.xml"
+        ? cfg.search.local.CDN
+        : locale === "en" ? "/en/search.xml" : "/search.xml"),
     },
     algolia: cfg.search.algolia,
-    random_posts: posts
+    random_posts: localizedPosts
       .filter((p) => p.data.random)
       .map((p) => url(contentPath(p))),
     randomlink: cfg.footer.randomlink,
@@ -193,6 +202,11 @@ export function runtimeConfig(
     },
     covercolor: cfg.post.covercolor,
     comment_runtime: {
+      article_links: Object.fromEntries(posts.map((post) => [
+        url(legacyPostPath(post)),
+        Object.fromEntries(versions.filter((version) => postIdentity(version) === postIdentity(post))
+          .map((version) => [postLocale(version), url(contentPath(version))])),
+      ])),
       routes: Object.fromEntries(
         [...posts, ...pages]
           .filter((p) =>
@@ -201,7 +215,7 @@ export function runtimeConfig(
               p.data.comment,
             ),
           )
-          .map((p) => [url(contentPath(p)), p.data.title]),
+          .map((p) => [url(p.collection === "posts" ? legacyPostPath(p) : contentPath(p)), p.data.title]),
       ),
       default_avatar: url("/img/icons/favicon.png"),
       barrage_script: url("/js/third_party/barrage.min.js"),
@@ -238,7 +252,7 @@ export function runtimeConfig(
   };
 }
 
-// Keep article lists and feature configuration in one payload; only UI copy varies.
+// Share article identities while switching localized labels, search and navigation targets.
 export function runtimeLanguagePatch(
   runtime: ReturnType<typeof runtimeConfig>,
 ) {
@@ -252,6 +266,8 @@ export function runtimeLanguagePatch(
     artalk,
     giscus,
     valine,
+    localsearch,
+    random_posts,
   } = runtime;
   const { state, witty_words, witty_comment } = aside;
   const { data: _data, ...friendLabels } = friend_links;
@@ -265,5 +281,7 @@ export function runtimeLanguagePatch(
     artalk: { option: artalk.option },
     giscus: { option: giscus.option },
     valine: { option: valine.option },
+    localsearch,
+    random_posts,
   };
 }

@@ -26,8 +26,27 @@ const common = z.looseObject({
 });
 export const collections = {
   posts: defineCollection({
-    loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),
+    loader: glob({
+      pattern: "**/*.{md,mdx}",
+      base: "./src/content/posts",
+      generateId: ({ entry }) => entry.replace(/\\/g, "/").replace(/\.mdx?$/i, ""),
+    }),
     schema: common.extend({ date: z.coerce.date() }),
+  }),
+  translations: defineCollection({
+    loader: glob({
+      pattern: "**/*.{md,mdx}",
+      base: "./src/content/translations/en",
+      generateId: ({ entry }) => entry.replace(/\\/g, "/").replace(/\.mdx?$/i, ""),
+    }),
+    schema: z.strictObject({
+      translationOf: z.string().trim().min(1),
+      title: z.string().trim().min(1),
+      description: z.string().optional(),
+      draft: z.boolean().default(false),
+      lastmod: z.coerce.date().optional(),
+      sourceRevision: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    }),
   }),
   pages: defineCollection({
     loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/pages" }),

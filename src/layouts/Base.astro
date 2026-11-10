@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import { applyInitialTheme } from "../scripts/theme-bootstrap";
 import { cfg, config, url, absolute, json } from "../lib/site";
-import { getPosts, getPages, contentPath, type Post } from "../lib/content";
+import { getPosts, getPages, getArticleVersions, deriveArticleSeo, contentPath, type Post } from "../lib/content";
 import { runtimeConfig, runtimeLanguagePatch } from "../lib/runtime-config";
 import {
   applyUiLanguage,
@@ -11,6 +11,8 @@ import {
   uiCopies,
 } from "../lib/ui-language";
 import I18n from "../components/I18n.astro";
+import { buildArticleCatalog } from "../lib/article-ui";
+import type { ArticleLanguage } from "../lib/routes";
 import { pageCommentsEnabled } from "../lib/comment-policy";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -32,6 +34,7 @@ interface Props {
   post?: Post;
   page?: import("../lib/page-types").PageMetadata;
   toc?: boolean;
+  article?: ArticleLanguage;
 }
 const {
   title = config.title,
@@ -40,16 +43,20 @@ const {
   post,
   page = {},
   toc = false,
+  article,
 } = Astro.props;
 const posts = await getPosts(),
   pages = await getPages();
-const runtime = runtimeConfig(posts, pages, { ...page, type });
+const versions = await getArticleVersions();
+const articleCatalog = buildArticleCatalog(versions);
+const articleSeo = post ? deriveArticleSeo(post, versions, absolute) : undefined;
 const defaultUiLocale = normalizeUiLocale(config.locale);
+const runtime = runtimeConfig(posts, pages, { ...page, type }, defaultUiLocale, versions);
 const runtimeLanguages = Object.fromEntries(
   (["en", "zh-CN"] as const).map((locale) => [
     locale,
     runtimeLanguagePatch(
-      runtimeConfig(posts, pages, { ...page, type }, locale),
+      runtimeConfig(posts, pages, { ...page, type }, locale, versions),
     ),
   ]),
 );
@@ -88,7 +95,8 @@ const inlineVars = Object.entries(vars)
 
 <!doctype html>
 <html
-  lang={defaultUiLocale}
+  lang={articleSeo?.locale ?? defaultUiLocale}
+  data-article-locale={articleSeo?.locale}
   data-ui-language={defaultUiLocale}
   data-theme="light"
   style={inlineVars}
@@ -116,13 +124,17 @@ const inlineVars = Object.entries(vars)
       data-i18n-content-text={post ? undefined : description}
     />
     {type === "404" && <meta name="robots" content="noindex, follow" />}
-    <link rel="canonical" href={canonicalUrl} />
+    <link rel="canonical" href={articleSeo?.canonical ?? canonicalUrl} />
+    {articleSeo?.alternates.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+    ))}
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={config.title}
+      title={`${config.title} — 中文`}
       href={url("/rss.xml")}
     />
+    <link rel="alternate" type="application/rss+xml" title={`${config.title} — English`} href={url("/en/rss.xml")} />
     <link rel="icon" href={url(cfg.site.icon)} />
     <meta
       property="og:title"
@@ -189,7 +201,9 @@ const inlineVars = Object.entries(vars)
     <template id="site-config" set:html={json(runtime)} />
     <template id="site-ui-config" set:html={json(runtimeLanguages)} />
     <template id="site-ui-copy" set:html={json(uiCopies)} />
+    <template id="article-catalog" set:html={json(articleCatalog)} />
     <template id="config-diff" set:html={json(pageConfig)} />
+    {article && <template id="article-language" set:html={json(article)} />}
     {cfg.verify_site.map((html: string) => (
       <Fragment set:html={html} />
     ))}

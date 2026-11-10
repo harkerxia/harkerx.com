@@ -37,20 +37,20 @@
 <table align="center">
   <tr>
     <td align="center" valign="top" width="50%">
-      <a href="https://harkerx.com/p/blog/">
-        <img src="https://harkerx.com/img/covers/blog.png" alt="从零开始搭建个人博客" width="360" height="200" />
+      <a href="https://harkerx.com/en/p/blog/">
+        <img src="https://harkerx.com/img/covers/blog.png" alt="Building a Personal Blog from Scratch" width="360" height="200" />
       </a>
       <br />
-      <a href="https://harkerx.com/p/blog/"><strong>从零开始搭建个人博客</strong></a>
+      <a href="https://harkerx.com/en/p/blog/"><strong>Building a Personal Blog from Scratch</strong></a>
       <br />
       <sub><a href="https://harkerx.com/categories/experience/">Experience</a> · 2023-02-12</sub>
     </td>
     <td align="center" valign="top" width="50%">
-      <a href="https://harkerx.com/p/vpn/">
-        <img src="https://harkerx.com/img/covers/vpn.png" alt="史上最全翻墙教程" width="360" height="200" />
+      <a href="https://harkerx.com/en/p/vpn/">
+        <img src="https://harkerx.com/img/covers/vpn.png" alt="A Comprehensive Guide to VPNs and Bypassing Internet Censorship" width="360" height="200" />
       </a>
       <br />
-      <a href="https://harkerx.com/p/vpn/"><strong>史上最全翻墙教程</strong></a>
+      <a href="https://harkerx.com/en/p/vpn/"><strong>A Comprehensive Guide to VPNs and Bypassing Internet Censorship</strong></a>
       <br />
       <sub><a href="https://harkerx.com/categories/technologies/">Technologies</a> · 2023-01-23</sub>
     </td>

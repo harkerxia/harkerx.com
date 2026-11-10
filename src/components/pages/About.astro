@@ -547,6 +547,9 @@ for (const section of data.sections)
                   {s.links.map((link) => (
                     <a
                       href={url(link.url)}
+                      data-feed-link={link.url === "/rss.xml" ? "" : undefined}
+                      data-feed-en={link.url === "/rss.xml" ? url("/en/rss.xml") : undefined}
+                      data-feed-zh={link.url === "/rss.xml" ? url("/rss.xml") : undefined}
                       target={link.external ? "_blank" : undefined}
                       rel={link.external ? "noopener noreferrer" : undefined}
                     >

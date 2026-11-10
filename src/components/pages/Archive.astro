@@ -1,12 +1,16 @@
 ---
 import I18n from "../../components/I18n.astro";
 import { cfg, config, t, url, dateLabel, json } from '../../lib/site';
-import { contentPath, type Post } from '../../lib/content';
+import { contentPath, postIdentity, getArticleVersions, selectArticleVersions, type Post } from '../../lib/content';
+import { normalizeUiLocale } from '../../lib/ui-language';
 interface Props {
   posts: Post[];
 }
 const { posts } = Astro.props;
-const data = posts.map((p) => ({
+const views = new Map(selectArticleVersions(await getArticleVersions(), normalizeUiLocale(config.locale))
+  .map((version) => [postIdentity(version), version]));
+const data = posts.map((p) => views.get(postIdentity(p)) ?? p).map((p) => ({
+  id: postIdentity(p),
   title: p.data.title,
   url: url(contentPath(p)),
   cover: url(p.data.cover ?? cfg.post.default.cover[0]),
@@ -56,8 +60,9 @@ const data = posts.map((p) => ({
   >
     <div class="archive-page-list tw:grid" id="archives-page-list">
       {data.slice(0, config.pagination).map((p) => (
-        <a class="archive-item" href={p.url}>
-          <time>{p.dateLabel}</time> {p.title}
+        <a class="archive-item" href={p.url} data-article-id={p.id} data-article-bind="href:path">
+          <time>{p.dateLabel}</time> <span data-article-text="title">{p.title}</span>
+          <small class="article-language-label" data-article-language hidden>中文</small>
         </a>
       ))}
     </div>

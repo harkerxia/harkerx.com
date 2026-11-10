@@ -1,25 +1,39 @@
 ---
-import { cfg, t, url } from '../lib/site';
-import { homePosts, contentPath, type Post } from '../lib/content';
+import { cfg, config, t, url } from '../lib/site';
+import { homePosts, contentPath, postIdentity, getArticleVersions, selectArticleVersions, type Post } from '../lib/content';
+import { normalizeUiLocale } from '../lib/ui-language';
 interface Props {
   posts: Post[];
 }
 const { posts } = Astro.props;
+const views = new Map(selectArticleVersions(await getArticleVersions(), normalizeUiLocale(config.locale))
+  .map((version) => [postIdentity(version), version]));
 const normalize = (s: string) => s.replace(/\/$/, '').replace(/\.html$/, '');
 const hidden = new Set(
-  posts.filter((p) => !p.data.home).map((p) => normalize(contentPath(p))),
+  posts.filter((p) => !p.data.home).map(postIdentity),
 );
-const items = cfg.hometop.recommendList.filter(
-  (p) => p.enable !== false && !hidden.has(normalize(p.url)),
-);
+const seen = new Set<string>();
+const items = cfg.hometop.recommendList.filter((p) => p.enable !== false).map((item) => {
+  const source = posts.find((post) => [contentPath(post), contentPath(post).replace(/^\/zh\//, '/en/')]
+    .some((path) => normalize(path) === normalize(item.url)));
+  const view = source && views.get(postIdentity(source));
+  return { ...item, articleId: source && postIdentity(source), title: view?.data.title ?? item.title, url: view ? contentPath(view) : item.url };
+}).filter((item) => {
+  if (item.articleId && hidden.has(item.articleId)) return false;
+  const key = item.articleId ?? normalize(item.url);
+  if (seen.has(key)) return false;
+  seen.add(key);
+  return true;
+});
 for (const post of homePosts(posts).sort(
   (a, b) => +b.data.date - +a.data.date,
 )) {
   if (items.length >= 5) break;
-  if (!items.some((p) => normalize(p.url) === normalize(contentPath(post))))
+  if (!items.some((p) => p.articleId === postIdentity(post) || normalize(p.url) === normalize(contentPath(post))))
     items.push({
-      title: post.data.title,
-      url: contentPath(post),
+      title: (views.get(postIdentity(post)) ?? post).data.title,
+      articleId: postIdentity(post),
+      url: contentPath(views.get(postIdentity(post)) ?? post),
       cover: post.data.cover,
       label: post.data.categories[0],
     });
@@ -49,6 +63,7 @@ const first = items[0];
               tabindex={i === 0 ? 0 : -1}
               aria-hidden={i !== 0}
               data-index={i}
+              data-article-id={item.articleId} data-article-bind="data-link:path;data-title:title"
               data-link={url(item.url)}
               data-title={item.title}
               data-label={item.label}
@@ -58,7 +73,7 @@ const first = items[0];
                 <img
                   class="home-center-cover-img nolazyload tw:[.home-center-banner-item.has-banner-cover_&]:object-cover"
                   src={url(item.cover ?? cfg.post.default.cover[0])}
-                  alt={item.title}
+                  alt={item.title} data-article-bind="alt:title"
                   loading={i === 0 ? 'eager' : 'lazy'}
                   data-solitude-fallback={url(cfg.post.default.cover[0])}
                 />
@@ -68,7 +83,7 @@ const first = items[0];
           ))}
         </div>
         <div class="home-center-title tw:absolute tw:text-left">
-          <a class="home-center-title-link" href={url(first.url)}>
+          <a class="home-center-title-link" href={url(first.url)} data-article-id={first.articleId} data-article-bind="href:path" data-article-text="title">
             {first.title}
           </a>
           <div class="home-center-title-tag tw:flex tw:items-center">
@@ -101,7 +116,7 @@ const first = items[0];
                   'home-center-item tw:flex tw:items-center tw:cursor-pointer',
                   { active: i === 0 },
                 ]}
-                data-index={i}
+                data-index={i} data-article-id={item.articleId}
                 aria-current={i === 0 ? 'true' : 'false'}
               >
                 <div class="home-center-item-icon tw:relative tw:flex tw:items-center tw:justify-center tw:shrink-0 tw:overflow-hidden">
@@ -113,7 +128,8 @@ const first = items[0];
                   />
                 </div>
                 <div class="home-center-item-title tw:overflow-hidden">
-                  <a href={url(item.url)}>{item.title}</a>
+                  <a href={url(item.url)} data-article-bind="href:path" data-article-text="title">{item.title}</a>
+                  <small class="article-language-label" data-article-language hidden>中文</small>
                 </div>
               </div>
             ))}

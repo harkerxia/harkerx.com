@@ -1,5 +1,6 @@
 import { navigate } from 'astro:transitions/client';
 import { pageRange } from '../lib/pagination';
+import { getArticlePresentation } from './core/article';
 /** Browser behavior preserved from Solitude Hugo; typed boundary: core/api.ts. */
 const SAFE_ARCHIVE_PROTOCOLS = new Set(['http:', 'https:']);
 const resolveArchivePostUrl = (value: unknown) => {
@@ -23,6 +24,7 @@ export const archivePageController = (() => {
     return element;
   };
   interface ArchivePost {
+    id: string;
     url: string;
     title: string;
     cover: string;
@@ -190,15 +192,19 @@ export const archivePageController = (() => {
       this.renderPagination(totalPages);
     },
     createPostItem(post: ArchivePost) {
-      const postUrl = resolveArchivePostUrl(post.url);
+      const presentation = getArticlePresentation(post.id);
+      const titleText = presentation?.title ?? post.title;
+      const postUrl = resolveArchivePostUrl(presentation?.path ?? post.url);
       const item = createElement(postUrl ? 'a' : 'div', 'archive-page-item');
       if (postUrl && item instanceof HTMLAnchorElement) item.href = postUrl;
       else item.setAttribute('aria-disabled', 'true');
-      item.title = post.title;
+      item.title = titleText;
+      item.dataset.articleId = post.id;
+      item.dataset.articleBind = "href:path;title:title";
       const thumb = createElement('div', 'archive-page-thumb');
       const image = createElement('img');
       image.src = post.cover;
-      image.alt = post.title;
+      image.alt = titleText;
       image.loading = 'lazy';
       image.addEventListener(
         'error',
@@ -208,11 +214,15 @@ export const archivePageController = (() => {
       const fallback = createElement(
         'span',
         'archive-page-thumb-fallback',
-        (post.title || 'A').trim().charAt(0) || 'A',
+        (titleText || 'A').trim().charAt(0) || 'A',
       );
       thumb.append(image, fallback);
       const main = createElement('div', 'archive-page-item-main');
-      const title = createElement('div', 'archive-page-item-title', post.title);
+      const title = createElement('div', 'archive-page-item-title', titleText);
+      title.dataset.articleText = 'title';
+      const language = createElement('small', 'article-language-label', '中文');
+      language.dataset.articleLanguage = '';
+      language.hidden = !(document.documentElement.dataset.uiLanguage === 'en' && presentation?.locale === 'zh-CN');
       const meta = createElement('div', 'archive-page-item-meta');
       meta.append(
         createElement(
@@ -222,7 +232,7 @@ export const archivePageController = (() => {
         ),
         createElement('span', 'archive-page-item-date', post.dateLabel),
       );
-      main.append(title, meta);
+      main.append(title, language, meta);
       const arrow = createElement('div', 'archive-page-item-arrow');
       const arrowIcon = createElement('i', 'solitude fas fa-chevron-right');
       arrow.setAttribute('aria-hidden', 'true');

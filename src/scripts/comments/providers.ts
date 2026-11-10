@@ -1,3 +1,4 @@
+import { getArticleLanguage } from "../core/article";
 import { Solitude } from "../core/api";
 import { lifecycle } from "../core/lifecycle";
 import type { CommentProvider } from "../types";
@@ -90,7 +91,7 @@ export const initializeOtherProviders = async (enabled: CommentProvider[]) => {
         ...config,
         ...config.option,
         el: selector,
-        path: location.pathname,
+        path: getArticleLanguage()?.legacyPath ?? location.pathname,
       };
       delete options.option;
       let instance: { destroy?(): void } | undefined;
@@ -124,7 +125,7 @@ export const initializeOtherProviders = async (enabled: CommentProvider[]) => {
       if (provider === "artalk")
         instance = window.Artalk!.init({
           ...options,
-          pageKey: location.pathname,
+          pageKey: getArticleLanguage()?.legacyPath ?? location.pathname,
           pageTitle: document.title,
         });
       if (signal.aborted) instance?.destroy?.();

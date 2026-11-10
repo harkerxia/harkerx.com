@@ -1,7 +1,22 @@
 import type { CollectionEntry } from "astro:content";
 import { config, t, termPath } from "./site";
 import { marked } from "marked";
-export type Post = CollectionEntry<"posts">;
+import { articlePath, composeArticleVersions } from "./post-translations";
+import { translationReviewMessages } from "./translation-review";
+const reportedTranslationReviews = new Set<string>();
+export { legacyPostPath, postIdentity, postLocale, selectArticleVersions, deriveArticleSeo } from "./post-translations";
+export type SourcePost = CollectionEntry<"posts">;
+export type TranslationEntry = CollectionEntry<"translations">;
+export type TranslatedPost = Omit<TranslationEntry, "data"> & {
+  data: SourcePost["data"] & Pick<TranslationEntry["data"], "translationOf">;
+  translation: {
+    originalId: string;
+    locale: "en";
+    sourceSlug: string;
+    legacyPath: string;
+  };
+};
+export type Post = SourcePost | TranslatedPost;
 export type Page = CollectionEntry<"pages">;
 export function contentPath(entry: {
   id: string;
@@ -9,10 +24,9 @@ export function contentPath(entry: {
   data: { url?: string; slug?: string };
 }): string {
   const path =
-    entry.data.url ??
-    (entry.collection === "posts"
-      ? `/p/${entry.data.slug ?? entry.id}/`
-      : `/${entry.data.slug ?? entry.id}/`);
+    entry.collection === "posts" || entry.collection === "translations"
+      ? articlePath(entry as Post)
+      : (entry.data.url ?? `/${entry.data.slug ?? entry.id}/`);
   if (
     !path.startsWith("/") ||
     path.startsWith("//") ||
@@ -40,10 +54,26 @@ export function homePosts(posts: Post[]): Post[] {
 }
 export async function getPosts() {
   const { getCollection } = await import("astro:content");
-  return published<Post>(
+  return published<SourcePost>(
     await getCollection("posts"),
     import.meta.env.DEV,
   ).sort((a, b) => +b.data.date - +a.data.date || a.id.localeCompare(b.id));
+}
+export async function getArticleVersions(): Promise<Post[]> {
+  const { getCollection } = await import("astro:content");
+  const [sources, translations] = await Promise.all([
+    getCollection("posts"),
+    getCollection("translations"),
+  ]);
+  const versions = composeArticleVersions(sources, translations, {
+    preview: import.meta.env.DEV,
+  });
+  for (const message of translationReviewMessages(sources, translations)) {
+    if (reportedTranslationReviews.has(message)) continue;
+    reportedTranslationReviews.add(message);
+    console.warn(message);
+  }
+  return versions;
 }
 export async function getPages() {
   const { getCollection } = await import("astro:content");

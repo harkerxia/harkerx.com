@@ -1,7 +1,7 @@
 ---
 import I18n from "./I18n.astro";
 import { cfg, url, termPath, dateLabel, isoDate } from '../lib/site';
-import { contentPath, type Post } from '../lib/content';
+import { contentPath, legacyPostPath, postIdentity, type Post } from '../lib/content';
 interface Props {
   post: Post;
   index?: number;
@@ -17,15 +17,17 @@ const right =
 <article
   class="recent-post-item tw:flex tw:items-center tw:overflow-hidden tw:cursor-pointer"
   style={right ? 'flex-direction:row-reverse' : undefined}
+  data-article-id={postIdentity(post)}
+  data-article-bind="data-solitude-url:path"
   data-solitude-action="navigateTo"
   data-solitude-url={url(contentPath(post))}
 >
   <div class={`post_cover ${index % 2 ? 'right' : 'left'}`}>
-    <a href={url(contentPath(post))} title={p.title}>
+    <a href={url(contentPath(post))} title={p.title} data-article-bind="href:path;title:title">
       <img
         class="post_bg nolazyload tw:[.recent-post-item_.post\_cover_img&]:object-cover"
         src={url(p.cover ?? cfg.post.default.cover[0])}
-        alt={p.title}
+        alt={p.title} data-article-bind="alt:title"
         loading="lazy"
         data-solitude-fallback={url(cfg.post.default.cover[0])}
       />
@@ -47,7 +49,7 @@ const right =
         ))}
         <a
           class="unvisited-post tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:flex tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:relative"
-          href={url(contentPath(post))}
+          href={url(contentPath(post))} data-article-bind="href:path"
         >
           <I18n k="homeRead" />
         </a>
@@ -55,19 +57,18 @@ const right =
       <a
         class="article-title tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_&]:overflow-hidden"
         href={url(contentPath(post))}
-        title={p.title}
+        title={p.title} data-article-bind="href:path;title:title" data-article-text="title"
       >
         {p.title}
       </a>
-      {p.description?.trim() && (
-        <p class="article-description">{p.description}</p>
-      )}
+      <small class="article-language-label" data-article-language hidden>中文</small>
+      <p class="article-description" data-article-text="description" hidden={!p.description?.trim()}>{p.description}</p>
     </div>
     <div class="article-meta-wrap tw:relative tw:flex tw:flex-row tw:justify-between tw:items-center tw:whitespace-nowrap">
       {p.comment && (
         <div
           class="post-card-commenters tw:flex tw:items-center"
-          data-comment-path={url(contentPath(post))}
+          data-comment-path={url(legacyPostPath(post))}
           hidden
         />
       )}

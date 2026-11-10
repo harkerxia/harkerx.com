@@ -1,7 +1,7 @@
 ---
 import I18n from "./I18n.astro";
 import { cfg, config, url, dateLabel, isoDate, termPath } from '../lib/site';
-import { contentPath, wordCount, type Post } from '../lib/content';
+import { legacyPostPath, wordCount, type Post } from '../lib/content';
 interface Props {
   post: Post;
 }
@@ -101,7 +101,7 @@ const count = wordCount(post.body ?? '');
         cfg.comment.use.includes('valine') && (
           <span
             class="leancloud_visitors"
-            id={url(contentPath(post))}
+            id={url(legacyPostPath(post))}
             data-flag-title={p.title}
           >
             <span class="leancloud-visitors-count">0</span>
@@ -115,7 +115,7 @@ const count = wordCount(post.body ?? '');
             <i class="solitude fas fa-comment" />
             <span
               class="comment-count valine-comment-count"
-              data-xid={url(contentPath(post))}
+              data-xid={url(legacyPostPath(post))}
             >
               0
             </span>

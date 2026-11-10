@@ -154,6 +154,9 @@ navButtons.sort(
               class:list={["site-page tw:[#nav_&]:relative tw:[#nav_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.menus\_items_&]:relative tw:[#sidebar_#sidebar-menus_.menus\_items_&]:block tw:[#sidebar_#sidebar-menus_.menus\_items_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.menus\_items_.menus\_item_>_&]:flex", { "social-icon": item.id === "search-button", search: item.id === "search-button" }]}
               href={url(item.url ?? '#')}
               data-astro-reload={item.id === 'rss-feed' ? true : undefined}
+              data-feed-link={item.id === 'rss-feed' ? '' : undefined}
+              data-feed-en={item.id === 'rss-feed' ? url('/en/rss.xml') : undefined}
+              data-feed-zh={item.id === 'rss-feed' ? url('/rss.xml') : undefined}
               data-solitude-action={item.action}
               data-solitude-prevent={item.action ? 'true' : undefined}
               aria-label={item.title ?? item.name} data-i18n-aria-label-text={item.title ?? item.name}

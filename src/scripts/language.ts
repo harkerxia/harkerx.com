@@ -2,10 +2,12 @@ import { navigate } from "astro:transitions/client";
 import {
   applyUiLanguage,
   normalizeUiLocale,
+  uiText,
   type UiCopies,
   type UiLocale,
 } from "../lib/ui-language";
 import { Solitude } from "./core/api";
+import { getArticleLanguage } from "./core/article";
 
 const storageKey = "harkerx-ui-language";
 const languageWindow = window as Window & { __harkerxUiLanguage?: UiLocale };
@@ -87,6 +89,7 @@ function capturePageState() {
     scrollX: window.scrollX,
     scrollY: window.scrollY,
     href: location.href,
+    articleId: getArticleLanguage()?.id,
     search: Solitude.localSearch?.open
       ? Solitude.localSearch.input.value
       : null,
@@ -95,17 +98,21 @@ function capturePageState() {
 function restorePageState(
   snapshot: ReturnType<typeof capturePageState>,
   signal: AbortSignal,
+  targetHref: string,
+  crossVersion: boolean,
 ) {
   const restored = new Set<number>();
   let restoredSearch = snapshot.search === null;
   let restoredScroll = false;
   const restore = () => {
     if (signal.aborted) return;
-    const original = new URL(snapshot.href);
+    const original = new URL(targetHref);
     if (
       location.pathname + location.search !==
       original.pathname + original.search
     )
+      return;
+    if (snapshot.articleId && getArticleLanguage()?.id !== snapshot.articleId)
       return;
     const fields = commentFields();
     snapshot.fields.forEach((saved) => {
@@ -138,15 +145,35 @@ function restorePageState(
       Solitude.localSearch.search();
       restoredSearch = true;
     }
-    if (!restoredScroll) {
-      window.scrollTo({
-        left: snapshot.scrollX,
-        top: snapshot.scrollY,
-        behavior: "instant",
-      });
+    if (
+      !restoredScroll &&
+      document.documentElement.dataset.solitudeRuntime === "ready"
+    ) {
+      let anchor: HTMLElement | null = null;
+      if (crossVersion && original.hash) {
+        try {
+          anchor = document.getElementById(
+            decodeURIComponent(original.hash.slice(1)),
+          );
+        } catch {
+          /* Invalid hashes fall back to the article top. */
+        }
+      }
+      if (anchor) anchor.scrollIntoView({ behavior: "instant" });
+      else
+        window.scrollTo({
+          left: crossVersion ? 0 : snapshot.scrollX,
+          top: crossVersion ? 0 : snapshot.scrollY,
+          behavior: "instant",
+        });
       restoredScroll = true;
     }
-    if (restored.size === snapshot.fields.length && restoredSearch) finish();
+    if (
+      restored.size === snapshot.fields.length &&
+      restoredSearch &&
+      restoredScroll
+    )
+      finish();
   };
   const observer = new MutationObserver(restore);
   const timeout = window.setTimeout(finish, 15000);
@@ -163,8 +190,24 @@ function restorePageState(
   });
   restore();
 }
-async function setLanguage(locale: UiLocale, persist = true) {
-  if (locale === activeLocale || switching) return;
+async function setLanguage(
+  locale: UiLocale,
+  persist = true,
+  followArticle = true,
+) {
+  if (switching) return;
+  const article = getArticleLanguage();
+  const original = new URL(location.href);
+  const versionPath = followArticle ? article?.versions[locale] : undefined;
+  const destination = new URL(versionPath || original.href, original);
+  if (destination.origin !== original.origin) return;
+  destination.search = original.search;
+  destination.hash = original.hash;
+  const crossVersion = destination.pathname !== original.pathname;
+  if (locale === activeLocale && !crossVersion) return;
+  const unavailable = Boolean(
+    followArticle && article && locale !== article.locale && !versionPath,
+  );
   switching = true;
   const snapshot = capturePageState();
   activeLocale = locale;
@@ -181,15 +224,28 @@ async function setLanguage(locale: UiLocale, persist = true) {
   restoreController?.abort();
   restoreController = new AbortController();
   const signal = restoreController.signal;
-  const original = new URL(snapshot.href);
-  restoreTarget = original.pathname + original.search;
+  restoreTarget = destination.pathname + destination.search;
   languageNavigationPending = true;
   const afterSwap = () => {
     if (signal.aborted) return;
     languageNavigationPending = false;
     if (location.pathname + location.search !== restoreTarget) return;
-    // Restore the exact URL after forcing a fresh swap even when it has a hash.
-    history.replaceState(history.state, "", snapshot.href);
+    if (snapshot.articleId && getArticleLanguage()?.id !== snapshot.articleId)
+      return;
+    // Translated headings may have different IDs; retain only anchors that exist.
+    if (crossVersion && destination.hash) {
+      try {
+        if (
+          !document.getElementById(
+            decodeURIComponent(destination.hash.slice(1)),
+          )
+        )
+          destination.hash = "";
+      } catch {
+        destination.hash = "";
+      }
+    }
+    history.replaceState(history.state, "", destination.href);
     if (snapshot.fields.length) {
       document
         .querySelectorAll<HTMLElement>(
@@ -199,16 +255,28 @@ async function setLanguage(locale: UiLocale, persist = true) {
           mount.dataset.lazyReady = "true";
         });
     }
-    restorePageState(snapshot, signal);
+    restorePageState(snapshot, signal, destination.href, crossVersion);
   };
   document.addEventListener("astro:after-swap", afterSwap, {
     once: true,
     signal,
   });
   try {
-    const target = new URL(location.href);
+    // A hashless request forces a fresh mount even for interface-only changes.
+    const target = new URL(destination.href);
     target.hash = "";
-    await navigate(target.href, { history: "replace" });
+    await navigate(target.href, { history: crossVersion ? "push" : "replace" });
+    if (
+      unavailable &&
+      !signal.aborted &&
+      getArticleLanguage()?.id === snapshot.articleId
+    ) {
+      Solitude.snackbarShow?.(
+        uiText("articleTranslationUnavailable", locale),
+        false,
+        3500,
+      );
+    }
   } catch (error) {
     console.warn("Unable to refresh the interface language:", error);
   } finally {
@@ -239,13 +307,26 @@ export function initializeLanguage() {
         : null;
     if (!target) return;
     event.preventDefault();
-    void setLanguage(activeLocale === "en" ? "zh-CN" : "en");
+    const article = getArticleLanguage();
+    const counterpart =
+      article?.locale === "en"
+        ? "zh-CN"
+        : article?.locale === "zh-CN"
+          ? "en"
+          : undefined;
+    const locale =
+      counterpart && article?.versions[counterpart]
+        ? counterpart
+        : activeLocale === "en"
+          ? "zh-CN"
+          : "en";
+    void setLanguage(locale);
   });
   window.addEventListener("storage", (event) => {
     if (
       event.key === storageKey &&
       (event.newValue === "en" || event.newValue === "zh-CN")
     )
-      void setLanguage(event.newValue, false);
+      void setLanguage(event.newValue, false, false);
   });
 }

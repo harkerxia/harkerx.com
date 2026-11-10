@@ -1,6 +1,7 @@
 import en from "../i18n/en.json";
 import zh from "../i18n/zh-CN.json";
 import siteZh from "../i18n/site.zh-CN.json";
+import type { ArticleCatalog } from "./article-ui";
 
 export type UiLocale = "en" | "zh-CN";
 export type UiValues = Record<string, string | number>;
@@ -45,7 +46,7 @@ export function applyUiLanguage(
   copies: UiCopies,
 ) {
   root.documentElement.dataset.uiLanguage = locale;
-  root.documentElement.lang = locale;
+  root.documentElement.lang = root.documentElement.dataset.articleLocale || locale;
   const translate = (
     key: string | null,
     source: string | null,
@@ -119,18 +120,89 @@ export function applyUiLanguage(
       );
     }
   });
+  let catalog: ArticleCatalog = {};
+  const catalogElement = root.getElementById("article-catalog");
+  try {
+    catalog = JSON.parse((catalogElement instanceof HTMLTemplateElement
+      ? catalogElement.content.textContent : catalogElement?.textContent) || "{}");
+  } catch {
+    /* Preserve server-rendered article links when metadata is unavailable. */
+  }
+  const attributes = new Set(["href", "title", "alt", "data-link", "data-title", "data-solitude-url"]);
+  root.querySelectorAll<HTMLElement>("[data-article-bind], [data-article-text], [data-article-language]").forEach((node) => {
+    const owner = node.closest<HTMLElement>("[data-article-id]");
+    const versions = catalog[owner?.dataset.articleId || ""];
+    const version = versions?.[locale] ?? versions?.["zh-CN"];
+    if (!version) return;
+    if (owner) owner.dataset.articleLocale = version.locale;
+    for (const binding of (node.dataset.articleBind || "").split(";")) {
+      const [attribute, field] = binding.split(":");
+      if (attributes.has(attribute) && (field === "path" || field === "title"))
+        node.setAttribute(attribute, version[field]);
+    }
+    const field = node.dataset.articleText;
+    if (field === "title" || field === "description") {
+      node.textContent = version[field];
+      node.lang = version.locale;
+      if (field === "description") node.hidden = !version.description.trim();
+    }
+    if (node.hasAttribute("data-article-language")) {
+      node.hidden = !(locale === "en" && version.locale === "zh-CN");
+      node.lang = "zh-CN";
+    }
+  });
+  root.querySelectorAll<HTMLAnchorElement>("a[data-feed-link]").forEach((link) => {
+    const target = locale === "en" ? link.dataset.feedEn : link.dataset.feedZh;
+    if (target) link.setAttribute("href", target);
+  });
+  root.querySelectorAll<HTMLElement>("#nav, #footer, #search-mask").forEach((node) => { node.lang = locale; });
+  let article:
+    { locale?: string; versions?: Record<string, string> } | undefined;
+  const articleElement = root.getElementById("article-language");
+  if (articleElement) {
+    try {
+      article =
+        JSON.parse(
+          (articleElement instanceof HTMLTemplateElement
+            ? articleElement.content.textContent
+            : articleElement.textContent) || "null",
+        ) || undefined;
+    } catch {
+      /* Keep interface-only controls if article metadata is unavailable. */
+    }
+  }
+  const counterpart =
+    article?.locale === "en"
+      ? "zh-CN"
+      : article?.locale === "zh-CN"
+        ? "en"
+        : undefined;
+  const targetLocale =
+    counterpart && article?.versions?.[counterpart]
+      ? counterpart
+      : locale === "en"
+        ? "zh-CN"
+        : "en";
   root
     .querySelectorAll<HTMLElement>("[data-ui-language-switch]")
     .forEach((button) => {
-      const label = locale === "en" ? "中文" : "EN";
-      const title = locale === "en" ? "Switch to Chinese" : "切换为英文";
+      const label = targetLocale === "zh-CN" ? "中文" : "EN";
+      const title =
+        locale === "en"
+          ? targetLocale === "zh-CN"
+            ? "Switch to Chinese"
+            : "Switch to English"
+          : targetLocale === "zh-CN"
+            ? "切换为中文"
+            : "切换为英文";
       button.querySelectorAll("[data-ui-language-label]").forEach((node) => {
         node.textContent = label;
       });
       button.setAttribute("aria-label", title);
       button.setAttribute("title", title);
       button.setAttribute("heotip", title);
-      button.setAttribute("lang", locale === "en" ? "zh-CN" : "en");
+      button.setAttribute("lang", targetLocale);
+      button.dataset.uiLanguageTarget = targetLocale;
     });
 }
 
@@ -145,5 +217,5 @@ export function bootstrapUiLanguage(defaultLocale: UiLocale) {
   }
   languageWindow.__harkerxUiLanguage = locale;
   document.documentElement.dataset.uiLanguage = locale;
-  document.documentElement.lang = locale;
+  document.documentElement.lang = document.documentElement.dataset.articleLocale || locale;
 }

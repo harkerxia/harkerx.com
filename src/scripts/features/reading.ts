@@ -3,8 +3,11 @@ import { lifecycle } from "../core/lifecycle";
 
 const storageKey = "solitude-read-posts";
 let readPosts = new Set<string>();
-const postPath = (address: string) =>
-  new URL(address, document.baseURI).pathname.replace(/\/+$/, "") || "/";
+const postPath = (address: string) => {
+  const path = new URL(address, document.baseURI).pathname.replace(/\/+$/, "") || "/";
+  // Retain the historical key so migration does not reset existing read records.
+  return (Solitude.config.article_paths?.[path] ?? path).replace(/\/+$/, "") || "/";
+};
 
 const restoreReadPosts = () => {
   try {
@@ -13,7 +16,7 @@ const restoreReadPosts = () => {
       Array.isArray(stored)
         ? stored.filter((value): value is string =>
             typeof value === "string" && value.startsWith("/") && !value.startsWith("//"),
-          )
+          ).map(postPath)
         : [],
     );
   } catch {

@@ -1,17 +1,20 @@
 ---
 import { render } from "astro:content";
 import Base from "./Base.astro";
+import { redirectSharedArticle } from "../scripts/share-redirect-bootstrap";
 import I18n from "../components/I18n.astro";
+import { normalizeUiLocale } from "../lib/ui-language";
 import customZh from "../i18n/site.zh-CN.json";
 import {
   cfg,
   config,
   url,
   absolute,
+  json,
   dateLabel,
   termPath,
 } from "../lib/site";
-import { getPosts, taxonomy, contentPath, type Post } from "../lib/content";
+import { getPosts, getArticleVersions, postIdentity, postLocale, selectArticleVersions, taxonomy, contentPath, type Post } from "../lib/content";
 import type { Route } from "../lib/routes";
 import { pageData } from "../lib/data";
 import { pageCommentsEnabled } from "../lib/comment-policy";
@@ -56,13 +59,20 @@ const hideAside =
     "message",
   ].includes(type) ||
   route.kind === "taxonomy";
-const index = post ? posts.findIndex((item) => item.id === post.id) : -1;
-const previous = posts[index + 1],
-  next = posts[index - 1];
+const index = post ? posts.findIndex((item) => postIdentity(item) === postIdentity(post)) : -1;
+const versions = await getArticleVersions();
+const defaultVersions = new Map(selectArticleVersions(versions, normalizeUiLocale(config.locale))
+  .map((version) => [postIdentity(version), version]));
+const listVersion = (item: Post) => defaultVersions.get(postIdentity(item)) ?? item;
+const localVersion = (item?: Post) => item && post
+  ? (versions.find((version) => postIdentity(version) === postIdentity(item) && postLocale(version) === postLocale(post)) ?? item)
+  : item;
+const previous = localVersion(posts[index + 1]),
+  next = localVersion(posts[index - 1]);
 const related = post
   ? posts
       .filter(
-        (item) => item.id !== post.id && +item.data.date <= +post.data.date,
+        (item) => postIdentity(item) !== postIdentity(post) && +item.data.date <= +post.data.date,
       )
       .map((item) => ({
         item,
@@ -71,7 +81,7 @@ const related = post
       .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, cfg.related_post.limit)
-      .map((x) => x.item)
+      .map((x) => localVersion(x.item)!)
   : [];
 const commentsEnabled = pageCommentsEnabled(type, p.comment);
 ---
@@ -80,12 +90,31 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
   <html lang={config.locale}>
     <head>
       <meta charset="utf-8" />
-      <meta http-equiv="refresh" content={`0;url=${url(route.target)}`} />
+      {route.shareVersions ? (
+        <script is:inline set:html={
+          "(" + redirectSharedArticle.toString() + ")(" + json(route.shareVersions) + ", " + json(normalizeUiLocale(config.locale)) + ");"
+        }></script>
+      ) : (
+        <script is:inline define:vars={{ redirectTarget: url(route.target) }}>
+          const destination = new URL(redirectTarget, location.origin);
+          destination.search = location.search;
+          destination.hash = location.hash;
+          location.replace(destination.href);
+        </script>
+      )}
+      <meta name="robots" content="noindex, follow" />
+      {!route.shareVersions && <meta http-equiv="refresh" content={`0;url=${url(route.target)}`} />}
       <link rel="canonical" href={absolute(route.target!)} />
       <title>{route.title}</title>
     </head>
     <body>
-      <a href={url(route.target)}>{route.title}</a>
+      {route.shareVersions ? (
+        <>
+          <p>Choose an article language / 选择文章语言：</p>
+          {route.shareVersions["zh-CN"] && <p><a lang="zh-CN" href={route.shareVersions["zh-CN"]}>中文</a></p>}
+          {route.shareVersions.en && <p><a lang="en" href={route.shareVersions.en}>English</a></p>}
+        </>
+      ) : <a href={url(route.target)}>{route.title}</a>}
     </body>
   </html>
 ) : (
@@ -94,6 +123,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
     description={String(p.description ?? config.description)}
     type={type}
     post={post}
+    article={route.article}
     page={p}
     toc={
       !hideAside &&
@@ -120,7 +150,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
             <div id="home">
               <div class="recent-posts tw:relative" id="recent-posts">
                 {route.posts?.map((post, i) => (
-                  <PostCard post={post} index={i} />
+                  <PostCard post={listVersion(post)} index={i} />
                 ))}
                 {!route.posts?.length && (
                   <p class="empty-state"><I18n k="archiveEmpty" /></p>
@@ -137,7 +167,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
         <div class="post-column">
           <div id="post">
             {post.data.not_cover && <PostMeta post={post} />}
-            <article class="post-content article-container">
+            <article class="post-content article-container" lang={route.article?.locale}>
               {Content && <Content components={components} />}
             </article>
             <div class="post-tools-right tw:[#post_&]:flex tw:[#post_&]:items-center tw:[#post_&]:flex-row tw:[#post_&]:justify-between tw:[#post_&]:flex-wrap">
@@ -310,15 +340,15 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
             <>
               <div class="article-sort-title"><I18n text={route.title} /></div>
               <div class="article-sort">
-                {route.posts?.map((item) => (
-                  <div class="article-sort-item tw:[.article-sort_&]:relative tw:[.article-sort_&]:flex tw:[.article-sort_&]:items-center tw:[.article-sort_&]:overflow-hidden">
+                {route.posts?.map(listVersion).map((item) => (
+                  <div data-article-id={postIdentity(item)} class="article-sort-item tw:[.article-sort_&]:relative tw:[.article-sort_&]:flex tw:[.article-sort_&]:items-center tw:[.article-sort_&]:overflow-hidden">
                     <a
-                      class="article-sort-item-img tw:[.article-sort_.article-sort-item_&]:overflow-hidden"
+                      class="article-sort-item-img tw:[.article-sort_.article-sort-item_&]:overflow-hidden" data-article-bind="href:path"
                       href={url(contentPath(item))}
                     >
                       <img
                         src={url(item.data.cover ?? cfg.post.default.cover[0])}
-                        alt={item.data.title}
+                        alt={item.data.title} data-article-bind="alt:title"
                         loading="lazy"
                       />
                     </a>
@@ -327,11 +357,12 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
                         <time>{dateLabel(item.data.date)}</time>
                       </div>
                       <a
-                        class="article-sort-item-title"
+                        class="article-sort-item-title" data-article-bind="href:path" data-article-text="title"
                         href={url(contentPath(item))}
                       >
                         {item.data.title}
                       </a>
+                      <small class="article-language-label" data-article-language hidden>中文</small>
                     </div>
                   </div>
                 ))}

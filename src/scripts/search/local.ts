@@ -8,6 +8,7 @@ interface SearchEntry {
   title: string;
   link: string;
   content: string;
+  locale: 'en' | 'zh-CN';
 }
 const indexes = new Map<string, Promise<SearchEntry[]>>();
 function loadIndex(path: string) {
@@ -41,7 +42,12 @@ function loadIndex(path: string) {
         } catch {
           return [];
         }
-        return [{ title, link, content: read('content').replace(/\s+/g, ' ') }];
+        return [{
+          title,
+          link,
+          content: [read('description'), read('content')].filter(Boolean).join(' ').replace(/\s+/g, ' '),
+          locale: read('language') === 'en' ? 'en' as const : 'zh-CN' as const,
+        }];
       });
     })
     .catch((error) => {
@@ -102,6 +108,7 @@ export class LocalSearch {
   currentQuery = '';
   currentPage = 1;
   store: SearchEntry[] | null = null;
+  storePath = '';
   currentResults: SearchEntry[] = [];
   error = false;
   composing = false;
@@ -145,6 +152,7 @@ export class LocalSearch {
     this.currentQuery = '';
     this.currentPage = 1;
     this.store = null;
+    this.storePath = '';
     this.error = false;
     this.composing = false;
     const version = ++this.generation;
@@ -201,16 +209,18 @@ export class LocalSearch {
   }
   async ensureData() {
     const version = this.generation;
-    if (this.store) return;
+    const path = Solitude.config.localsearch.path;
+    if (this.store && this.storePath === path) return;
     this.error = false;
     if (this.open) this.status(this.labels.loading, 'loading');
     try {
-      const data = await loadIndex(Solitude.config.localsearch.path);
-      if (version !== this.generation) return;
+      const data = await loadIndex(path);
+      if (version !== this.generation || path !== Solitude.config.localsearch.path) return;
       this.store = data;
+      this.storePath = path;
       if (this.open) this.search();
     } catch {
-      if (version !== this.generation) return;
+      if (version !== this.generation || path !== Solitude.config.localsearch.path) return;
       this.error = true;
       if (this.open) this.status(this.labels.error, 'error');
     }
@@ -235,6 +245,7 @@ export class LocalSearch {
     this.input.focus();
     if (
       this.store &&
+      this.storePath === Solitude.config.localsearch.path &&
       this.currentResults?.length &&
       this.currentQuery === this.input.value.trim()
     )
@@ -258,6 +269,11 @@ export class LocalSearch {
     if (this.composing) return;
     this.currentQuery = this.input.value.trim();
     this.currentPage = 1;
+    if (this.store && this.storePath !== Solitude.config.localsearch.path) {
+      this.store = null;
+      this.error = false;
+      void this.ensureData();
+    }
     if (this.error) {
       this.status(this.labels.error, 'error');
       return;
@@ -323,9 +339,17 @@ export class LocalSearch {
         const link = document.createElement('a');
         link.className = 'search-result-title';
         link.href = result.link;
+        link.lang = result.locale;
         const title = document.createElement('span');
         title.className = 'search-result-heading';
         title.append(highlighted(result.title, this.currentQuery));
+        if (document.documentElement.dataset.uiLanguage === 'en' && result.locale === 'zh-CN') {
+          const language = document.createElement('small');
+          language.className = 'search-result-language';
+          language.lang = 'zh-CN';
+          language.textContent = ' · 中文';
+          title.append(language);
+        }
         link.append(title);
         if (result.content) {
           const summary = document.createElement('span');

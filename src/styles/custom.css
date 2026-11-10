@@ -1,1 +1,9 @@
 /* Add future site-specific overrides here. */
+
+/* Language fallback labels stay secondary to article titles. */
+.article-language-label:not([hidden]) {
+  display: inline-block;
+  color: var(--efu-secondtext);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
