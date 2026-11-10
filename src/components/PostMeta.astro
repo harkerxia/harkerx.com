@@ -1,5 +1,6 @@
 ---
-import { cfg, config, t, url, dateLabel, isoDate, termPath } from '../lib/site';
+import I18n from "./I18n.astro";
+import { cfg, config, url, dateLabel, isoDate, termPath } from '../lib/site';
 import { contentPath, wordCount, type Post } from '../lib/content';
 interface Props {
   post: Post;
@@ -19,7 +20,7 @@ const count = wordCount(post.body ?? '');
   >
     <div class="meta-firstline tw:[.post_#post-info_#post-firstinfo_&]:flex tw:[.post_#post-info_#post-firstinfo_&]:items-center">
       <a class="post-meta-original tw:[.post_#post-info_#post-firstinfo_.meta-firstline_&]:flex">
-        {p.reprint ? t('reprint') : t('original')}
+        <I18n k={p.reprint ? "reprint" : "original"} />
       </a>
       {p.categories[0] && (
         <span class="post-meta-categories tw:[.post_#post-info_#post-firstinfo_.meta-firstline_span.post-meta-categories_a&]:flex">
@@ -84,7 +85,7 @@ const count = wordCount(post.body ?? '');
               1,
               Math.ceil(count / (config.hasCJKLanguage ? 500 : 212)),
             )}{' '}
-            {t('readingMinutes')}
+            <I18n k="readingMinutes" />
           </span>
         </span>
       )}

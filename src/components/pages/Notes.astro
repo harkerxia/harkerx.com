@@ -1,5 +1,6 @@
 ---
 import notes from "../../data/notes.json";
+import I18n from "../I18n.astro";
 import { cfg, config, dateLabel, t, url } from "../../lib/site";
 import type { NotesData } from "../../lib/page-types";
 interface Props {
@@ -31,23 +32,25 @@ const items = data.items.slice(0, c.strip);
       />
       <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
         <div class="author-content-item-tips">
-          {header?.description || t("notesDescription")}
+          {header?.description ? <I18n text={header.description} /> : <I18n k="notesDescription" />}
         </div>
         <h1 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-          {data.title || t("notes")}
+          {data.title ? <I18n text={data.title} /> : <I18n k="notes" />}
         </h1>
         <div class="banner-button-group tw:[div#banners_&]:absolute tw:[div#banners_&]:flex tw:[.author-content-item_.card-content_&]:absolute">
           <a
             class="banner-button tw:[div#banners_&]:flex tw:[div#banners_&]:items-center tw:[div#banners_&]:cursor-pointer tw:[.author-content-item_.card-content_.banner-button-group_&]:justify-center tw:[.author-content-item_.card-content_.banner-button-group_&]:flex tw:[.author-content-item_.card-content_.banner-button-group_&]:items-center tw:[.author-content-item_.card-content_.banner-button-group_&]:cursor-pointer"
             href={url(header?.button?.link || "/archives/")}
             aria-label={header?.button?.text || t("notesReadMore")}
+            data-i18n-aria-label={header?.button?.text ? undefined : "notesReadMore"}
+            data-i18n-aria-label-text={header?.button?.text}
           >
             <i
               class="solitude fas fa-circle-chevron-right"
               aria-hidden="true"
             />
             <span class="banner-button-text">
-              {header?.button?.text || t("notesReadMore")}
+              {header?.button?.text ? <I18n text={header.button.text} /> : <I18n k="notesReadMore" />}
             </span>
           </a>
         </div>
@@ -154,7 +157,7 @@ const items = data.items.slice(0, c.strip);
                       {item.link && (
                         <a class="notes-content-link" href={url(item.link)}>
                           <i class="solitude fas fa-link" />
-                          {t("notesLink")}
+                          <I18n k="notesLink" />
                         </a>
                       )}
                     </div>
@@ -166,8 +169,8 @@ const items = data.items.slice(0, c.strip);
         </ul>
         <div id="notes-tips" class="tw:text-center">
           {items.length
-            ? t("notesCount").replace("{count}", String(items.length))
-            : t("notesEmpty")}
+            ? <I18n k="notesCount" values={{ count: items.length }} />
+            : <I18n k="notesEmpty" />}
         </div>
       </section>
     </solitude-notes>

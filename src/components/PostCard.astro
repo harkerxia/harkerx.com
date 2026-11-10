@@ -1,5 +1,6 @@
 ---
-import { cfg, t, url, termPath, dateLabel, isoDate } from '../lib/site';
+import I18n from "./I18n.astro";
+import { cfg, url, termPath, dateLabel, isoDate } from '../lib/site';
 import { contentPath, type Post } from '../lib/content';
 interface Props {
   post: Post;
@@ -36,7 +37,7 @@ const right =
         {p.sticky && (
           <span class="article-meta sticky-warp tw:[.article-meta-wrap_>_&]:whitespace-nowrap tw:[.article-meta-wrap_>_&]:overflow-hidden tw:[.article-meta-wrap_>_&]:flex tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_>_&]:flex tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_>_&]:relative tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_>_&]:justify-center tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_>_&]:items-center">
             <i class="solitude fas fa-thumbtack sticky orange" />
-            <span class="sticky orange">{t('homeSticky')}</span>
+            <span class="sticky orange"><I18n k="homeSticky" /></span>
           </span>
         )}
         {p.categories.map((c) => (
@@ -48,7 +49,7 @@ const right =
           class="unvisited-post tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:flex tw:[.recent-post-item_>_.recent-post-info_.recent-post-info-top_.recent-post-info-top-tips_&]:relative"
           href={url(contentPath(post))}
         >
-          {t('homeRead')}
+          <I18n k="homeRead" />
         </a>
       </div>
       <a

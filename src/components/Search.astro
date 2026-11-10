@@ -1,4 +1,5 @@
 ---
+import I18n from "./I18n.astro";
 import { cfg, t, url, termPath } from '../lib/site';
 ---
 
@@ -20,12 +21,12 @@ import { cfg, t, url, termPath } from '../lib/site';
         >
           <nav class="search-nav">
             <span class="search-dialog-title" id="search-dialog-title">
-              {t('search')}
+              <I18n k="search" />
             </span>
             <button
               class="search-close-button"
               type="button"
-              aria-label={t('close')}
+              aria-label={t('close')} data-i18n-aria-label="close"
             >
               <i class="solitude fas fa-xmark" />
             </button>
@@ -58,8 +59,8 @@ import { cfg, t, url, termPath } from '../lib/site';
                   type="search"
                   autocomplete="off"
                   spellcheck="false"
-                  placeholder={t('searchPlaceholder')}
-                  aria-label={t('search')}
+                  placeholder={t('searchPlaceholder')} data-i18n-placeholder="searchPlaceholder"
+                  aria-label={t('search')} data-i18n-aria-label="search"
                 />
               </div>
               <div id="search-suggestions">
@@ -70,7 +71,7 @@ import { cfg, t, url, termPath } from '../lib/site';
                 ))}
               </div>
               <ul class="local-hits" id="search-results" hidden />
-              <nav id="search-pagination" aria-label={t('search')} />
+              <nav id="search-pagination" aria-label={t('search')} data-i18n-aria-label="search" />
               <div
                 id="search-tips"
                 role="status"

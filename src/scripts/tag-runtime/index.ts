@@ -365,7 +365,7 @@ interface RepositoryData {
           const button = document.createElement('button');
           if (!panel.id) panel.id = `${container.id || 'tabs'}-panel-${index}`;
           button.type = 'button';
-          button.textContent = panel.dataset.tabTitle || `Tab ${index + 1}`;
+          button.textContent = panel.dataset.tabTitle || uiText('tabLabel', 'Tab {index}').replace('{index}', String(index + 1));
           button.id = `${container.id || 'tabs'}-tab-${index}`;
           button.setAttribute('role', 'tab');
           button.setAttribute('aria-controls', panel.id);

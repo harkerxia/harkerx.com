@@ -2,6 +2,8 @@
 import about from "../../data/about.json";
 import { url, json, t } from "../../lib/site";
 import { marked } from "marked";
+import I18n from "../I18n.astro";
+import sourceZh from "../../i18n/site.zh-CN.json";
 import type {
   AboutData,
   AboutTimeline,
@@ -10,6 +12,7 @@ import type {
 interface Props {
   data?: AboutData;
 }
+const customZh = sourceZh as Record<string, string>;
 const data: AboutData = Astro.props.data ?? about;
 const careerStyle = (event: AboutTimelineEvent, timeline?: AboutTimeline) => {
   if (!timeline) return "";
@@ -43,7 +46,7 @@ for (const section of data.sections)
     class="about-page-title tw:[#about-page_&]:text-center"
     id="about-page-title"
   >
-    {data.title}
+    <I18n text={data.title} />
   </h1>
   <div class="author-page-content tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
     {data.sections
@@ -55,18 +58,18 @@ for (const section of data.sections)
               <article class="author-content-item about-intro-card">
                 <div class="about-intro-heading">
                   <div>
-                    <p class="about-card-copy">{s.greeting}</p>
+                    <p class="about-card-copy"><I18n text={s.greeting} /></p>
                     <h2>
-                      {s.name_prefix} <span class="inline-word">{s.name}</span>
+                      <I18n text={s.name_prefix} /> <span class="inline-word">{s.name}</span>
                     </h2>
                   </div>
                   {s.photo && (
-                    <img class="about-intro-avatar" src={url(s.photo.image)} alt={s.photo.alt ?? ""} width="80" height="80" />
+                    <img class="about-intro-avatar" src={url(s.photo.image)} alt={s.photo.alt ?? ""} data-i18n-alt-text={s.photo.alt ?? ""} width="80" height="80" />
                   )}
                 </div>
-                <p class="about-card-copy">{s.description}</p>
+                <p class="about-card-copy"><I18n text={s.description} /></p>
                 {s.links?.length && (
-                  <nav class="about-links" aria-label="Profile links">
+                  <nav class="about-links" aria-label="Profile links" data-i18n-aria-label-text="Profile links">
                     {s.links.map((link) => (
                       <a
                         href={url(link.url)}
@@ -74,17 +77,17 @@ for (const section of data.sections)
                         rel={link.external ? "noopener noreferrer" : undefined}
                       >
                         {link.icon && <i class={link.icon} aria-hidden="true" />}
-                        {link.text}
+                        <I18n text={link.text} />
                       </a>
                     ))}
                   </nav>
                 )}
               </article>
               <article class="author-content-item about-pursuit-card">
-                <p class="author-content-item-tips">{s.pursuit?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.pursuit?.label} /></p>
                 <h2>
                   {s.pursuit?.lines?.map((line: string) => (
-                    <span>{line}</span>
+                    <span><I18n text={line} /></span>
                   ))}
                   <span
                     class="about-word-mask tw:[#about-page_&]:relative tw:[#about-page_&]:block tw:[#about-page_&]:overflow-hidden"
@@ -96,14 +99,14 @@ for (const section of data.sections)
                           data-about-word
                           data-show={i === 0 ? "" : undefined}
                         >
-                          {word}
+                          <I18n text={word} />
                         </span>
                       ),
                     )}
                   </span>
                 </h2>
                 {s.pursuit?.description && (
-                  <p class="about-pursuit-note">{s.pursuit.description}</p>
+                  <p class="about-pursuit-note"><I18n text={s.pursuit.description} /></p>
                 )}
               </article>
             </div>
@@ -112,9 +115,9 @@ for (const section of data.sections)
             <div class="author-content about-row about-row--skills-career">
               <article class="author-content-item skills" tabindex="0">
                 <div class="about-card-flow tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
-                  <p class="author-content-item-tips">{s.skills?.label}</p>
+                  <p class="author-content-item-tips"><I18n text={s.skills?.label} /></p>
                   <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                    {s.skills?.title}
+                    <I18n text={s.skills?.title} />
                   </h2>
                   <div class="skills-style-group tw:[#about-page_&]:relative tw:[#about-page_&]:block">
                     <div
@@ -144,7 +147,7 @@ for (const section of data.sections)
                     </div>
                     <ul
                       class="skills-list tw:[#about-page_&]:absolute tw:[#about-page_&]:flex tw:[#about-page_&]:flex-wrap tw:[#about-page_&]:overflow-hidden"
-                      aria-label={s.skills?.label}
+                      aria-label={s.skills?.label} data-i18n-aria-label-text={s.skills?.label}
                     >
                       {s.skills?.items?.map((item) => (
                         <li class="skill-info tw:[#about-page_&]:flex tw:[#about-page_&]:items-center">
@@ -159,7 +162,7 @@ for (const section of data.sections)
                             )}
                           </span>
                           <span class="skill-name tw:[#about-page_&]:overflow-hidden tw:[#about-page_&]:whitespace-nowrap">
-                            {item.name}
+                            <I18n text={item.name} />
                           </span>
                         </li>
                       ))}
@@ -169,9 +172,9 @@ for (const section of data.sections)
               </article>
               <article class="author-content-item careers">
                 <div class="about-card-flow tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
-                  <p class="author-content-item-tips">{s.career?.label}</p>
+                  <p class="author-content-item-tips"><I18n text={s.career?.label} /></p>
                   <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                    {s.career?.title}
+                    <I18n text={s.career?.title} />
                   </h2>
                   <ul class="careers-summary tw:[#about-page_&]:grid">
                     {s.career?.summary?.map((item) => (
@@ -179,7 +182,7 @@ for (const section of data.sections)
                         style={`--career-color:${item.color ?? "var(--efu-main)"}`}
                       >
                         <span aria-hidden="true" />
-                        {item.name}
+                        <I18n text={item.name} />
                       </li>
                     ))}
                   </ul>
@@ -191,9 +194,10 @@ for (const section of data.sections)
                       aria-label={
                         s.career.timeline.aria_label ?? s.career.title
                       }
+                      data-i18n-aria-label-text={s.career.timeline.aria_label ?? s.career.title}
                     >
                       <p class="career-track-label tw:[#about-page_&]:absolute">
-                        {s.career.timeline.track_label ?? s.career.label}
+                        <I18n text={s.career.timeline.track_label ?? s.career.label} />
                       </p>
                       <div
                         class="career-timeline-axis tw:[#about-page_&]:absolute"
@@ -203,7 +207,7 @@ for (const section of data.sections)
                       <i class="career-timeline-tick career-timeline-tick--end tw:[#about-page_&]:absolute" />
                       <ul
                         class="career-track tw:[#about-page_&]:absolute tw:[#about-page_&]:overflow-hidden"
-                        aria-label={t("careerStages")}
+                        aria-label={t("careerStages")} data-i18n-aria-label="careerStages"
                       >
                         {s.career.timeline.events?.map((event) => (
                           <li
@@ -213,8 +217,8 @@ for (const section of data.sections)
                             ]}
                             style={careerStyle(event, s.career?.timeline)}
                             tabindex="0"
-                            aria-label={careerEventLabel(event)}
-                            title={careerEventLabel(event)}
+                            aria-label={careerEventLabel(event)} data-i18n-aria-label-text={careerEventLabel(event)}
+                            title={careerEventLabel(event)} data-i18n-title-text={careerEventLabel(event)}
                           >
                             <span
                               class="career-event-bar tw:[#about-page_&]:block"
@@ -232,7 +236,7 @@ for (const section of data.sections)
                             s.career.timeline.start}
                         </span>
                         <span>
-                          {s.career.timeline.end_label ?? s.career.timeline.end}
+                          <I18n text={String(s.career.timeline.end_label ?? s.career.timeline.end)} />
                         </span>
                       </div>
                     </div>
@@ -248,9 +252,9 @@ for (const section of data.sections)
                 data-personality-type={s.personality?.type}
                 style={`--personality-color:${s.personality?.color ?? "var(--efu-main)"}`}
               >
-                <p class="author-content-item-tips">{s.personality?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.personality?.label} /></p>
                 <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                  {s.personality?.title}
+                  <I18n text={s.personality?.title} />
                 </h2>
                 <p
                   class="personality-type"
@@ -272,7 +276,7 @@ for (const section of data.sections)
                     target={s.personality.link.external ? "_blank" : undefined}
                     rel="noopener noreferrer"
                   >
-                    {s.personality.link.text}
+                    <I18n text={s.personality.link.text} />
                   </a>
                 )}
               </article>
@@ -281,7 +285,7 @@ for (const section of data.sections)
                   <img
                     class="author-content-img nolazyload tw:[#about-page_.myphoto_>_&]:absolute tw:[#about-page_.myphoto_>_&]:object-cover"
                     src={url(s.photo.image)}
-                    alt={s.photo.alt ?? ""}
+                    alt={s.photo.alt ?? ""} data-i18n-alt-text={s.photo.alt ?? ""}
                   />
                   {s.photo.badge && (
                     <img
@@ -297,21 +301,21 @@ for (const section of data.sections)
           {s.type === "values" && (
             <div class="author-content about-row about-row--values">
               <article class="author-content-item maxim">
-                <p class="author-content-item-tips">{s.motto?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.motto?.label} /></p>
                 <h2>
-                  <span>{s.motto?.prefix}</span>
-                  <span>{s.motto?.content}</span>
+                  <span><I18n text={s.motto?.prefix} /></span>
+                  <span><I18n text={s.motto?.content} /></span>
                 </h2>
               </article>
               <article class="author-content-item buff">
-                <p class="author-content-item-tips">{s.expertise?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.expertise?.label} /></p>
                 <h2>
                   <span>
-                    {s.expertise?.prefix}
-                    <strong>{s.expertise?.specialist}</strong>
+                    <I18n text={s.expertise?.prefix} />
+                    <strong><I18n text={s.expertise?.specialist} /></strong>
                   </span>
                   <span>
-                    {s.expertise?.content} <strong>{s.expertise?.level}</strong>
+                    <I18n text={s.expertise?.content} /> <strong><I18n text={s.expertise?.level} /></strong>
                   </span>
                 </h2>
               </article>
@@ -326,12 +330,12 @@ for (const section of data.sections)
                   style={`${item.background ? `--interest-background:url('${url(item.background)}');` : ""}--interest-color:${item.color ?? "var(--efu-main)"}`}
                 >
                   <div class="interest-card-content tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col">
-                    <p class="author-content-item-tips">{item.label}</p>
+                    <p class="author-content-item-tips"><I18n text={item.label} /></p>
                     <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
                       {(
                         item.title_lines ?? (item.title ? [item.title] : [])
                       ).map((line: string) => (
-                        <span>{line}</span>
+                        <span><I18n text={line} /></span>
                       ))}
                       {item.mode?.image && (
                         <img
@@ -346,7 +350,7 @@ for (const section of data.sections)
                       {item.heroes && (
                         <ul
                           class="interest-heroes tw:[#about-page_&]:flex tw:[#about-page_&]:items-center"
-                          aria-label={t("favoriteHeroes")}
+                          aria-label={t("favoriteHeroes")} data-i18n-aria-label="favoriteHeroes"
                         >
                           {item.heroes.map((hero, i: number) => (
                             <li style={`--hero-index:${i}`}>
@@ -359,12 +363,12 @@ for (const section of data.sections)
                           ))}
                         </ul>
                       )}
-                      <p class="interest-subtitle">{item.subtitle}</p>
+                      <p class="interest-subtitle"><I18n text={item.subtitle} /></p>
                       <p
                         class="interest-right-text tw:[#about-page_&]:whitespace-nowrap"
                         title={item.right_tip}
                       >
-                        {item.right_text}
+                        <I18n text={item.right_text} />
                       </p>
                       {item.button && (
                         <a
@@ -374,7 +378,7 @@ for (const section of data.sections)
                           rel="noopener noreferrer"
                         >
                           {item.button.icon && <i class={item.button.icon} />}
-                          <span>{item.button.text}</span>
+                          <span><I18n text={item.button.text} /></span>
                         </a>
                       )}
                     </div>
@@ -394,14 +398,14 @@ for (const section of data.sections)
                     : undefined
                 }
               >
-                <p class="author-content-item-tips">{s.statistics?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.statistics?.label} /></p>
                 <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                  {s.statistics?.title}
+                  <I18n text={s.statistics?.title} />
                 </h2>
                 <dl class="about-statistics-list tw:[#about-page_&]:grid">
                   {s.statistics?.metrics?.map((m) => (
                     <div>
-                      <dt>{m.label}</dt>
+                      <dt><I18n text={m.label} /></dt>
                       <dd data-about-metric={m.field}>{m.fallback}</dd>
                     </div>
                   ))}
@@ -411,7 +415,7 @@ for (const section of data.sections)
                     class="about-card-button tw:[#about-page_&]:inline-flex tw:[#about-page_&]:items-center tw:[#about-page_&]:justify-center tw:[#about-page_&]:cursor-pointer tw:[#about-page_.interest-card_&]:relative tw:[#about-page_.interest-card_&]:whitespace-nowrap"
                     href={url(s.statistics.button.url)}
                   >
-                    {s.statistics.button.text}
+                    <I18n text={s.statistics.button.text} />
                   </a>
                 )}
                 <script
@@ -428,9 +432,9 @@ for (const section of data.sections)
                 class="author-content-item about-map tw:[#about-page_&]:flex tw:[#about-page_&]:flex-col"
                 tabindex="0"
               >
-                <p class="author-content-item-tips">{s.location?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.location?.label} /></p>
                 <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                  {s.location?.title}
+                  <I18n text={s.location?.title} />
                 </h2>
                 <div
                   class="about-map-visual tw:[#about-page_.author-content-item_>_&]:absolute"
@@ -453,16 +457,16 @@ for (const section of data.sections)
                 </div>
               </article>
               <article class="author-content-item about-profile">
-                <p class="author-content-item-tips">{s.profile?.label}</p>
+                <p class="author-content-item-tips"><I18n text={s.profile?.label} /></p>
                 <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                  {s.profile?.title}
+                  <I18n text={s.profile?.title} />
                 </h2>
                 <dl class="about-profile-list tw:[#about-page_&]:grid">
                   {s.profile?.items?.map((item) => (
                     <div>
                       {item.icon && <i class={item.icon} />}
-                      <dt>{item.label}</dt>
-                      <dd>{item.value}</dd>
+                      <dt><I18n text={item.label} /></dt>
+                      <dd><I18n text={item.value} /></dd>
                     </div>
                   ))}
                 </dl>
@@ -470,11 +474,11 @@ for (const section of data.sections)
             </div>
           )}
           {s.type === "projects" && (
-            <section class="about-projects" aria-label={s.title}>
+            <section class="about-projects" aria-label={s.title} data-i18n-aria-label-text={s.title}>
               <div class="about-section-heading">
                 <div>
-                  <p class="author-content-item-tips">{s.label}</p>
-                  <h2>{s.title}</h2>
+                  <p class="author-content-item-tips"><I18n text={s.label} /></p>
+                  <h2><I18n text={s.title} /></h2>
                 </div>
                 {s.links?.map((link) => (
                   <a
@@ -484,7 +488,7 @@ for (const section of data.sections)
                     rel={link.external ? "noopener noreferrer" : undefined}
                   >
                     {link.icon && <i class={link.icon} aria-hidden="true" />}
-                    {link.text}
+                    <I18n text={link.text} />
                     <i class="fas fa-arrow-up-right-from-square" aria-hidden="true" />
                   </a>
                 ))}
@@ -499,7 +503,7 @@ for (const section of data.sections)
                       <span class="about-project-icon" aria-hidden="true">
                         <i class={project.icon ?? "fas fa-code"} />
                       </span>
-                      {project.status && <span>{project.status}</span>}
+                      {project.status && <span><I18n text={project.status} /></span>}
                     </div>
                     <h3>
                       {project.url ? (
@@ -509,10 +513,10 @@ for (const section of data.sections)
                         </a>
                       ) : project.name}
                     </h3>
-                    <p class="about-project-description">{project.description}</p>
+                    <p class="about-project-description"><I18n text={project.description} /></p>
                     {project.tags?.length && (
-                      <ul class="about-tags" aria-label={`${project.name} technologies`}>
-                        {project.tags.map((tag) => <li>{tag}</li>)}
+                      <ul class="about-tags" aria-label={`${project.name} technologies`} data-i18n-aria-label-text={`${project.name} technologies`}>
+                        {project.tags.map((tag) => <li><I18n text={tag} /></li>)}
                       </ul>
                     )}
                   </article>
@@ -522,21 +526,24 @@ for (const section of data.sections)
           )}
           {s.type === "story" && (
             <article class="author-content-item about-story">
-              <p class="author-content-item-tips">{s.label}</p>
+              <p class="author-content-item-tips"><I18n text={s.label} /></p>
               <h2 class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                {s.title}
+                <I18n text={s.title} />
               </h2>
               <div
                 class="about-story-content"
+                data-i18n-html
+                data-i18n-text={marked.parse(s.content ?? "")}
+                data-i18n-zh={marked.parse(customZh[s.content ?? ""] ?? s.content ?? "")}
                 set:html={marked.parse(s.content ?? "")}
               />
               {s.tags?.length && (
-                <ul class="about-tags" aria-label="Site technologies">
-                  {s.tags.map((tag) => <li>{tag}</li>)}
+                <ul class="about-tags" aria-label="Site technologies" data-i18n-aria-label-text="Site technologies">
+                  {s.tags.map((tag) => <li><I18n text={tag} /></li>)}
                 </ul>
               )}
               {s.links?.length && (
-                <nav class="about-links" aria-label="Explore this site">
+                <nav class="about-links" aria-label="Explore this site" data-i18n-aria-label-text="Explore this site">
                   {s.links.map((link) => (
                     <a
                       href={url(link.url)}
@@ -544,7 +551,7 @@ for (const section of data.sections)
                       rel={link.external ? "noopener noreferrer" : undefined}
                     >
                       {link.icon && <i class={link.icon} aria-hidden="true" />}
-                      {link.text}
+                      <I18n text={link.text} />
                     </a>
                   ))}
                 </nav>

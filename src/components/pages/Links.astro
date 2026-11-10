@@ -1,5 +1,6 @@
 ---
 import linksData from "../../data/links.json";
+import I18n from "../I18n.astro";
 import { t, url } from "../../lib/site";
 import type { LinksData } from "../../lib/page-types";
 import { friendBannerPairs } from "../../lib/friend-banner";
@@ -25,10 +26,10 @@ const pairs = friendBannerPairs(all);
     id="banners"
   >
     <div class="banners-title tw:absolute tw:flex tw:flex-col">
-      <div class="banners-title-small">{description}</div>
-      <div class="banners-title-big">{title}</div>
+      <div class="banners-title-small"><I18n text={description} /></div>
+      <div class="banners-title-big"><I18n text={title} /></div>
     </div>
-    <div class="tags-group-all nowrapMove tw:flex" aria-label={title}>
+    <div class="tags-group-all nowrapMove tw:flex" aria-label={title} data-i18n-aria-label-text={title}>
       {[0, 1].map((row) => (
         <div class:list={["tags-group-wrapper", { "tags-group-wrapper--reverse": row === 1 }]}>
           {[0, 1].map((copy) => (
@@ -62,18 +63,18 @@ const pairs = friendBannerPairs(all);
 )}
 {all.length === 0 && (
   <header class="page-title-wrap friend-links-heading">
-    <h1 class="page-title">{title}</h1>
-    {description && <p>{description}</p>}
+    <h1 class="page-title"><I18n text={title} /></h1>
+    {description && <p><I18n text={description} /></p>}
   </header>
 )}
 <div class="flink article-container" id="friend-links-list">
-  {all.length === 0 && <p class="friend-links-empty">{t("linksEmpty")}</p>}
+  {all.length === 0 && <p class="friend-links-empty"><I18n k="linksEmpty" /></p>}
   {groups.map((g) => (
     <>
       <h2>
-        {g.class_name} ({g.link_list.length})
+        <I18n text={g.class_name} /> ({g.link_list.length})
       </h2>
-      <div class="flink-desc">{g.class_desc}</div>
+      <div class="flink-desc"><I18n text={g.class_desc} /></div>
       {g.type === "card" ? (
         <div class="site-card-group">
           {g.link_list.map((item) => (

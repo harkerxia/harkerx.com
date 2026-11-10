@@ -1,0 +1,31 @@
+---
+import { config } from "../lib/site";
+import {
+  normalizeUiLocale,
+  translateUiText,
+  type UiValues,
+} from "../lib/ui-language";
+interface Props {
+  k?: string;
+  text?: string;
+  values?: UiValues;
+  html?: boolean;
+  zh?: string;
+}
+const { k, text, values, html = false, zh } = Astro.props;
+const translated = translateUiText(
+  { k, text, values, zh },
+  normalizeUiLocale(config.locale),
+);
+---
+
+<i18n-text
+  style="display:contents"
+  data-i18n={k}
+  data-i18n-text={text}
+  data-i18n-values={values ? JSON.stringify(values) : undefined}
+  data-i18n-html={html ? "true" : undefined}
+  data-i18n-zh={zh}
+>
+  {html ? <Fragment set:html={translated} /> : translated}
+</i18n-text>

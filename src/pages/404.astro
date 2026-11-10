@@ -1,4 +1,5 @@
 ---
+import I18n from "../components/I18n.astro";
 import Base from '../layouts/Base.astro';
 import { cfg, t, url } from '../lib/site';
 import { getPosts, contentPath } from '../lib/content';
@@ -19,16 +20,16 @@ const posts = await getPosts();
           />
         </h1>
         <div class="error-info">
-          <div class="error_subtitle">{cfg.errorpage.text}</div>
+          <div class="error_subtitle"><I18n text={cfg.errorpage.text} /></div>
           <a class="button--animated" href={url('/')}>
             <i class="solitude fas fa-arrow-up-right-from-square" />
-            {t('backHome')}
+            <I18n k="backHome" />
           </a>
         </div>
       </div>
     </div>
     {cfg.errorpage.recommendList && (
-      <section class="aside-list" aria-label={t('recentPosts')}>
+      <section class="aside-list" aria-label={t('recentPosts')} data-i18n-aria-label="recentPosts">
         <div class="aside-list-group">
           {posts.slice(0, 5).map((p) => (
             <article class="aside-list-item">

@@ -82,6 +82,10 @@ body[data-right-menu="false"] #rightmenu-mask {
   display: flex;
 }
 
+#rightMenu .rightMenu-language .rightMenu-item {
+  display: flex;
+}
+
 #rightMenu .rightMenu-item {
   box-sizing: border-box;
   width: 100%;

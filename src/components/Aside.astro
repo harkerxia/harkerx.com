@@ -1,4 +1,5 @@
 ---
+import I18n from "./I18n.astro";
 import { cfg, config, t, url, dateLabel, isoDate } from '../lib/site';
 import TocItems, { type Heading } from './TocItems.astro';
 import AsideGroup from './AsideGroup.astro';
@@ -56,8 +57,8 @@ for (const heading of headings) {
             >
               <div class="item-headline tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:items-center">
                 <i class="solitude fas fa-bars" />
-                <span id="toc-title">{t('toc')}</span>
-                <button class="toc-close" type="button" aria-label={t('close')}>
+                <span id="toc-title"><I18n k="toc" /></span>
+                <button class="toc-close" type="button" aria-label={t('close')} data-i18n-aria-label="close">
                   <i class="fas fa-xmark" aria-hidden="true" />
                 </button>
               </div>
@@ -109,14 +110,14 @@ for (const heading of headings) {
                 <div class="bottom-group tw:[.card-info_&]:absolute tw:[.card-info_&]:flex tw:[.card-info_&]:justify-between">
                   <span class="left">
                     <div class="name">{config.author.name}</div>
-                    <div class="desc" set:html={card.description} />
+                    <div class="desc"><I18n text={card.description} html /></div>
                   </span>
                   <div class="social-icons is-center tw:[.card-info_.bottom-group_&]:flex tw:[.card-info_.bottom-group_&]:justify-end">
                     {card.information.map((l) => (
                       <a
                         class="social-icon tw:[.card-info_.bottom-group_.social-icons_&]:cursor-pointer tw:[.card-info_.bottom-group_.social-icons_&]:flex"
                         href={url(l.url)}
-                        title={l.name}
+                        title={l.name} data-i18n-title-text={l.name}
                       >
                         <i class={`solitude ${l.icon}`} />
                       </a>
@@ -129,7 +130,7 @@ for (const heading of headings) {
             <div class="card-widget card-recent-post tw:[#aside-content_&]:overflow-hidden">
               <div class="item-headline tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:items-center">
                 <i class="solitude fas fa-map" />
-                <span>{t('recentPosts')}</span>
+                <span><I18n k="recentPosts" /></span>
               </div>
               <div class="aside-list tw:[#console_&]:flex tw:[#console_&]:flex-wrap tw:[#console_&]:flex-row tw:[#console_&]:justify-between tw:[#body-wrap.error_&]:flex tw:[#body-wrap.error_&]:flex-row">
                 {recent.map((p) => (
@@ -172,7 +173,7 @@ for (const heading of headings) {
                   </div>
                   {tags.length >= cfg.aside.tags.limit && (
                     <span id="more-tags-btn" data-solitude-action="openAllTags">
-                      {t('moreTags')}
+                      <I18n k="moreTags" />
                     </span>
                   )}
                   <hr />
@@ -181,19 +182,19 @@ for (const heading of headings) {
               <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
                 {cfg.aside.siteinfo.postcount && (
                   <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('posts')}</div>
+                    <div class="item-name"><I18n k="posts" /></div>
                     <div class="item-count">{posts.length}</div>
                   </div>
                 )}
                 {cfg.aside.siteinfo.runtimeenable && (
                   <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('uptime')}</div>
+                    <div class="item-name"><I18n k="uptime" /></div>
                     <div class="item-count runtimeshow" />
                   </div>
                 )}
                 {cfg.aside.siteinfo.updatetime && (
                   <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('lastUpdated')}</div>
+                    <div class="item-name"><I18n k="lastUpdated" /></div>
                     <time class="item-count" datetime={isoDate(updated)}>
                       {dateLabel(updated)}
                     </time>
@@ -201,7 +202,7 @@ for (const heading of headings) {
                 )}
                 {cfg.aside.siteinfo.wordcount && (
                   <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('totalWords')}</div>
+                    <div class="item-name"><I18n k="totalWords" /></div>
                     <div class="item-count">
                       {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
                     </div>
@@ -215,13 +216,13 @@ for (const heading of headings) {
             <div class="card-widget card-recent-comment tw:[#aside-content_&]:overflow-hidden">
               <div class="item-headline tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:items-center">
                 <i class="solitude fas fa-comment" />
-                <span>{t('recentComments')}</span>
+                <span><I18n k="recentComments" /></span>
                 {cfg.recent_comments.enable && (
                   <a
                     class="recent-comment-more tw:[.card-recent-comment_&]:inline-flex tw:[.card-recent-comment_&]:items-center tw:[.card-recent-comment_&]:justify-center tw:[#console_&]:flex tw:[#console_&]:items-center"
                     href={url(cfg.recent_comments.page)}
-                    title={t('more')}
-                    aria-label={t('more')}
+                    title={t('more')} data-i18n-title="more"
+                    aria-label={t('more')} data-i18n-aria-label="more"
                   >
                     <i
                       class="solitude fas fa-circle-chevron-right"
@@ -240,7 +241,7 @@ for (const heading of headings) {
                   class="comment-loading tw:[.card-recent-comment_&]:inline-flex tw:[.card-recent-comment_&]:items-center"
                   role="status"
                 >
-                  {t('commentsLoading')}
+                  <I18n k="commentsLoading" />
                 </div>
               </div>
             </div>

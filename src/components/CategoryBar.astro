@@ -1,4 +1,5 @@
 ---
+import I18n from "./I18n.astro";
 import { t, url } from '../lib/site';
 import { taxonomy, type Post } from '../lib/content';
 interface Props {
@@ -23,7 +24,7 @@ const categories = taxonomy(posts, 'categories');
         <span class="category-bar-link-icon tw:inline-flex tw:items-center tw:justify-center">
           <i class="solitude fas fa-star" />
         </span>
-        <span>{t('home')}</span>
+        <span><I18n k="home" /></span>
       </a>
     </div>
     <div class="category-bar-item" id="archives" data-default-order="1">
@@ -31,7 +32,7 @@ const categories = taxonomy(posts, 'categories');
         <span class="category-bar-link-icon tw:inline-flex tw:items-center tw:justify-center">
           <i class="solitude fas fa-book" />
         </span>
-        <span>{t('allPosts')}</span>
+        <span><I18n k="allPosts" /></span>
       </a>
     </div>
     {categories.map((c, i) => (
@@ -51,7 +52,7 @@ const categories = taxonomy(posts, 'categories');
         id="category-bar-next"
         type="button"
         data-solitude-action="scrollCategoryBarToRight"
-        aria-label={t('more')}
+        aria-label={t('more')} data-i18n-aria-label="more"
       >
         <i class="solitude fas fa-angles-right" />
       </button>
@@ -60,7 +61,7 @@ const categories = taxonomy(posts, 'categories');
       class="category-bar-more tw:relative tw:inline-flex tw:items-center tw:justify-center tw:overflow-hidden"
       href={url('/categories/')}
     >
-      {t('more')}
+      <I18n k="more" />
     </a>
   </div>
 </div>

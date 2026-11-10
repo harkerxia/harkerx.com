@@ -1,5 +1,6 @@
 ---
-import { cfg, t } from "../lib/site";
+import I18n from "./I18n.astro";
+import { cfg } from "../lib/site";
 interface Props {
   enabled?: boolean;
 }
@@ -11,7 +12,7 @@ const { enabled = true } = Astro.props;
     <div class="comment-head">
       <div class="comment-headline">
         <i class="solitude fas fa-comments" />
-        <span>{t("comments")}</span>
+        <span><I18n k="comments" /></span>
       </div>
     </div>
     <div class="comment-wrap">

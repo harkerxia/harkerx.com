@@ -1,5 +1,6 @@
 ---
-import { cfg, t, url } from "../../lib/site";
+import I18n from "../../components/I18n.astro";
+import { cfg, url } from "../../lib/site";
 interface Props {
   title: string;
   page?: import("../../lib/page-types").PageMetadata;
@@ -51,7 +52,7 @@ const tip = page.desc || page.description;
       aria-live="polite"
       aria-busy="true"
     >
-      {t("commentsLoading")}
+      <I18n k="commentsLoading" />
     </div>
   </>
 )}

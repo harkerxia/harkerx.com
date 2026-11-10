@@ -199,6 +199,48 @@
   border-radius: 40px;
 }
 
+/* Keep language selection available in desktop and mobile navigation. */
+#page-header #nav #nav-right .language-switch-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  color: var(--efu-fontcolor);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  background: none;
+  border: 0;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.post #page-header:not(.nav-fixed) #nav #nav-right .language-switch-trigger {
+  color: var(--efu-white);
+}
+
+#page-header #nav #nav-right .language-switch-trigger:hover {
+  background: var(--efu-white-op);
+}
+
+#page-header #nav #nav-right .language-switch-trigger:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+@media screen and (max-width: 900px) {
+  #page-header #nav #nav-right .language-switch-trigger {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 #page-header #nav #nav-right .nav-button a i {
   font-size: 22px;
   line-height: 1;

@@ -1,4 +1,5 @@
 ---
+import I18n from "../I18n.astro";
 import { randomUUID } from "node:crypto";
 import { getPosts, contentPath } from "../../lib/content";
 import { cfg, t, url } from "../../lib/site";
@@ -84,7 +85,7 @@ const seriesPosts = allSeriesPosts
       aria-expanded="false"
       aria-controls={id}
     >
-      {p.title ?? p.text ?? "Click"}
+      {p.title ?? p.text ?? <I18n k="revealContent" />}
     </button>
     <HideTag id={id} class="tag-hide-content" hidden>
       <slot />
@@ -217,7 +218,7 @@ const seriesPosts = allSeriesPosts
       </div>
       <div class="card_mask card_info">
         <div class="card_content">
-          <span class="card_title">{p.title ?? p.name ?? t("untitled")}</span>
+          <span class="card_title">{p.title ?? p.name ?? <I18n k="untitled" />}</span>
           <span class="card_description">
             {p.desc}
             <slot />
@@ -228,6 +229,8 @@ const seriesPosts = allSeriesPosts
             <div
               class="card_rating"
               aria-label={t("cardRating").replace("{rating}", String(p.star))}
+              data-i18n-aria-label="cardRating"
+              data-i18n-values={JSON.stringify({ rating: p.star })}
             >
               <i class="fa-solid fa-star" aria-hidden="true" />
               <span aria-hidden="true">{p.star} / 5</span>
@@ -241,6 +244,8 @@ const seriesPosts = allSeriesPosts
                 "{name}",
                 p.title ?? p.name ?? t("untitled"),
               )}
+              data-i18n-aria-label="cardDetails"
+              data-i18n-values={JSON.stringify({ name: p.title ?? p.name ?? t("untitled") })}
               target={external ? "_blank" : undefined}
               rel={external ? "noopener noreferrer" : undefined}
             >
@@ -276,9 +281,9 @@ const seriesPosts = allSeriesPosts
     >
       {p.repo?.split("/").pop()}
     </a>
-    <p class="repo-desc">{t("repoLoading")}</p>
+    <p class="repo-desc"><I18n k="repoLoading" /></p>
     <div class="repo-card-footer">
-      <div class="repo-gist" aria-label="Repository statistics">
+      <div class="repo-gist" aria-label={t("repositoryStatistics")} data-i18n-aria-label="repositoryStatistics">
         <span>
           <i class="fas fa-star" />
           <span class="repo-stars">—</span>
@@ -289,7 +294,7 @@ const seriesPosts = allSeriesPosts
         </span>
       </div>
       <span class="repo-status" role="status">
-        {t("loading")}
+        <I18n k="loading" />
       </span>
     </div>
   </article>
@@ -329,7 +334,7 @@ const seriesPosts = allSeriesPosts
   <div class="solitude-tag video-container tag-video-embed tag-video-youtube">
     <iframe
       src={`https://www.youtube${p.privacy === false ? "" : "-nocookie"}.com/embed/${encodeURIComponent(p.id ?? "")}`}
-      title="YouTube video player"
+      title={t("youtubePlayer")} data-i18n-title="youtubePlayer"
       loading="lazy"
       allowfullscreen
     ></iframe>
@@ -339,7 +344,7 @@ const seriesPosts = allSeriesPosts
   <div class="solitude-tag video-container tag-video-embed tag-video-bilibili">
     <iframe
       src={`https://player.bilibili.com/player.html?autoplay=0&bvid=${encodeURIComponent(p.bvid ?? p.id ?? "")}`}
-      title="Bilibili video player"
+      title={t("bilibiliPlayer")} data-i18n-title="bilibiliPlayer"
       loading="lazy"
       allowfullscreen
     ></iframe>
@@ -371,7 +376,7 @@ const seriesPosts = allSeriesPosts
   <div
     class="solitude-tag abc-music-sheet tag-score"
     data-params={JSON.stringify(p.params ?? {})}
-    aria-label="Music notation"
+    aria-label={t("musicNotation")} data-i18n-aria-label="musicNotation"
   >
     {p.score}
     <slot />
@@ -449,7 +454,7 @@ const seriesPosts = allSeriesPosts
   <span
     class={`solitude-tag spoiler tag-spoiler ${p.style ?? "block"}-text`}
     tabindex="0"
-    aria-label="Hidden text"
+    aria-label={t("hiddenText")} data-i18n-aria-label="hiddenText"
   >
     <slot />
   </span>

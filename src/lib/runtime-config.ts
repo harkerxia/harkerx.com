@@ -1,4 +1,10 @@
-import { cfg, config, t, url } from "./site";
+import { cfg, config, url } from "./site";
+import {
+  normalizeUiLocale,
+  siteText,
+  uiText,
+  type UiLocale,
+} from "./ui-language";
 import { contentPath, type Post, type Page } from "./content";
 import linksData from "../data/links.json";
 import type { LinksData } from "./page-types";
@@ -9,7 +15,9 @@ export function runtimeConfig(
   posts: Post[],
   pages: Page[],
   page: { right_menu?: boolean; type?: string; data?: string },
+  locale: UiLocale = normalizeUiLocale(config.locale),
 ) {
+  const t = (key: string) => uiText(key, locale);
   const inlineLinks =
     page.type === "links" ? pageData(page.data, "links") : undefined;
   const activeLinks = inlineLinks ?? links;
@@ -29,6 +37,20 @@ export function runtimeConfig(
     ) as Record<K, string>;
   return {
     ...cfg,
+    twikoo: { ...cfg.twikoo, option: { ...cfg.twikoo.option, lang: locale } },
+    waline: { ...cfg.waline, option: { ...cfg.waline.option, lang: locale } },
+    artalk: { ...cfg.artalk, option: { ...cfg.artalk.option, locale } },
+    giscus: {
+      ...cfg.giscus,
+      option: { ...cfg.giscus.option, lang: locale } as Record<string, unknown>,
+    },
+    valine: {
+      ...cfg.valine,
+      option: {
+        ...cfg.valine.option,
+        lang: locale === "zh-CN" ? "zh-CN" : "en",
+      },
+    },
     root: config.base,
     runtime: cfg.aside.siteinfo.runtimeenable
       ? cfg.aside.siteinfo.runtime
@@ -95,6 +117,7 @@ export function runtimeConfig(
         repoError: "repoError",
         loadFailed: "loadFailed",
         contentTabs: "contentTabs",
+        tabLabel: "tabLabel",
         musicPrevious: "musicPrevious",
         musicPlay: "musicPlay",
         musicPause: "musicPause",
@@ -157,18 +180,27 @@ export function runtimeConfig(
     },
     aside: {
       ...cfg.aside,
-      state: cfg.aside.my_card.state,
-      witty_words: cfg.aside.my_card.witty_words,
+      state: Object.fromEntries(
+        Object.entries(cfg.aside.my_card.state).map(([key, value]) => [
+          key,
+          siteText(value, locale),
+        ]),
+      ) as typeof cfg.aside.my_card.state,
+      witty_words: cfg.aside.my_card.witty_words.map((word) =>
+        siteText(word, locale),
+      ),
       witty_comment: { prefix: t("hello"), back: t("welcomeBack") },
     },
     covercolor: cfg.post.covercolor,
     comment_runtime: {
       routes: Object.fromEntries(
         [...posts, ...pages]
-          .filter((p) => pageCommentsEnabled(
-            p.collection === "posts" ? "post" : (p.data.type ?? "page"),
-            p.data.comment,
-          ))
+          .filter((p) =>
+            pageCommentsEnabled(
+              p.collection === "posts" ? "post" : (p.data.type ?? "page"),
+              p.data.comment,
+            ),
+          )
           .map((p) => [url(contentPath(p)), p.data.title]),
       ),
       default_avatar: url("/img/icons/favicon.png"),
@@ -183,7 +215,10 @@ export function runtimeConfig(
           img_error: t("rightMenuImageError"),
           img_copy_error: t("rightMenuImageCopyError"),
           mode: labels({ dark: "rightMenuDark", light: "rightMenuLight" }),
-          aside: labels({ show: "rightMenuAsideShow", hide: "rightMenuAsideHide" }),
+          aside: labels({
+            show: "rightMenuAsideShow",
+            hide: "rightMenuAsideHide",
+          }),
           barrage: labels({
             open: "rightMenuBarrageOpen",
             close: "rightMenuBarrageClose",
@@ -200,5 +235,35 @@ export function runtimeConfig(
         }
       : (false as const),
     translate: cfg.translate.enable ? cfg.translate : (false as const),
+  };
+}
+
+// Keep article lists and feature configuration in one payload; only UI copy varies.
+export function runtimeLanguagePatch(
+  runtime: ReturnType<typeof runtimeConfig>,
+) {
+  const {
+    lang,
+    aside,
+    right_menu,
+    friend_links,
+    twikoo,
+    waline,
+    artalk,
+    giscus,
+    valine,
+  } = runtime;
+  const { state, witty_words, witty_comment } = aside;
+  const { data: _data, ...friendLabels } = friend_links;
+  return {
+    lang,
+    aside: { state, witty_words, witty_comment },
+    right_menu,
+    friend_links: friendLabels,
+    twikoo: { option: twikoo.option },
+    waline: { option: waline.option },
+    artalk: { option: artalk.option },
+    giscus: { option: giscus.option },
+    valine: { option: valine.option },
   };
 }

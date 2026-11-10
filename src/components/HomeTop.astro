@@ -75,7 +75,7 @@ const first = items[0];
             <i class="solitude fas fa-star" />
             <span>{first.label}</span>
           </div>
-          <div class="home-center-indicators" aria-label={t('recommendations')}>
+          <div class="home-center-indicators" aria-label={t('recommendations')} data-i18n-aria-label="recommendations">
             {items.slice(0, 5).map((_, i) => (
               <button
                 class:list={['home-center-indicator', { active: i === 0 }]}
@@ -85,6 +85,7 @@ const first = items[0];
                   '{index}',
                   String(i + 1),
                 )}
+                data-i18n-aria-label="recommendationItem" data-i18n-values={JSON.stringify({ index: i + 1 })}
                 aria-current={i === 0 ? 'true' : 'false'}
               />
             ))}

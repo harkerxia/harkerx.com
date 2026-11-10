@@ -1,4 +1,5 @@
 ---
+import I18n from "./I18n.astro";
 import { cfg, config, t, url } from '../lib/site';
 import type { Post } from '../lib/content';
 import type { ThemeLink } from '../lib/config';
@@ -57,7 +58,7 @@ navButtons.sort(
             <button
               class="back-home-trigger"
               type="button"
-              aria-label="Navigation links"
+              aria-label="Navigation links" data-i18n-aria-label-text="Navigation links"
               aria-expanded="false"
               aria-controls="nav-connect-links"
             >
@@ -75,7 +76,7 @@ navButtons.sort(
                 .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
                 .map(([name, items]) => (
                   <div class="back-menu-list-group tw:[.back-home-button_&]:flex tw:[.back-home-button_&]:flex-col">
-                    <div class="back-menu-list-title">{name}</div>
+                    <div class="back-menu-list-title"><I18n text={name} /></div>
                     <div class="back-menu-list tw:flex tw:flex-row tw:flex-wrap tw:justify-between tw:[#sidebar_#sidebar-menus_.back-menu-list-groups_&]:justify-start">
                       {items.map((item) => (
                         <a
@@ -95,7 +96,7 @@ navButtons.sort(
                               />
                             )
                           )}
-                          <span class="back-menu-item-text">{item.name}</span>
+                          <span class="back-menu-item-text"><I18n text={item.name} /></span>
                         </a>
                       ))}
                     </div>
@@ -107,8 +108,8 @@ navButtons.sort(
         <a
           id="site-name"
           href={url('/')}
-          title={t('backHome')}
-          heotip={t('backHome')}
+          title={t('backHome')} data-i18n-title={'backHome'}
+          heotip={t('backHome')} data-i18n-heotip={'backHome'}
           class="tw:[#nav_&]:flex tw:[#nav_&]:justify-center tw:[#nav_&]:items-center tw:[#nav_&]:cursor-pointer"
         >
           {cfg.site.name.class === 'img' ? (
@@ -126,10 +127,10 @@ navButtons.sort(
           <a
             id="page-name-text"
             data-solitude-action="toTop"
-            title={t('backTop')}
-            heotip={t('backTop')}
+            title={t('backTop')} data-i18n-title={'backTop'}
+            heotip={t('backTop')} data-i18n-heotip={'backTop'}
           >
-            {title}
+            {post ? title : <I18n text={title} />}
           </a>
         </div>
       </div>
@@ -155,14 +156,26 @@ navButtons.sort(
               data-astro-reload={item.id === 'rss-feed' ? true : undefined}
               data-solitude-action={item.action}
               data-solitude-prevent={item.action ? 'true' : undefined}
-              aria-label={item.title ?? item.name}
-              title={item.title ?? item.name}
-              heotip={item.title ?? item.name}
+              aria-label={item.title ?? item.name} data-i18n-aria-label-text={item.title ?? item.name}
+              title={item.title ?? item.name} data-i18n-title-text={item.title ?? item.name}
+              heotip={item.title ?? item.name} data-i18n-heotip-text={item.title ?? item.name}
             >
               <i class={`solitude ${item.icon}`} />
             </a>
           </div>
         ))}
+        <div class="nav-button nav-language-button">
+          <button
+            id="language-switch"
+            class="language-switch-trigger"
+            type="button"
+            data-ui-language-switch
+            aria-label="Switch to Chinese"
+            title="Switch to Chinese"
+          >
+            <span data-ui-language-label>中文</span>
+          </button>
+        </div>
         {cfg.console.enable && (
           <div
             class="nav-button tw:[#page-header_#nav_#nav-right_&]:cursor-pointer"
@@ -173,9 +186,9 @@ navButtons.sort(
               href="#"
               data-solitude-action="toggleConsole"
               data-solitude-prevent="true"
-              aria-label={t('console')}
-              title={t('console')}
-              heotip={t('console')}
+              aria-label={t('console')} data-i18n-aria-label={'console'}
+              title={t('console')} data-i18n-title={'console'}
+              heotip={t('console')} data-i18n-heotip={'console'}
             >
               <label>
                 <i class="left" />
@@ -189,8 +202,8 @@ navButtons.sort(
           class="nav-button tw:[#page-header_#nav_#nav-right_&]:cursor-pointer tw:[#page-header.nav-at-top_#nav-right_&]:overflow-hidden tw:relative tw:flex tw:items-center"
           id="nav-totop"
           data-solitude-action="toTop"
-          title={t('backTop')}
-          heotip={t('backTop')}
+          title={t('backTop')} data-i18n-title={'backTop'}
+          heotip={t('backTop')} data-i18n-heotip={'backTop'}
         >
           <a class="totopbtn tw:[#page-header_#nav_#nav-right_.nav-button_a&]:absolute">
             <i class="solitude fas fa-arrow-up" />
@@ -206,7 +219,7 @@ navButtons.sort(
           <a
             class="site-page tw:[#nav_&]:relative tw:[#nav_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.menus\_items_&]:relative tw:[#sidebar_#sidebar-menus_.menus\_items_&]:block tw:[#sidebar_#sidebar-menus_.menus\_items_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.menus\_items_.menus\_item_>_&]:flex"
             href="#"
-            aria-label={t('menu')}
+            aria-label={t('menu')} data-i18n-aria-label={'menu'}
           >
             <i class="solitude fas fa-bars" />
           </a>

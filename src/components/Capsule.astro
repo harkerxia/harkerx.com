@@ -11,7 +11,7 @@ const music = cfg.capsule;
       data-solitude-action="handleMusicClick"
       data-solitude-event="true"
       aria-keyshortcuts="ArrowLeft ArrowRight Home End"
-      aria-label={t('rightMenuMusicStart')}
+      aria-label={t('rightMenuMusicStart')} data-i18n-aria-label="rightMenuMusicStart"
     />
     <output class="music-progress-tooltip" aria-hidden="true">
       0:00 / 0:00
@@ -30,7 +30,7 @@ const music = cfg.capsule;
           type="button"
           data-solitude-action={action}
           data-solitude-stop="true"
-          aria-label={t(label)}
+          aria-label={t(label)} data-i18n-aria-label={label}
         >
           <i class={`solitude fas fa-${icon}`} />
         </button>

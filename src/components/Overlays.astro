@@ -1,4 +1,5 @@
 ---
+import I18n from "./I18n.astro";
 import { cfg, t, url, dateLabel, isoDate } from "../lib/site";
 import { taxonomy, wordCount, type Post } from "../lib/content";
 import Menu from "./Menu.astro";
@@ -66,16 +67,16 @@ const contextItems = [
             >
               <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
                 <div class="author-content-item-tips">
-                  {t("recentComments")}
+                  <I18n k="recentComments" />
                 </div>
                 <div class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                  {t("comments")}
+                  <I18n k="comments" />
                   {cfg.recent_comments.enable && (
                     <a
                       class="recent-comment-more tw:[.card-recent-comment_&]:inline-flex tw:[.card-recent-comment_&]:items-center tw:[.card-recent-comment_&]:justify-center tw:[#console_&]:flex tw:[#console_&]:items-center"
                       href={url(cfg.recent_comments.page)}
-                      title={t("more")}
-                      aria-label={t("more")}
+                      title={t("more")} data-i18n-title={"more"}
+                      aria-label={t("more")} data-i18n-aria-label={"more"}
                     >
                       <i class="solitude fas fa-circle-chevron-right" />
                     </a>
@@ -89,7 +90,7 @@ const contextItems = [
                 aria-busy="true"
               >
                 <div class="comment-loading tw:[.card-recent-comment_&]:inline-flex tw:[.card-recent-comment_&]:items-center">
-                  {t("commentsLoading")}
+                  <I18n k="commentsLoading" />
                 </div>
               </div>
             </div>
@@ -103,9 +104,9 @@ const contextItems = [
                 data-solitude-action="hideConsole"
               >
                 <div class="card-content tw:[#aside-content_.card-widget_&]:relative tw:[#aside-content_.card-widget_&]:flex tw:[#aside-content_.card-widget_&]:flex-col tw:[.author-content-item_&]:absolute tw:[.author-content-item_&]:flex tw:[.author-content-item_&]:flex-col">
-                  <div class="author-content-item-tips">{t("tags")}</div>
+                  <div class="author-content-item-tips"><I18n k="tags" /></div>
                   <div class="author-content-item-title tw:[#console_&]:flex tw:[#console_&]:items-center tw:[#console_&]:justify-between tw:[#about-page_.interest-card_&]:flex tw:[#about-page_.interest-card_&]:items-start tw:[#about-page_.interest-card_&]:justify-between tw:[#about-page_.interest-card--media_&]:block">
-                    {t("explore")}
+                    <I18n k="explore" />
                   </div>
                 </div>
                 <div class="card-tag-cloud tw:overflow-hidden tw:relative tw:flex tw:flex-row tw:flex-wrap tw:[#console_.console-card.tags_&]:flex tw:[#console_.console-card.tags_&]:flex-wrap tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-row tw:[#sidebar_#sidebar-menus_&]:flex-wrap">
@@ -137,7 +138,7 @@ const contextItems = [
                             }
                           </span>
                           <span class="unit tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
-                            {t("postUnit")}
+                            <I18n k="postUnit" />
                           </span>
                         </div>
                       </a>
@@ -145,13 +146,13 @@ const contextItems = [
                   ))}
                   <li class="item">
                     <a href={url("/archives/")}>
-                      <span class="date">{t("allPosts")}</span>
+                      <span class="date"><I18n k="allPosts" /></span>
                       <div class="count-group tw:[#console_.console-card.history_.card-archive-list_a_&]:flex tw:[#console_.console-card.history_.card-archive-list_a_&]:flex-row">
                         <span class="count tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
                           {posts.length}
                         </span>
                         <span class="unit tw:[#console_.console-card.history_.card-archive-list_a_.count-group_&]:text-left">
-                          {t("postUnit")}
+                          <I18n k="postUnit" />
                         </span>
                       </div>
                     </a>
@@ -167,7 +168,7 @@ const contextItems = [
           <button
             class="darkmode_switchbutton tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:cursor-pointer"
             data-solitude-action="toggleTheme"
-            aria-label={t("toggleTheme")}
+            aria-label={t("toggleTheme")} data-i18n-aria-label={"toggleTheme"}
           >
             <i class="solitude fas fa-circle-half-stroke" />
           </button>
@@ -179,7 +180,7 @@ const contextItems = [
           <button
             class="asideSwitch"
             data-solitude-action="switchHideAside"
-            aria-label={t("toggleAside")}
+            aria-label={t("toggleAside")} data-i18n-aria-label={"toggleAside"}
           >
             <i class="solitude fas fa-arrows-left-right-to-line" />
           </button>
@@ -193,7 +194,7 @@ const contextItems = [
               class="keyboardSwitch"
               type="button"
               data-solitude-action="switchKeyboard"
-              aria-label={t("keyboardToggle")}
+              aria-label={t("keyboardToggle")} data-i18n-aria-label={"keyboardToggle"}
               aria-pressed="false"
             >
               <i class="solitude fas fa-keyboard" />
@@ -208,7 +209,7 @@ const contextItems = [
             <button
               class="music-switch"
               data-solitude-action="musicToggle"
-              aria-label={t("keyboardMusic")}
+              aria-label={t("keyboardMusic")} data-i18n-aria-label={"keyboardMusic"}
             >
               <i class="solitude fas fa-compact-disc" />
             </button>
@@ -241,7 +242,7 @@ const contextItems = [
     class="tw:flex tw:flex-col"
   >
     <div class="keyboardTitle" id="keyboard-title">
-      {t("keyboardTitle")}
+      <I18n k="keyboardTitle" />
     </div>
     <div
       class="keyboardList tw:[#keyboard-tips_&]:flex tw:[#keyboard-tips_&]:flex-col"
@@ -254,8 +255,8 @@ const contextItems = [
           data-shortcut-index={index}
           data-shortcut-action={item.action}
           data-shortcut-custom-label={String(Boolean(item.name))}
-          data-theme-light-label={t("keyboardThemeLight")}
-          data-theme-dark-label={t("keyboardThemeDark")}
+          data-theme-light-label={t("keyboardThemeLight")} data-i18n-data-theme-light-label={"keyboardThemeLight"}
+          data-theme-dark-label={t("keyboardThemeDark")} data-i18n-data-theme-dark-label={"keyboardThemeDark"}
         >
           <div class="keyGroup tw:[#keyboard-tips_&]:flex tw:[#keyboard-tips_&]:items-center">
             <kbd class="key">
@@ -265,8 +266,9 @@ const contextItems = [
           </div>
           <div class="keyContent">
             <span class="content">
-              {item.name ??
-                t(actionLabels[item.action ?? ""] ?? item.action ?? "")}
+              {item.name
+                ? <I18n text={item.name} />
+                : <I18n k={actionLabels[item.action ?? ""] ?? item.action ?? ""} />}
             </span>
           </div>
         </div>
@@ -287,7 +289,7 @@ const contextItems = [
           <div class="data-item-link">
             <a href={url(item.path)}>
               <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
-                {t(item.name)}
+                <I18n k={item.name} />
               </div>
               <div class="length-num">{item.count}</div>
             </a>
@@ -300,7 +302,7 @@ const contextItems = [
             <div class="data-item-link">
               <a href={url(cfg.recent_comments.page)}>
                 <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
-                  {t("comments")}
+                  <I18n k="comments" />
                 </div>
                 <div class="length-num" id="valine_allcount">
                   <i class="solitude fas fa-spinner fa-spin" />
@@ -310,7 +312,7 @@ const contextItems = [
           </div>
         )}
     </div>
-    <span class="sidebar-menu-item-title">{t("sidebarFeatures")}</span>
+    <span class="sidebar-menu-item-title"><I18n k="sidebarFeatures" /></span>
     <div class="sidebar-menu-item tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:flex-col">
       <button
         type="button"
@@ -318,11 +320,11 @@ const contextItems = [
         data-solitude-action="toggleTheme"
       >
         <i class="solitude fas fa-circle-half-stroke" />
-        <span>{t("displayMode")}</span>
+        <span><I18n k="displayMode" /></span>
       </button>
     </div>
     <Menu mobile />
-    <span class="sidebar-menu-item-title">{t("tags")}</span>
+    <span class="sidebar-menu-item-title"><I18n k="tags" /></span>
     <div class="card-tags">
       <div class="card-tag-cloud tw:overflow-hidden tw:relative tw:flex tw:flex-row tw:flex-wrap tw:[#console_.console-card.tags_&]:flex tw:[#console_.console-card.tags_&]:flex-wrap tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-row tw:[#sidebar_#sidebar-menus_&]:flex-wrap">
         {tags.slice(0, cfg.aside.tags.limit).map((tag) => (
@@ -341,27 +343,27 @@ const contextItems = [
       </div>
       {tags.length >= cfg.aside.tags.limit && (
         <a class="more-tags-btn" href={url("/tags/")}>
-          {t("moreTags")}
+          <I18n k="moreTags" />
         </a>
       )}
     </div>
-    <span class="sidebar-menu-item-title">{t("siteInformation")}</span>
+    <span class="sidebar-menu-item-title"><I18n k="siteInformation" /></span>
     <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
       {cfg.aside.siteinfo.postcount && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t("posts")}</div>
+          <div class="item-name"><I18n k="posts" /></div>
           <div class="item-count">{posts.length}</div>
         </div>
       )}
       {cfg.aside.siteinfo.runtimeenable && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t("uptime")}</div>
+          <div class="item-name"><I18n k="uptime" /></div>
           <div class="item-count runtimeshow" />
         </div>
       )}
       {cfg.aside.siteinfo.updatetime && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t("lastUpdated")}</div>
+          <div class="item-name"><I18n k="lastUpdated" /></div>
           <time class="item-count" datetime={isoDate(updated)}>
             {dateLabel(updated)}
           </time>
@@ -369,7 +371,7 @@ const contextItems = [
       )}
       {cfg.aside.siteinfo.wordcount && (
         <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t("totalWords")}</div>
+          <div class="item-name"><I18n k="totalWords" /></div>
           <div class="item-count">
             {posts.reduce((n, p) => n + wordCount(p.body ?? ""), 0)}
           </div>
@@ -396,7 +398,7 @@ const contextItems = [
           class="mode darkmode_switchbutton tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:cursor-pointer"
           type="button"
           data-solitude-action="toggleTheme"
-          aria-label={t("toggleTheme")}
+          aria-label={t("toggleTheme")} data-i18n-aria-label={"toggleTheme"}
         >
           <i class="solitude fas fa-circle-half-stroke" />
         </button>
@@ -406,7 +408,7 @@ const contextItems = [
           class="aside pc"
           type="button"
           data-solitude-action="switchHideAside"
-          aria-label={t("toggleAside")}
+          aria-label={t("toggleAside")} data-i18n-aria-label={"toggleAside"}
         >
           <i class="solitude fas fa-arrows-left-right-to-line" />
         </button>
@@ -420,7 +422,7 @@ const contextItems = [
           type="button"
           data-solitude-action="toggleTargetClass"
           data-solitude-target="#rightside-config-hide"
-          aria-label={t("settings")}
+          aria-label={t("settings")} data-i18n-aria-label={"settings"}
         >
           <i class="solitude fas fa-gear" />
         </button>
@@ -432,7 +434,7 @@ const contextItems = [
           data-solitude-toc-toggle
           aria-controls="card-toc"
           aria-expanded="false"
-          aria-label={t("toc")}
+          aria-label={t("toc")} data-i18n-aria-label={"toc"}
         >
           <i class="solitude fas fa-list" />
         </button>
@@ -443,7 +445,7 @@ const contextItems = [
           type="button"
           data-solitude-action="scrollTo"
           data-solitude-target="post-comment"
-          aria-label={t("comments")}
+          aria-label={t("comments")} data-i18n-aria-label={"comments"}
         >
           <i class="solitude fas fa-comment" />
         </button>
@@ -453,7 +455,7 @@ const contextItems = [
 )}
 {cfg.right_menu.enable && (
   <>
-    <nav id="rightMenu" aria-label={t("rightMenuLabel")}>
+    <nav id="rightMenu" aria-label={t("rightMenuLabel")} data-i18n-aria-label={"rightMenuLabel"}>
       <div class="rightMenu-group rightMenu-small">
         {[
           ["backward", "arrow-left", "rightMenuBack"],
@@ -465,8 +467,8 @@ const contextItems = [
             class="rightMenu-item"
             id={`menu-${id}`}
             type="button"
-            aria-label={t(label)}
-            title={t(label)}
+            aria-label={t(label)} data-i18n-aria-label={label}
+            title={t(label)} data-i18n-title={label}
           >
             <i class={`solitude fas fa-${icon}`} />
           </button>
@@ -478,10 +480,10 @@ const contextItems = [
             class="rightMenu-item"
             id={`menu-${id}`}
             type="button"
-            title={t(label)}
+            title={t(label)} data-i18n-title={label}
           >
             <i class={`solitude fas fa-${icon}`} />
-            <span>{t(label)}</span>
+            <span><I18n k={label} /></span>
           </button>
         ))}
       </div>
@@ -495,7 +497,7 @@ const contextItems = [
             data-solitude-value={item.click}
           >
             <i class={`solitude ${item.icon}`} />
-            <span>{item.name}</span>
+            <span><I18n text={item.name} /></span>
           </button>
         ))}
         <button
@@ -508,7 +510,7 @@ const contextItems = [
           style="display:none"
         >
           <i class="solitude fas fa-table-columns" aria-hidden="true" />
-          <span class="menu-aside-text">{t("rightMenuAsideHide")}</span>
+          <span class="menu-aside-text"><I18n k="rightMenuAsideHide" /></span>
         </button>
         {cfg.comment.use &&
           cfg.comment.commentBarrage &&
@@ -520,7 +522,7 @@ const contextItems = [
             >
               <i class="solitude fas fa-comment" />
               <span class="menu-commentBarrage-text">
-                {t("rightMenuBarrageClose")}
+                <I18n k="rightMenuBarrageClose" />
               </span>
             </button>
           )}
@@ -531,14 +533,27 @@ const contextItems = [
           data-solitude-action="switchDarkMode"
         >
           <i class="solitude fas fa-circle-half-stroke" />
-          <span class="menu-darkmode-text">{t("rightMenuDark")}</span>
+          <span class="menu-darkmode-text"><I18n k="rightMenuDark" /></span>
         </button>
         {cfg.right_menu.translate && (
           <button class="rightMenu-item" id="menu-translate" type="button">
             <i class="solitude fas fa-language" />
-            <span>{t("rightMenuToTraditional")}</span>
+            <span><I18n k="rightMenuToTraditional" /></span>
           </button>
         )}
+      </div>
+      <div class="rightMenu-group rightMenu-line rightMenu-language">
+        <button
+          class="rightMenu-item"
+          id="menu-language"
+          type="button"
+          data-ui-language-switch
+          aria-label="Switch to Chinese"
+          title="Switch to Chinese"
+        >
+          <i class="solitude fas fa-language" aria-hidden="true" />
+          <span data-ui-language-label>中文</span>
+        </button>
       </div>
     </nav>
     <div id="rightmenu-mask" />

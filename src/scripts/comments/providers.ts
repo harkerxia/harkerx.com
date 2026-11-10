@@ -101,10 +101,10 @@ export const initializeOtherProviders = async (enabled: CommentProvider[]) => {
           __vue_app__?: { unmount?(): void };
         };
         const app = host.__vue_app__;
-        // Twikoo's English empty state does not use the theme dictionary.
+        // Override only Twikoo's built-in empty labels, keeping search-empty messages intact.
         const syncEmptyText = () => {
           mount.querySelectorAll<HTMLElement>(".tk-comments-no > span").forEach((node) => {
-            if (node.textContent === "No comment") {
+            if (node.textContent === "No comment" || node.textContent === "没有评论") {
               const text = commentText("empty", "No comments yet");
               if (node.textContent !== text) node.textContent = text;
             }

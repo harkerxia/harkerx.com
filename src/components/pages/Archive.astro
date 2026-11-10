@@ -1,4 +1,5 @@
 ---
+import I18n from "../../components/I18n.astro";
 import { cfg, config, t, url, dateLabel, json } from '../../lib/site';
 import { contentPath, type Post } from '../../lib/content';
 interface Props {
@@ -24,18 +25,18 @@ const data = posts.map((p) => ({
   data-per-page={config.pagination}
   data-initial-year="all"
   data-initial-page="1"
-  data-label-error={t('archiveLoadError')}
-  data-label-empty={t('archiveEmpty')}
-  data-label-uncategorized={t('uncategorized')}
-  data-label-previous={t('previousPageShort')}
-  data-label-next={t('nextPageShort')}
+  data-label-error={t('archiveLoadError')} data-i18n-data-label-error="archiveLoadError"
+  data-label-empty={t('archiveEmpty')} data-i18n-data-label-empty="archiveEmpty"
+  data-label-uncategorized={t('uncategorized')} data-i18n-data-label-uncategorized="uncategorized"
+  data-label-previous={t('previousPageShort')} data-i18n-data-label-previous="previousPageShort"
+  data-label-next={t('nextPageShort')} data-i18n-data-label-next="nextPageShort"
 >
   <section class="archive-page-section archive-page-section-toolbar">
     <div class="archive-page-toolbar tw:justify-between">
       <div
         class="archive-page-years"
         role="group"
-        aria-label={t('archiveYearFilter')}
+        aria-label={t('archiveYearFilter')} data-i18n-aria-label="archiveYearFilter"
       >
         <button
           class="archive-year-button is-active"
@@ -43,7 +44,7 @@ const data = posts.map((p) => ({
           data-year="all"
           aria-pressed="true"
         >
-          {t('archiveAll')}
+          <I18n k="archiveAll" />
         </button>
         <div id="archives-year-filter-list" />
       </div>
@@ -64,7 +65,7 @@ const data = posts.map((p) => ({
   <section class="archive-page-section archive-page-section-pagination">
     <nav
       id="pagination"
-      aria-label={t('paginationNavigation')}
+      aria-label={t('paginationNavigation')} data-i18n-aria-label="paginationNavigation"
       class="tw:[#post_&]:overflow-hidden"
     >
       <div class="pagination" />

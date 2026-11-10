@@ -1,10 +1,11 @@
 ---
 import { render } from "astro:content";
 import Base from "./Base.astro";
+import I18n from "../components/I18n.astro";
+import customZh from "../i18n/site.zh-CN.json";
 import {
   cfg,
   config,
-  t,
   url,
   absolute,
   dateLabel,
@@ -122,7 +123,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
                   <PostCard post={post} index={i} />
                 ))}
                 {!route.posts?.length && (
-                  <p class="empty-state">{t("archiveEmpty")}</p>
+                  <p class="empty-state"><I18n k="archiveEmpty" /></p>
                 )}
                 <Pagination current={route.current!} total={route.total!} />
               </div>
@@ -170,13 +171,13 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
               >
                 <div class="headline tw:[.site-data_.data-item_.data-item-link_&]:whitespace-nowrap tw:[.relatedPosts_&]:flex tw:[.relatedPosts_&]:items-center">
                   <i class="solitude fas fa-star" />
-                  <span id="related-posts-title">{t("relatedPostsLead")}</span>
+                  <span id="related-posts-title"><I18n k="relatedPostsLead" /></span>
                   <button
                     class="relatedPosts-random tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:cursor-pointer"
                     type="button"
                     data-solitude-action="randomPost"
                   >
-                    {t("browseRandomly")}
+                    <I18n k="browseRandomly" />
                   </button>
                 </div>
                 <div class="relatedPosts-list tw:flex tw:flex-col">
@@ -212,22 +213,22 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
             )}
           </div>
 
-          <nav class="post-page-switch" aria-label="Post navigation">
+          <nav class="post-page-switch" aria-label="Post navigation" data-i18n-aria-label-text="Post navigation">
             {previous ? (
               <a
                 class="post-page-switch__card"
                 href={url(contentPath(previous))}
                 title={previous.data.title}
               >
-                <span class="post-page-switch__label">上一篇</span>
+                <span class="post-page-switch__label"><I18n k="previousPost" /></span>
                 <span class="post-page-switch__title">
                   {previous.data.title}
                 </span>
               </a>
             ) : (
               <span class="post-page-switch__card is-disabled">
-                <span class="post-page-switch__label">上一篇</span>
-                <span class="post-page-switch__title">没有更早的文章了</span>
+                <span class="post-page-switch__label"><I18n k="previousPost" /></span>
+                <span class="post-page-switch__title"><I18n text="No earlier posts" /></span>
               </span>
             )}
 
@@ -237,13 +238,13 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
                 href={url(contentPath(next))}
                 title={next.data.title}
               >
-                <span class="post-page-switch__label">下一篇</span>
+                <span class="post-page-switch__label"><I18n k="nextPost" /></span>
                 <span class="post-page-switch__title">{next.data.title}</span>
               </a>
             ) : (
               <span class="post-page-switch__card is-disabled">
-                <span class="post-page-switch__label">下一篇</span>
-                <span class="post-page-switch__title">已经是最新文章了</span>
+                <span class="post-page-switch__label"><I18n k="nextPost" /></span>
+                <span class="post-page-switch__title"><I18n text="This is the latest post" /></span>
               </span>
             )}
           </nav>
@@ -287,7 +288,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
           {route.kind === "taxonomy" ? (
             <>
               <h1 class="page-title tw:[#page_h1&]:text-center">
-                {route.title}
+                <I18n text={route.title} />
               </h1>
               <div class="category-lists">
                 <div class="tag-cloud-list is-center">
@@ -307,7 +308,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
             </>
           ) : route.kind === "term" ? (
             <>
-              <div class="article-sort-title">{route.title}</div>
+              <div class="article-sort-title"><I18n text={route.title} /></div>
               <div class="article-sort">
                 {route.posts?.map((item) => (
                   <div class="article-sort-item tw:[.article-sort_&]:relative tw:[.article-sort_&]:flex tw:[.article-sort_&]:items-center tw:[.article-sort_&]:overflow-hidden">
@@ -344,7 +345,9 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
               title={route.title}
               description={String(p.description ?? "")}
             >
-              {Content && <Content components={components} />}
+              {fullEntry?.body?.trim() && Object.hasOwn(customZh, fullEntry.body.trim())
+                ? <p><I18n text={fullEntry.body.trim()} /></p>
+                : Content && <Content components={components} />}
             </Links>
           ) : type === "notes" ? (
             <Notes data={pageData(p.data, "notes")} />
@@ -364,7 +367,7 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
                 />
               </div>
               <div class="Music-loading">
-                <div>{t("playerLoading")}</div>
+                <div><I18n k="playerLoading" /></div>
               </div>
             </>
           ) : type === "recentcomment" ? (
@@ -373,15 +376,15 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
             <>
               <header class="page-title-wrap">
                 <h1 class="page-title tw:[#page_h1&]:text-center">
-                  {route.title}
+                  <I18n text={route.title} />
                 </h1>
-                {p.description && <p>{String(p.description)}</p>}
+                {p.description && <p><I18n text={String(p.description)} /></p>}
               </header>
               <article class="post-content article-container">
                 {Content && <Content components={components} />}
               </article>
               {type === "music" && !cfg.music.enable && (
-                <p>{t("musicSetup")}</p>
+                <p><I18n k="musicSetup" /></p>
               )}
               {type === "message" && cfg.envelope.enable && <MessageBarrage />}
             </>

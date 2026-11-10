@@ -1,4 +1,5 @@
 ---
+import I18n from "./I18n.astro";
 import { cfg, config, t, url } from '../lib/site';
 const f = cfg.footer;
 const year = new Date().getFullYear();
@@ -14,8 +15,8 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
       <a
         class="deal_link tw:[#footer_#footer\_deal_&]:flex tw:[#footer_#footer\_deal_&]:justify-center tw:[#footer_#footer\_deal_&]:items-center"
         href={url(l.url)}
-        title={l.name}
-        aria-label={l.name}
+        title={l.name} data-i18n-title-text={l.name}
+        aria-label={l.name} data-i18n-aria-label-text={l.name}
       >
         <i class={`solitude ${l.icon}`} />
       </a>
@@ -26,7 +27,7 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
         id="footer_mini_logo"
         type="button"
         data-solitude-action="toTop"
-        aria-label={t('backTop')}
+        aria-label={t('backTop')} data-i18n-aria-label="backTop"
       >
         <img src={url(f.information.author)} alt="" />
       </button>
@@ -35,8 +36,8 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
       <a
         class="deal_link tw:[#footer_#footer\_deal_&]:flex tw:[#footer_#footer\_deal_&]:justify-center tw:[#footer_#footer\_deal_&]:items-center"
         href={url(l.url)}
-        title={l.name}
-        aria-label={l.name}
+        title={l.name} data-i18n-title-text={l.name}
+        aria-label={l.name} data-i18n-aria-label-text={l.name}
       >
         <i class={`solitude ${l.icon}`} />
       </a>
@@ -50,7 +51,7 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
       .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
       .map(([name, items]) => (
         <div class="footer-group">
-          <h3 class="footer-title">{name}</h3>
+          <h3 class="footer-title"><I18n text={name} /></h3>
           <div class="footer-links tw:[#footer_#st-footer_&]:flex tw:[#footer_#st-footer_&]:flex-col">
             {items.map((l) => (
               <a class="footer-item" href={url(l.url)}>
@@ -63,12 +64,12 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
     {f.randomlink && (
       <div class="footer-group">
         <div class="footer-title-group tw:[#footer_#st-footer_&]:flex tw:[#footer_#st-footer_&]:items-center">
-          <h3 class="footer-title">{t('randomFriends')}</h3>
+          <h3 class="footer-title"><I18n k="randomFriends" /></h3>
           <button
             class="random-friends-btn tw:[#footer_#st-footer_&]:flex"
             type="button"
             data-solitude-action="randomLinksList"
-            aria-label={t('randomFriends')}
+            aria-label={t('randomFriends')} data-i18n-aria-label="randomFriends"
           >
             <i class="solitude fas fa-arrows-rotate" />
           </button>
@@ -84,7 +85,7 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
     <div class="footer-bar-links tw:[#footer-bar_&]:flex tw:[#footer-bar_&]:justify-between tw:[#footer-bar_&]:flex-wrap tw:[#footer-bar_&]:items-center">
       <div class="footer-bar-left tw:[#footer-bar_&]:flex tw:[#footer-bar_&]:flex-col">
         <div class="copyright tw:[#footer-bar_.footer-bar-left_&]:flex tw:[#footer-bar_.footer-bar-left_&]:flex-row tw:[#footer-bar_.footer-bar-left_&]:items-center">
-          © {start === year ? year : `${start} – ${year}`} By{' '}
+          © {start === year ? year : `${start} – ${year}`} <I18n text="By" />{' '}
           <a
             class="footer-bar-link tw:[#footer-bar_.footer-bar-left_.beian-group_&]:flex tw:[#footer-bar_.footer-bar-left_.beian-group_&]:items-center tw:[#footer-bar_&]:whitespace-nowrap tw:[#footer-bar_&]:flex tw:[#footer-bar_&]:items-center"
             href={url('/')}
@@ -114,7 +115,7 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
           <a
             class="footer-bar-link tw:[#footer-bar_.footer-bar-left_.beian-group_&]:flex tw:[#footer-bar_.footer-bar-left_.beian-group_&]:items-center tw:[#footer-bar_&]:whitespace-nowrap tw:[#footer-bar_&]:flex tw:[#footer-bar_&]:items-center"
             href={url(l.url)}
-            title={l.name}
+            title={l.name} data-i18n-title-text={l.name}
           >
             {l.icon ? (
               (Array.isArray(l.icon) ? l.icon : [l.icon]).map(

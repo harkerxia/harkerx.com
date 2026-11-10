@@ -1,8 +1,9 @@
 ---
+import I18n from "../../components/I18n.astro";
 import { cfg, t } from '../../lib/site';
 ---
 
-<section class="message-barrage-region" aria-label={t('comments')}>
+<section class="message-barrage-region" aria-label={t('comments')} data-i18n-aria-label="comments">
   <p
     id="message-barrage-status"
     role="status"
@@ -10,12 +11,12 @@ import { cfg, t } from '../../lib/site';
     aria-busy="true"
     class="tw:text-center"
   >
-    {t('commentsLoading')}
+    <I18n k="commentsLoading" />
   </p>
   <div
     id="barrage"
     data-native-barrage
-    aria-label={t('comments')}
+    aria-label={t('comments')} data-i18n-aria-label="comments"
     data-line={cfg.envelope.line}
     data-speed={cfg.envelope.speed}
     data-hover={String(cfg.envelope.hover)}
@@ -32,7 +33,7 @@ import { cfg, t } from '../../lib/site';
       aria-pressed="true"
       disabled
     >
-      <span>{t('showBarrage')}</span>
+      <span><I18n k="showBarrage" /></span>
     </button>
     <button
       type="button"
@@ -40,7 +41,7 @@ import { cfg, t } from '../../lib/site';
       aria-pressed="false"
       disabled
     >
-      <span>{t('hideBarrage')}</span>
+      <span><I18n k="hideBarrage" /></span>
     </button>
   </div>
 </section>

@@ -185,5 +185,12 @@
   "musicPlayIndex": "Play track {index}",
   "musicHall": "Music hall",
   "unknownArtist": "Unknown artist",
-  "docsearchUnavailable": "DocSearch is unavailable. Check appId, apiKey, and indexName."
+  "docsearchUnavailable": "DocSearch is unavailable. Check appId, apiKey, and indexName.",
+  "revealContent": "Click",
+  "tabLabel": "Tab {index}",
+  "repositoryStatistics": "Repository statistics",
+  "youtubePlayer": "YouTube video player",
+  "bilibiliPlayer": "Bilibili video player",
+  "musicNotation": "Music notation",
+  "hiddenText": "Hidden text"
 }
