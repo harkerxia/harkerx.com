@@ -1,7 +1,7 @@
 ---
 import I18n from "./I18n.astro";
 import ArticleWordTotal from "./ArticleWordTotal.astro";
-import { cfg, t, url, dateLabel, isoDate } from "../lib/site";
+import { cfg, config, t, url, dateLabel, isoDate } from "../lib/site";
 import { taxonomy, type Post } from "../lib/content";
 import Menu from "./Menu.astro";
 interface Props {
@@ -13,6 +13,8 @@ const { posts, comments = false, toc = false } = Astro.props;
 const tags = taxonomy(posts, "tags");
 const categories = taxonomy(posts, "categories");
 const updated = new Date();
+const rssLink = cfg.nav.right.custom.find((item) => item.id === "rss-feed");
+const themeSwitch = cfg.nav.right.custom.find((item) => item.id === "theme-toggle");
 const actionLabels: Record<string, string> = {
   toggleKeyboard: "keyboardDisable",
   showConsole: "keyboardConsole",
@@ -279,7 +281,16 @@ const contextItems = [
 )}
 <div id="sidebar">
   <div id="menu-mask" />
-  <div id="sidebar-menus" class="tw:[#sidebar_&]:overflow-hidden">
+  <div id="sidebar-menus" class="tw:[#sidebar_&]:overflow-hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-label={t("menu")} data-i18n-aria-label="menu">
+    <div class="mobile-menu-header">
+      <button id="mobile-menu-close" class="mobile-menu-close" type="button" aria-label={t("close")} data-i18n-aria-label="close">
+        <i class="fas fa-xmark" aria-hidden="true" />
+      </button>
+      <div class="mobile-menu-brand">
+        <div class="mobile-menu-title">{config.title}</div>
+        <div class="mobile-menu-description"><I18n text={config.description} /></div>
+      </div>
+    </div>
     <div class="site-data tw:flex tw:justify-between">
       {[
         { name: "archives", path: "/archives/", count: posts.length },
@@ -313,17 +324,34 @@ const contextItems = [
           </div>
         )}
     </div>
-    <span class="sidebar-menu-item-title"><I18n k="sidebarFeatures" /></span>
-    <div class="sidebar-menu-item tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:flex-col">
-      <button
-        type="button"
-        class="darkmode_switchbutton menu-child tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:cursor-pointer tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:flex tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:items-center tw:[#sidebar_#sidebar-menus_.sidebar-menu-item_&]:text-left"
-        data-solitude-action="toggleTheme"
-      >
-        <i class="solitude fas fa-circle-half-stroke" />
-        <span><I18n k="displayMode" /></span>
-      </button>
+    <div class="mobile-menu-features">
+      <span class="sidebar-menu-item-title"><I18n k="sidebarFeatures" /></span>
+      <div class="sidebar-menu-item tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:flex-col">
+        {cfg.nav.right.random && (
+          <button id="mobile-random-post" type="button" class="menu-child" data-solitude-action="randomPost">
+            <i class="solitude fas fa-shuffle" aria-hidden="true" />
+            <span><I18n k="randomPost" /></span>
+          </button>
+        )}
+        {rssLink && (
+          <a id="mobile-rss-feed" class="menu-child" href={url(rssLink.url ?? "/rss.xml")} data-astro-reload data-feed-link data-feed-en={url("/en/rss.xml")} data-feed-zh={url("/rss.xml")}>
+            <i class={rssLink.icon || "fas fa-rss"} aria-hidden="true" />
+            <span><I18n text={rssLink.name} /></span>
+          </a>
+        )}
+        {themeSwitch && (
+          <button id="mobile-theme-toggle" type="button" class="darkmode_switchbutton menu-child" data-solitude-action={themeSwitch.action ?? "toggleTheme"}>
+            <i class={themeSwitch.icon || "fas fa-circle-half-stroke"} aria-hidden="true" />
+            <span><I18n k="displayMode" /></span>
+          </button>
+        )}
+        <button id="mobile-language-switch" type="button" class="menu-child" data-ui-language-switch aria-label="Switch to Chinese">
+          <i class="solitude fas fa-language" aria-hidden="true" />
+          <span data-ui-language-label>中文</span>
+        </button>
+      </div>
     </div>
+    <span class="sidebar-menu-item-title"><I18n k="sidebarNavigation" /></span>
     <Menu mobile />
     <span class="sidebar-menu-item-title"><I18n k="tags" /></span>
     <div class="card-tags">

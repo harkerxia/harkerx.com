@@ -599,6 +599,8 @@
   #page-header #nav #site-name {
     width: 100%;
     min-width: 0;
+    position: relative;
+    flex: 1 1 auto;
   }
 }
 
@@ -678,6 +680,31 @@
     flex: 1 1 auto;
     min-width: 0;
     padding: 0;
+    container: nav-brand / inline-size;
+  }
+}
+
+/* Use the existing home icon when the brand no longer has room for its title. */
+@container nav-brand (max-width: 240px) {
+  #page-header #nav #blog_name .back-home-button {
+    display: none;
+  }
+  #page-header #nav #site-name {
+    flex: 0 0 44px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+  #page-header #nav #site-name > :not(.nav-home-icon) {
+    display: none;
+  }
+  #page-header #nav #site-name .nav-home-icon {
+    font-size: 20px;
+    position: static;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    color: inherit;
   }
 }
 
@@ -1787,10 +1814,21 @@
   }
 }
 
+/* Keep compact feature placement and header visibility on the same breakpoint. */
+#sidebar #sidebar-menus .mobile-menu-features {
+  display: none;
+}
+
 @media screen and (max-width: 480px) {
   #page-header #nav #rss-feed,
-  #page-header #nav #randomPost_button {
+  #page-header #nav #randomPost_button,
+  #page-header #nav #theme-toggle,
+  #page-header #nav .nav-language-button,
+  #page-header #nav #nav-totop {
     display: none;
+  }
+  #sidebar #sidebar-menus .mobile-menu-features {
+    display: block;
   }
 }
 

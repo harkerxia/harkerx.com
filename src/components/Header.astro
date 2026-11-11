@@ -108,6 +108,7 @@ navButtons.sort(
         <a
           id="site-name"
           href={url('/')}
+          aria-label={t('backHome')} data-i18n-aria-label="backHome"
           title={t('backHome')} data-i18n-title={'backHome'}
           heotip={t('backHome')} data-i18n-heotip={'backHome'}
           class="tw:[#nav_&]:flex tw:[#nav_&]:justify-center tw:[#nav_&]:items-center tw:[#nav_&]:cursor-pointer"
@@ -119,7 +120,7 @@ navButtons.sort(
           ) : (
             <span class="title">{cfg.site.name.custom}</span>
           )}
-          <i class="solitude fas fa-home tw:[#nav_#site-name_i.fas&]:absolute tw:[#nav_#site-name_i.fas&]:flex tw:[#nav_#site-name_i.fas&]:items-center tw:[#nav_#site-name_i.fas&]:justify-center" />
+          <i aria-hidden="true" class="nav-home-icon solitude fas fa-home tw:[#nav_#site-name_i.fas&]:absolute tw:[#nav_#site-name_i.fas&]:flex tw:[#nav_#site-name_i.fas&]:items-center tw:[#nav_#site-name_i.fas&]:justify-center" />
         </a>
       </div>
       <div id="page-name-mask">

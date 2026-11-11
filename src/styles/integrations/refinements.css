@@ -35,8 +35,8 @@ button:disabled { cursor: default; opacity: .45; }
 #local-search .search-dialog:hover { border-color: var(--efu-card-border); box-shadow: var(--efu-shadow-border); }
 #local-search .search-nav, #local-search .search-box, #local-search #search-pagination, #local-search #search-tips { flex-shrink: 0; }
 #local-search .search-close-button { flex-basis: 44px; width: 44px; height: 44px; }
-#local-search .search-box input { font-size: 16px; border: var(--style-border-always); }
-#local-search .search-box input:focus { border-color: var(--efu-theme); box-shadow: var(--efu-focus-ring); }
+#local-search .search-box input { font-size: 16px; border: var(--style-border-always); -webkit-appearance: none; appearance: none; }
+#local-search .search-box input:focus { border-color: var(--efu-theme); outline: none; box-shadow: inset 0 0 0 1px var(--efu-theme); }
 #local-search #search-results { gap: var(--efu-space-1); padding: 4px; overscroll-behavior: contain; }
 #local-search #search-results .search-result-title {
   padding: var(--efu-space-3);

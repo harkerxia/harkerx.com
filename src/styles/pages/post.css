@@ -27,7 +27,7 @@
     width: 100%;
     margin: 0;
     font-size: 14px;
-    text-align: left;
+    text-align: center;
   }
 }
 @media screen and (max-width: 768px) {
@@ -139,10 +139,6 @@
 
 .post #post-info #post-meta .meta-secondline .post-meta-commentcount {
   cursor: pointer;
-}
-
-.post #post-info #post-meta .meta-secondline .word-count {
-  font-weight: 800;
 }
 
 .post #post-info #post-firstinfo {

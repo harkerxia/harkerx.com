@@ -343,22 +343,82 @@
 #sidebar #sidebar-menus {
   visibility: hidden;
   position: fixed;
-  top: 16px;
-  right: 8px;
-  width: 300px;
-  max-width: 90vw;
-  height: calc(100% - 32px);
-  background: var(--efu-maskbgdeep);
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  height: 100dvh;
+  background: var(--efu-background);
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0s linear 0.3s;
   z-index: 1004;
-  border: var(--style-border-always);
-  padding-bottom: 44px;
-  border-radius: 12px;
-  transform-origin: top right;
-  transform: scale(0.9);
+  border: 0;
+  padding: calc(68px + env(safe-area-inset-top)) env(safe-area-inset-right) calc(24px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+  border-radius: 0;
+  transform: translateX(100%);
+  overscroll-behavior: contain;
   opacity: 0;
   pointer-events: none;
   scrollbar-width: none;
+}
+
+#sidebar #sidebar-menus .mobile-menu-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 4px;
+  padding: calc(16px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 16px calc(16px + env(safe-area-inset-left));
+  background: var(--efu-background);
+}
+
+#sidebar #sidebar-menus .mobile-menu-brand {
+  min-width: 0;
+  text-align: center;
+  transform: translateY(4px);
+}
+
+#sidebar #sidebar-menus .mobile-menu-title {
+  overflow: hidden;
+  color: var(--efu-fontcolor);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#sidebar #sidebar-menus .mobile-menu-description {
+  overflow: hidden;
+  margin-top: 2px;
+  color: var(--efu-secondtext);
+  font-size: 12px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#sidebar #sidebar-menus .mobile-menu-close {
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--efu-fontcolor);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#sidebar #sidebar-menus .mobile-menu-close:active {
+  background: var(--efu-main-op);
 }
 
 #sidebar #sidebar-menus::-webkit-scrollbar {
@@ -436,12 +496,13 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 24px;
-  padding: 12px 16px;
-  color: var(--efu-fontcolor);
-  font-size: 14px;
-  font-weight: 720;
-  line-height: 1.4;
+  min-height: 44px;
+  padding: 10px 16px;
+  color: color-mix(in srgb, var(--efu-fontcolor) 85%, var(--efu-card-bg));
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
   text-align: left;
   background: var(--efu-card-bg);
   border: var(--style-border-always);
@@ -484,7 +545,15 @@
 
 #sidebar #sidebar-menus .menus_items .menus_item_child .site-page.child {
   min-height: 44px;
-  font-size: 16px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+#sidebar #sidebar-menus .menus_items .menus_item_child .site-page.child i {
+  flex: 0 0 20px;
+  font-size: 18px;
+  text-align: center;
 }
 
 #sidebar #sidebar-menus > hr {
@@ -494,12 +563,10 @@
 #sidebar #sidebar-menus.open {
   visibility: visible;
   transition-delay: 0s;
-  transform: scale(1);
+  transform: none;
   opacity: 1;
   pointer-events: auto;
   overflow: hidden auto;
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
 }
 
 #sidebar #sidebar-menus .back-menu-list-groups {
@@ -576,12 +643,13 @@
 }
 
 #sidebar #sidebar-menus .sidebar-menu-item {
+  gap: 6px;
   padding: 0 16px;
   margin-bottom: 6px;
 }
 
 #sidebar #sidebar-menus .sidebar-menu-item .darkmode_switchbutton {
-  padding: 4px 8px;
+  padding: 8px 12px;
   transition: all 0.5s ease 0s;
 }
 
@@ -595,27 +663,39 @@
   color: var(--efu-white);
 }
 
+/* Fixed icon tracks avoid differences in Font Awesome glyph widths and display rules. */
 #sidebar #sidebar-menus .sidebar-menu-item .menu-child {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  text-align: left;
+  cursor: pointer;
   width: 100%;
   background: var(--efu-card-bg);
   border-radius: 8px;
   border: var(--style-border-always);
   font-size: 14px;
-  color: inherit;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--efu-fontcolor) 85%, var(--efu-card-bg));
   font-family: inherit;
-  line-height: inherit;
+  line-height: 1.5;
 }
 
-#sidebar #sidebar-menus .sidebar-menu-item .menu-child i {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#sidebar #sidebar-menus .sidebar-menu-item .menu-child > i {
+  justify-self: center;
+  align-self: center;
+  width: auto;
+  height: auto;
+  font-size: 18px;
+  line-height: 1;
 }
 
-#sidebar #sidebar-menus .sidebar-menu-item .menu-child span {
-  margin-left: 10px;
+#sidebar #sidebar-menus .sidebar-menu-item .menu-child > span {
+  min-width: 0;
+  margin: 0;
 }
 
 #sidebar #sidebar-menus .webinfo {
@@ -623,7 +703,7 @@
 }
 
 #sidebar #sidebar-menus .menus_items .site-page span:hover {
-  color: var(--efu-fontcolor);
+  color: inherit;
 }
 
 #sidebar #toggle-sidebar {

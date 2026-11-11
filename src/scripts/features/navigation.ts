@@ -36,8 +36,9 @@ export const sidebarFn = () => {
   if (!$toggleMenu || !$mobileSidebarMenus || !$menuMask) return;
   const toggleMobileSidebar = (isOpen: boolean) => {
     $body.style.overflow = isOpen ? 'hidden' : '';
-    Solitude[isOpen ? 'fadeIn' : 'fadeOut']($menuMask, 0.5);
+    $menuMask.style.display = isOpen ? 'block' : 'none';
     $mobileSidebarMenus.classList.toggle('open', isOpen);
+    $mobileSidebarMenus.setAttribute('aria-hidden', String(!isOpen));
     $toggleMenu
       .querySelector('a')
       ?.setAttribute('aria-expanded', String(isOpen));
@@ -48,6 +49,7 @@ export const sidebarFn = () => {
     }
   };
   const menuTrigger = $toggleMenu.querySelector('a');
+  const closeButton = document.getElementById('mobile-menu-close');
   menuTrigger?.setAttribute('aria-controls', 'sidebar-menus');
   menuTrigger?.setAttribute('aria-expanded', 'false');
   $mobileSidebarMenus
@@ -69,6 +71,23 @@ export const sidebarFn = () => {
     )
       closeMobileSidebar();
   });
+  lifecycle.listen(closeButton, 'click', () => {
+    closeMobileSidebar();
+    menuTrigger?.focus();
+  });
+  lifecycle.listen($mobileSidebarMenus, 'keydown', (event) => {
+    if (event.key !== 'Tab' || !$mobileSidebarMenus.classList.contains('open')) return;
+    const focusable = Array.from($mobileSidebarMenus.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'))
+      .filter((element) => element.getClientRects().length > 0);
+    const first = focusable[0], last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  });
   lifecycle.listen(document, 'keydown', (event) => {
     if (
       event.key === 'Escape' &&
@@ -81,6 +100,7 @@ export const sidebarFn = () => {
   lifecycle.listen($toggleMenu, 'click', (event) => {
     event.preventDefault();
     toggleMobileSidebar(true);
+    closeButton?.focus({ preventScroll: true });
   });
   lifecycle.listen($menuMask, 'click', closeMobileSidebar);
   let resizeFrame = 0;

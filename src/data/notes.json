@@ -6,104 +6,84 @@
   },
   "items": [
     {
-      "date": "2024-08-14",
-      "content": "贷款可以看作一种让资源跨越时间、流向有需要的地方的方式。一个人现在缺钱，但认为某件事做成后能够创造更大的价值，于是愿意借钱，并拿未来收益中的一部分作为利息支付给银行。如果项目成功，借款者和银行都可能获益，也可能创造新的社会财富。",
-      "contentEn": "A loan can be seen as a way for resources to move across time and reach where they are needed. Someone may be short of money now but believe that a project could create greater value if it succeeds. They are willing to borrow and pay the bank part of their future returns as interest. If the project works out, both the borrower and the bank may benefit, and new wealth may be created for society."
+      "date": "2026-11-06",
+      "content": "我们永远无法真正以另一个人的第一视角体验世界，也没办法直接知道对方脑子里在想什么。语言和交流能让彼此理解一部分，但每个人的经历、感受和理解方式终究不完全相同。从这个意义上说，每个人生活的世界就像是大部分互相平行、只有一小部分相交的世界。",
+      "contentEn": "We can never truly experience the world from another person's first-person perspective, nor can we directly know what is going on in their mind. Language and communication allow us to understand one another to some extent, but our experiences, feelings, and ways of understanding things are never entirely the same. In that sense, the worlds we each live in are mostly parallel, intersecting only in a small part."
+    },
+    {
+      "date": "2026-07-23",
+      "content": "网上讨论的哲学内容感觉有些东西被讲得过于复杂了。一大段话里塞满术语，拆开来却可能只是个很普通的道理。术语有时确实是为了更精确地区分概念，但如果表达的结果是让人完全看不懂，那也很难说交流是成功的。向别人解释一个思想时，精确性应该给理解性让步。",
+      "contentEn": "Some of the philosophy discussed online feels unnecessarily complicated. A long passage may be packed with technical terms, yet turn out to express a fairly ordinary idea once you unpack it. Terminology can help distinguish concepts more precisely, but if the result is completely incomprehensible, it is hard to call that successful communication. When explaining an idea to others, precision should give way to comprehensibility."
     },
     {
       "date": "2026-07-09",
-      "content": "语言类似于人脑感官的有损压缩。现实中的一个事物包含极其丰富的颜色、形状、触感、气味和个人体验，但说出一个词时，我们不可能把这些细节全部传递过去，只能用一个简短的符号概括它。不同人的经历和语境不同，解压出来的理解也可能不一样。例如你无法向一个没见过苹果的人描述苹果，所以词语和语言是对于人们形成共识的一种东西的表达方式。",
-      "contentEn": "Language is a bit like lossy compression of our sensory experience. Something in the real world carries a rich mix of colors, shapes, textures, smells, and personal associations. When we name it, we cannot pass along every detail; we can only summarize it with a brief symbol. People have different experiences and contexts, so what they reconstruct from that symbol may differ too. You cannot fully convey what an apple is like by describing it to someone who has never seen one. Words and language are ways of expressing things that people have come to share an understanding of."
+      "content": "语言类似于人脑感官的有损压缩。现实中的一个事物包含极其丰富的颜色、形状、触感、气味和个人体验，但说出一个词时，我们不可能把这些细节全部传递过去，只能用一个简短的符号概括它。不同人的经历和语境不同，解压出来的理解也可能不一样。仅靠被表达出来的信息，很难还原体验本身的全部细节。例如你无法向一个没见过苹果的人描述苹果。词语和语言是对于人们形成共识的一种东西的表达方式。",
+      "contentEn": "Language is somewhat like lossy compression of what the human brain senses. A real-world object contains an incredibly rich range of colors, shapes, textures, smells, and personal experiences. But when we say a word, we cannot convey every one of those details; we can only sum them up with a short symbol. Different people have different experiences and contexts, so what they reconstruct from that symbol may differ as well. The information we manage to express alone can hardly recreate every detail of the original experience. For example, you cannot really describe what an apple is like to someone who has never seen one. Words and language are ways of expressing things about which people have developed a shared understanding."
     },
     {
       "date": "2026-07-09",
-      "content": "由语言是一种有损压缩，我又想到 AI 与人的区别。现在的大语言模型主要通过大量文本等数据来学习和生成内容，而人理解世界时还会依赖亲眼看见、亲身经历和身体感受。仅靠被表达出来的信息，很难还原体验本身的全部细节。",
-      "contentEn": "Thinking of language as lossy compression led me to another difference between AI and people. Today's large language models mainly learn from and generate content using vast amounts of text and other data. People also understand the world through what they see firsthand, what they live through, and what they feel in their bodies. Information that has been put into words can rarely capture every detail of the experience itself."
+      "content": "现在AI与人的区别，我觉得很大一部分程度在于其无法拥有人类所有的感官体验。大语言模型主要通过大量文本等数据来学习和生成内容，而这些都是已经经过高度浓缩的信息。人理解世界时还会依赖亲眼看见、亲身经历和身体感受。而目前大模型却没有这样的能力，所以并不具备真的主观意识等概念。",
+      "contentEn": "I think a major difference between AI and humans today is that AI cannot have the full range of human sensory experiences. Large language models mainly learn from and generate content using enormous amounts of text and other data, which are already highly compressed forms of information. Humans also understand the world through what they see with their own eyes, what they personally experience, and what they feel in their bodies. Current large models do not have those abilities, so I believe they lack genuine subjective consciousness and related qualities."
     },
     {
-      "date": "2026-01-23",
-      "content": "最近看了一些网上讨论哲学的内容，感觉有些东西被讲得过于复杂了。一大段话里塞满术语，拆开来却可能只是个很普通的道理。术语有时确实是为了更精确地区分概念，但如果表达的结果是让人完全看不懂，那也很难说交流是成功的。向别人解释一个思想时，精确性应该给理解性让步。",
-      "contentEn": "I've been reading some online discussions about philosophy, and parts of it seem needlessly complicated. A long passage packed with terminology may turn out to express a fairly ordinary idea once you unpack it. Technical terms can help distinguish concepts more precisely, but if the result is impossible to understand, it is hard to call that successful communication. When explaining an idea to someone, precision should give way to clarity."
+      "date": "2026-01-10",
+      "content": "思考理解有点像是对已有记忆和经验的重新排列与组合。遇到新情况时，我们会从过去的经历里寻找关联，有时还会注意到两个原本看似无关的东西其实存在联系。组合的数量、层次和复杂程度，还会影响思考的深度。如果不存在相应知识储备，便无法思考关联或产生灵感。灵感是知识的堆叠加以发散的思考方式。",
+      "contentEn": "Thinking and understanding are somewhat like rearranging and recombining existing memories and experiences. When we encounter something new, we look for connections to past experiences, and sometimes notice that two things that once seemed unrelated are actually connected. The number, layers, and complexity of these combinations also affect the depth of our thinking. Without the relevant knowledge to draw on, we cannot make those connections or come up with inspiration. Inspiration is a way of thinking that builds on accumulated knowledge and branches out from it."
     },
     {
-      "date": "2025-11-04",
-      "content": "我们永远无法真正以另一个人的第一视角体验世界，也没办法直接知道对方脑子里在想什么。语言和交流能让彼此理解一部分，但每个人的经历、感受和理解方式终究不完全相同。从这个意义上说，每个人生活的主观世界就像是大部分互相平行、只有一小部分相交的世界。",
-      "contentEn": "We can never truly experience the world from another person's first-person perspective or directly know what is going on in their mind. Language and communication let us understand part of it, but our experiences, feelings, and ways of making sense of things are never quite the same. In that sense, our subjective worlds are mostly parallel, with only a few points of intersection."
-    },
-    {
-      "date": "2025-08-27",
+      "date": "2026-01-03",
       "content": "客观世界与主观世界间存在着不可逾越的鸿沟。人连紫外线、红外线都无法直接看见，以为熟悉的世界，其实只是大脑根据有限的感官信息构建出来的。即使借助仪器能知道更多，也不代表我们能脱离自身的感知方式，直接看到世界的全部。",
-      "contentEn": "There is an unbridgeable gap between the objective world and our subjective experience of it. We cannot even see ultraviolet or infrared light directly. The world we think we know is something our brains construct from limited sensory information. Instruments may help us learn more, but that does not mean we can step outside our own ways of perceiving and see the world in its entirety."
+      "contentEn": "There is an unbridgeable gap between the objective world and the subjective world. Humans cannot even see ultraviolet or infrared light directly. The world we think we know so well is actually constructed by our brains from limited sensory information. Even if instruments allow us to learn more, that does not mean we can step outside our own ways of perceiving and directly see the whole of reality."
     },
     {
-      "date": "2025-07-19",
-      "content": "有个不错的思考方法叫奥卡姆剃刀，如非必要，勿增实体。这句话直接看有些抽象。换成更容易理解的说法就是：面对同一个问题的多种解释，在解释力相近的情况下，可以优先考虑那个需要更少未经验证的前提假设的版本。这种思路在科学假设中很有用，放在人际关系和日常判断中，也能帮助自己少做一些不必要的脑补减少内耗，并可能更接近真实。",
-      "contentEn": "Occam's razor is a useful way of thinking: do not multiply entities unnecessarily. That can sound abstract. Put more simply, when several explanations account for the same thing equally well, prefer the one that requires fewer unverified assumptions. This is useful in forming scientific hypotheses, but it can also help in relationships and everyday judgments. Less unnecessary speculation may mean less mental strain and a better chance of getting closer to the truth."
+      "date": "2025-10-23",
+      "content": "照片和视频的意义，不只是保存画面，更在于它们能承载大量与当时有关的信息。很多时候，原本很多事已经不能主动想起来了，只要重新看到某张照片或某段视频，就能想起当时发生的事、周围的环境，甚至那一刻的感受，像是又触发了一遍当时的共鸣。这份记忆的唤醒是拍摄照片更深刻的意义所在。",
+      "contentEn": "The meaning of photos and videos goes beyond preserving images: they also carry a great deal of information about a particular moment. Often, there are things we can no longer recall on our own, yet seeing a certain photo or video again can bring back what happened, the surroundings, and even how we felt at the time, as though that moment resonates with us all over again. This awakening of memories is the deeper meaning of taking photos."
     },
     {
-      "date": "2025-06-12",
-      "content": "人生有点像动态规划，每一步都在权衡短期快乐和长期快乐。眼前看起来最舒服的选择，未必能让之后的自己更快乐。同时也不能为了一个遥远的目标，把当下的快乐全都牺牲掉。重要的可能不是每一步都选最快乐的，而是考虑它会怎样影响后面的选择。",
-      "contentEn": "Life is a little like dynamic programming: each step involves weighing short-term happiness against long-term happiness. The choice that feels most comfortable now may not make your future self happier. At the same time, you cannot sacrifice all of today's happiness for a distant goal. What matters may be less about choosing the happiest option at every step and more about considering how each choice shapes the ones that come after it."
+      "date": "2025-10-16",
+      "content": "有个不错的思考方法叫奥卡姆剃刀，如非必要，勿增实体。这句话直接看有些抽象。换成更容易理解的说法就是，面对同一个问题的多种解释，在解释力相近的情况下，可以优先考虑那个需要更少未经验证的前提假设的版本。这种思路在科学假设中很有用，放在人际关系和日常判断中，也能帮助自己少做一些不必要的脑补减少内耗，并可能更接近真实。",
+      "contentEn": "A useful way of thinking is Occam's razor: do not multiply entities beyond necessity. That can sound a little abstract at first. Put more simply, when there are several explanations for the same problem, and they explain it equally well, we can favor the one that requires fewer unverified assumptions. This is useful in scientific hypotheses, but it can also help with relationships and everyday judgments by reducing unnecessary speculation and mental strain, and perhaps bringing us closer to what is real."
     },
     {
-      "date": "2025-05-06",
-      "content": "我一直倾向于认为，人最终会朝着自己预期更值得、更快乐的方向行动。即使有人主动选择痛苦，也可能是因为在他的判断里，承受眼前的痛苦比放弃某件更重要的事有更低的机会成本。",
-      "contentEn": "I've always leaned toward the idea that people ultimately act in the direction they expect to find more worthwhile or happier. Even when someone willingly chooses pain, they may judge that enduring it now has a lower opportunity cost than giving up something more important."
+      "date": "2024-10-25",
+      "content": "解决问题时，通常会先看整体是由哪些部分组成的，再分析各部分之间是怎么连接、怎么工作的。如果问题还没找到，就继续往下拆，直到能用自己已经理解的底层原理逐一检查。",
+      "contentEn": "When solving a problem, I usually start by looking at which parts make up the whole, then analyze how those parts are connected and how they work. If I still cannot find the problem, I keep breaking it down until I can check each part against underlying principles I already understand."
     },
     {
-      "date": "2025-03-19",
-      "content": "快乐的经验可以告诉人什么值得追求，痛苦的经验同样能告诉人什么应该避免。一个人如果经历了很多痛苦，后来总结出一套避免痛苦的方法，再把它教给下一代，他可能就会把这套经验当成自己的真理。但是每个人的主观体验都是不一样的，所谓真理只是适用于经历过一些事的人，而无法拟合到其它人身上。",
-      "contentEn": "Pleasant experiences can teach us what is worth pursuing, just as painful ones can teach us what to avoid. Someone who has suffered a great deal may develop a set of rules for avoiding pain and pass them on to the next generation, treating those lessons as their truth. But subjective experience differs from person to person. What we call truth may only fit those who have been through certain things, rather than fitting everyone else as well."
+      "date": "2024-10-11",
+      "content": "人从出生起就在不断接受环境的奖惩反馈，并逐渐学会预测什么行为会带来快乐、什么行为会带来痛苦。通过与环境交互，来适应世界，建立起一套思维模式并不断优化。类似于机器学习中强化学习优化模型。",
+      "contentEn": "From birth, people continuously receive rewards and punishments from their environment and gradually learn to predict which actions will bring happiness and which will bring pain. Through interacting with their surroundings, they adapt to the world, build up a way of thinking, and keep refining it. This resembles the way a model is optimized through reinforcement learning in machine learning."
     },
     {
-      "date": "2025-02-11",
-      "content": "人从出生起就在不断接受环境的奖惩反馈，并逐渐学会预测什么行为会带来快乐、什么行为会带来痛苦，类似于机器学习中的强化学习一样。通过与环境交互，来适应世界，建立起一套思维模式并不断优化。类似于强化学习优化模型一般。",
-      "contentEn": "From birth, we continually receive rewards and penalties from our surroundings. Gradually, we learn to predict which actions will bring pleasure and which will bring pain, much like reinforcement learning in machine learning. By interacting with our environment, we adapt to the world and build a way of thinking that we keep refining, rather like improving a model through reinforcement learning."
+      "date": "2024-10-10",
+      "content": "快乐感来源于预期差，就是现在比过去的预期更好，未来比现在预期更好的变化。若长期处于高水准的物质及精神享受状态下，预期基准线会被提高，而此时就更难感受到快乐。毒品或许就是类似的道理。这也就是延迟满足的意义所在。",
+      "contentEn": "I think happiness comes from the gap between expectations and outcomes: the present turns out better than we expected in the past, and we anticipate the future improving beyond what we expect now. When someone remains at a high level of material and psychological enjoyment for a long time, their baseline expectations rise, making happiness harder to feel. Drugs may work on a similar principle. This may also be part of the meaning of delayed gratification."
     },
     {
-      "date": "2025-01-25",
-      "content": "解决问题时，通常会先看整体是由哪些部分组成的，再分析各部分之间是怎么连接、怎么工作的。如果问题还没找到，就继续往下拆，直到能用自己已经理解的底层原理逐一检查。这个过程有点像从大模块一路追到小模块，但前提是自己对这些模块已经有一定的知识和经验，否则就很难判断到底哪里出了问题。",
-      "contentEn": "When solving a problem, I usually start by looking at the parts that make up the whole, then examine how they connect and work together. If I still cannot find the issue, I keep breaking things down until I can check them against underlying principles I already understand. It is a bit like tracing a large module down to smaller ones. But that only works if I already have some knowledge and experience with those modules; otherwise, it is hard to tell what has actually gone wrong."
-    },
-    {
-      "date": "2025-01-20",
-      "content": "很多时候，人并没有在进行特别深入的思考，而是在凭习惯和经验快速做出反应。只有遇到新的知识、陌生的问题，或者原有经验无法直接应对的情况时，才更需要主动推理和探索。",
-      "contentEn": "Much of the time, we are not thinking particularly deeply. We are reacting quickly based on habit and experience. Active reasoning and exploration become more necessary when we encounter new knowledge, unfamiliar problems, or situations our existing experience cannot readily handle."
-    },
-    {
-      "date": "2025-01-14",
-      "content": "思考理解有点像是对已有记忆和经验的重新排列与组合。遇到新情况时，我们会从过去的经历里寻找关联，有时还会注意到两个原本看似无关的东西其实存在联系。组合的数量、层次和复杂程度，还会影响思考的深度。譬如将算法或物理与一些感受联系，如果不存在这些知识，便无法思考关联或产生灵感。也就是说所谓灵感是知识的堆叠加以发散的思考方式。",
-      "contentEn": "Thinking and understanding are a bit like rearranging and recombining memories and experiences. When we face something new, we look for connections to what we have encountered before. Sometimes we notice a link between two things that once seemed unrelated. The number, layers, and complexity of those combinations can also shape how deeply we think. We might connect an algorithm or a concept from physics with something we feel, for example. Without that knowledge, the connection or inspiration would not be available to us. In that sense, inspiration comes from accumulated knowledge combined with thinking that branches out in new directions."
-    },
-    {
-      "date": "2025-01-04",
-      "content": "我觉得思考的作用，首先是帮助生物更好地适应环境。可以从进化的角度理解：即使最初只是对光线等刺激做出简单反应，只要这种能力提高了生存和繁衍的机会，就可能被保留下来。随着感知、记忆和神经系统逐渐复杂，生物处理环境信息的方式也越来越复杂，最终出现了我们所说的思考。",
-      "contentEn": "I think the primary role of thought is to help living things adapt to their environment. From an evolutionary perspective, even a simple response to a stimulus such as light may be preserved if it improves the chances of survival and reproduction. As perception, memory, and nervous systems became more complex, so did the ways organisms processed information about their surroundings, eventually giving rise to what we call thought."
-    },
-    {
-      "date": "2024-10-03",
-      "content": "照片和视频的意义，不只是保存画面，更在于它们能承载大量与当时有关的信息。很多时候，只要重新看到某张照片或某段视频，就能想起当时发生的事、周围的环境，甚至那一刻的感受，像是又触发了一遍当时的共鸣。",
-      "contentEn": "The value of photos and videos lies not only in preserving images, but also in the wealth of information they carry about a moment. Seeing a particular photo or video again can bring back what happened, the surroundings, and even how we felt, as though something from that moment resonates with us all over again."
-    },
-    {
-      "date": "2024-06-29",
-      "content": "先去探索自己的兴趣，然后边做边补这个领域的知识。从远处看，一个领域的知识曲线似乎很平滑、完整；但当你不断精进、逐渐接近前沿，就会发现其中其实还有很多空缺。那些空缺，可能就是值得研究的机会。",
-      "contentEn": "Explore what interests you first, then build your knowledge of the field as you go. From a distance, a field's body of knowledge can look smooth and complete. But as you improve and get closer to the frontier, you start to notice how many gaps remain. Those gaps may be opportunities worth researching."
+      "date": "2024-09-06",
+      "content": "我一直倾向于认为人始终都是以自己预期更值得更快乐的方向来行动。即使有人主动选择常识上的痛苦，也可能是因为在他的思考体系里，承受眼前的痛苦比放弃某件更重要的事有更低的机会成本，或者当下的痛苦对于他的定义就是快乐。相同的行为在不同的人眼里所指代的含义都是不同的，但是不管大众的含义是什么，每个人都是以自己主观层面上的快乐为目标去行动的。",
+      "contentEn": "I have long tended to believe that people always act in the direction they expect to be more worthwhile and to bring them greater happiness. Even if someone deliberately chooses something commonly seen as painful, it may be because, in their own way of thinking, enduring that pain has a lower opportunity cost than giving up something more important—or because what others call pain is actually happiness by their own definition. The same behavior can mean different things to different people. Regardless of what the majority thinks it means, each person acts toward happiness as they subjectively understand it."
     },
     {
       "date": "2024-05-21",
-      "content": "做事情时，理论推导很有用，但不能推导完就只记住结论。推导的过程也应该尽量记住，最好能理解到自己可以重新推导出来。这样遇到相似但不完全相同的情况时，才有能力灵活调整，而不是直接套用过去的结果。很多时候，一个看起来很小的条件变化，就可能改变最后的答案。",
-      "contentEn": "Theoretical derivations are useful, but it is not enough to work through one and remember only the conclusion. Try to remember the reasoning too, ideally well enough to derive it again yourself. That lets you adapt when you encounter a similar but slightly different situation, rather than simply applying an old result. Often, a seemingly small change in the conditions can change the final answer."
+      "content": "做事情时，不能只记住结论，理论推导也很有用。推导的方式也应该尽量记住，最好能理解到可以自己重新推导出来。这样遇到相似但不完全相同的情况时，才有能力灵活调整，而不是直接套用过去的结果。很多时候，一个看起来很小的条件变化，就可能改变最后的答案。",
+      "contentEn": "When doing something, we should not remember only the conclusion; theoretical derivation is useful too. We should also try to remember the method of derivation, ideally understanding it well enough to work it out again ourselves. That way, when we encounter a similar but not identical situation, we can adjust flexibly rather than simply applying a past result. Often, a seemingly small change in the conditions can change the final answer."
     },
     {
       "date": "2024-02-24",
-      "content": "内耗有点像思想树分叉太多，或者往下推演得太深，导致模拟各种情况需要耗费大量时间和资源。但其中不少情况发生的可能性很低，推演出来也未必有用。与其把精力花在这些低概率的分支上，不如把一部分时间拿去学习、实践和产出，提升能力。",
-      "contentEn": "Mental strain can feel like a thought tree with too many branches, or one explored too deeply. Simulating all those possibilities consumes a great deal of time and mental resources. Yet many of those scenarios are unlikely, and thinking them through may not be useful anyway. Rather than spending so much energy on low-probability branches, it may be better to put some of it into learning, practice, and making things, and grow more capable in the process."
+      "content": "内耗就像思想树分叉太多，或者往下推演得太深，导致模拟各种情况需要耗费大量时间和资源。但其中不少情况发生的可能性很低，推演出来也未必有用。与其把精力花在这些低概率的分支上，不如把一部分时间拿去学习、实践和产出，提升能力。",
+      "contentEn": "Mental overthinking is like a thought tree with too many branches, or one explored too deeply, making it costly in time and resources to simulate all the possible scenarios. Yet many of those situations are highly unlikely, and working through them may not be useful anyway. Instead of spending so much energy on low-probability branches, it would be better to devote some of that time to learning, practice, and producing things, and to improving our abilities."
     },
     {
-      "date": "2024-01-17",
-      "content": "我觉得幸福感很大程度上来源于一种加速度：现在比过去更好，并且相信未来还能比现在更好。延迟满足的意义或许也在这里。若长期处于很高水准的物质和精神享受中，人会逐渐适应，原本强烈的幸福感也可能变淡。某种程度上，生活中的起伏和变化让人感到自己仍在向前走；过于平坦的直线，反而容易让人失去感觉。",
-      "contentEn": "I think happiness often comes from a kind of acceleration: life is better than it used to be, and we believe it can become better still. That may also be part of the point of delayed gratification. If we enjoy a high level of material comfort and emotional satisfaction for long enough, we gradually adapt, and the happiness that once felt intense may fade. In a way, life's ups and downs make us feel that we are still moving forward. A line that stays too flat can leave us feeling that we have stopped going anywhere."
+      "date": "2023-11-04",
+      "content": "思考的作用，首先是帮助生物更好地适应环境。可以从进化的角度理解，即使最初只是对光线等刺激做出简单反应，只要这种能力提高了生存和繁衍的机会，就可能被保留下来。随着感知、记忆和神经系统逐渐复杂，生物处理环境信息的方式也越来越复杂，最终出现了所谓的思考。",
+      "contentEn": "The primary function of thinking is to help living things adapt better to their environment. From an evolutionary perspective, even the earliest simple responses to stimuli such as light could be preserved if they improved the chances of survival and reproduction. As perception, memory, and nervous systems became increasingly complex, so did the ways organisms processed information from their surroundings, eventually giving rise to what we call thinking."
+    },
+    {
+      "date": "2023-09-12",
+      "content": "人生有点像动态规划，每一步都在权衡短期快乐和长期快乐。眼前看起来最舒服的选择，未必能让之后的自己更快乐。同时也不能为了一个遥远的目标，把当下的快乐全都牺牲掉。重要的可能不是每一步都选最快乐的，而是考虑它会怎样影响后面的选择。",
+      "contentEn": "Life is a bit like dynamic programming: at every step, we weigh short-term happiness against long-term happiness. The choice that feels most comfortable right now may not make our future selves happier. At the same time, we should not sacrifice all our present happiness for some distant goal. What matters may not be choosing the happiest option at every step, but considering how each choice will affect the choices that follow."
     }
   ]
 }

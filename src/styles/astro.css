@@ -32,6 +32,9 @@ html[data-theme="dark"] .code-block .astro-code span {
 }
 
 .solitude-toast {
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  overflow-wrap: anywhere;
   position: fixed;
   top: 24px;
   left: 50%;
