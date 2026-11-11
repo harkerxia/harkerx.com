@@ -81,7 +81,7 @@ const items = data.items.slice(0, c.strip);
                 </div>
               )}
               <div class="notes-content">
-                <p class="datacont" lang={item.contentEn?.trim() ? undefined : "zh-CN"}><I18n text={item.contentEn?.trim() ? item.contentEn : item.content} zh={item.content} /></p>
+                <p class="datacont" lang={item.translation?.trim() ? undefined : "zh-CN"}><I18n text={item.translation?.trim() ? item.translation : item.content} zh={item.content} /></p>
                 {item.image && (
                   <div class="notes-content-img tw:[#notes_&]:flex">
                     {(Array.isArray(item.image)

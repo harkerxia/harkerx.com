@@ -55,10 +55,10 @@ Run the schema command again, then deploy the Worker, and verify health returns 
 - D1 stores HMAC-derived visitor identifiers, not raw IP addresses or emails. A unique key and triggers update records and counters atomically. Losing the cookie or changing devices creates a new anonymous identity; this cannot enforce one like per real person.
 - The displayed view count is deduplicated visits, not unique people or proof that someone read the full article. Automated browsers can still imitate visitors.
 - Personalized responses use `private, no-store`; do not add a Cache Everything rule to this API.
-- Home cards display read-only views and likes before their dates. Card loads only perform GET requests and never count an article view. Metadata remains centered next to multiline tags when space permits; on very narrow cards the complete statistics/date group wraps together.
+- Home cards display read-only views and likes before their dates. Card loads only perform GET requests and never count an article view. Statistics and date stay aligned to the bottom of the card, independently of the number of tag lines; on very narrow cards the complete group wraps together.
 - The article header shows read-only views followed by likes. The bottom action toggles like/unlike and displays localized success or error feedback. All visible counts use the logical article ID.
 - Cross-tab notifications refresh counts without counting another view. Background reads are queued during local mutations, and late responses cannot restore an old liked state.
-- The frontend leaves unavailable counts as `—`, permits a retry, ignores detached-page responses, cancels requests on navigation, and keeps the existing article and share functionality usable.
+- Views and likes initially display `0` and are replaced by the API totals after loading. Failed reads retain the displayed values and show an unavailable tooltip. The frontend permits a retry, ignores detached-page responses, cancels requests on navigation, and keeps the existing article and share functionality usable.
 - New published articles become available through the blog manifest without redeploying the Worker. If the manifest is unavailable or invalid, no interaction is recorded. Old count rows are preserved when an article is removed from publication.
 
 ## Validation and maintenance

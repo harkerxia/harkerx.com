@@ -36,7 +36,7 @@ export const collections = {
   translations: defineCollection({
     loader: glob({
       pattern: "**/*.{md,mdx}",
-      base: "./src/content/translations/en",
+      base: "./src/content/translations",
       generateId: ({ entry }) => entry.replace(/\\/g, "/").replace(/\.mdx?$/i, ""),
     }),
     schema: z.strictObject({

@@ -4,7 +4,7 @@
 
 Chinese originals stay in `src/content/posts`. Their relative filenames, without `.md` or `.mdx`, define the stable article identity: `src/content/posts/vpn.md` has ID `vpn`, and `src/content/posts/guides/vpn.md` has ID `guides/vpn`. Keep filenames/IDs stable after publishing. Changing a title or the public `slug` does not change the identity.
 
-Put English Markdown or MDX translations in `src/content/translations/en`. Their filenames are for organization; `translationOf` must match the original ID, including a subdirectory when present.
+Put English Markdown or MDX translations in `src/content/translations`. Their filenames are for organization; `translationOf` must match the original ID, including a subdirectory when present.
 
 ```yaml
 ---
@@ -16,7 +16,7 @@ draft: true
 Write the reviewed English article here.
 ```
 
-The directory defines the English language. Supported translation fields are `translationOf`, `title`, `description`, `draft` (defaults to false), optional `lastmod`, and optional `sourceRevision`. Do not repeat routing, date, cover, category, tag, recommendation, comment, or other shared settings; translations inherit these from the original.
+This collection is reserved for English translations; no extra language subdirectory is needed. Supported translation fields are `translationOf`, `title`, `description`, `draft` (defaults to false), optional `lastmod`, and optional `sourceRevision`. Do not repeat routing, date, cover, category, tag, recommendation, comment, or other shared settings; translations inherit these from the original.
 
 A published translation requires a nonblank English title, description, and article body. Draft translations can keep an unfinished description or body. Production excludes draft translations and translations of draft originals. Development preview includes drafts; seeing one in `pnpm dev` does not mean it will be published.
 
@@ -67,3 +67,17 @@ The fingerprint confirms which source text was reviewed, not whether the transla
 Use `pnpm check` and `pnpm build` before publishing. Verify direct Chinese and English URLs, language switches, fallback behavior, and the generated feeds. Published article versions have their own canonical URL and reciprocal language alternatives; draft or missing versions must not appear in SEO alternatives.
 
 After adding a new collection or the first translation, restart an already-running `pnpm dev` process if a new route still returns 404. Verify published routes with a fresh `pnpm build` and `pnpm preview`; an old development content store is not evidence that a published translation is missing.
+
+## Thoughts translations
+
+In `src/data/notes.json`, each item keeps its Chinese text in `content` and its optional English text in `translation`:
+
+```json
+{
+  "date": "2026-11-11",
+  "content": "这里写中文随想。",
+  "translation": "Write the English translation here."
+}
+```
+
+The interface language selects the displayed text without changing the `/notes/` address. A missing or blank `translation` falls back to `content`. Keep the existing item order, dates, images, and other fields when adding a translation.

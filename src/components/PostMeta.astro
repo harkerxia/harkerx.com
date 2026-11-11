@@ -82,13 +82,13 @@ const { count, minutes } = readingStats(post.body ?? '');
       {cfg.interactions.enable && (
         <span class="post-meta-views" title={t("pageViews")} data-i18n-title="pageViews">
           <i class="post-meta-icon solitude fas fa-eye" aria-hidden="true" />
-          <span data-post-views>—</span>
+          <span data-post-views>0</span>
         </span>
       )}
       {cfg.interactions.enable && (
         <span class="post-meta-likes" title={t("postLikes")} data-i18n-title="postLikes">
           <i class="post-meta-icon solitude fas fa-heart" aria-hidden="true" />
-          <span data-post-likes>—</span>
+          <span data-post-likes>0</span>
         </span>
       )}
       {cfg.post.meta.locate && (

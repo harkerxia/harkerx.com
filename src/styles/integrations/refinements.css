@@ -1,5 +1,5 @@
 /* Core reading and discovery refinements, built on the public theme tokens. */
-.recent-post-item > .recent-post-info { min-width: 0; height: auto; gap: var(--efu-space-4); }
+.recent-post-item > .recent-post-info { min-width: 0; height: auto; align-self: stretch; gap: var(--efu-space-4); }
 .recent-post-item > .recent-post-info .recent-post-info-top .article-title {
   -webkit-line-clamp: 3;
   line-height: 1.5;
@@ -16,7 +16,8 @@
   font-size: 12px;
   overflow-wrap: anywhere;
 }
-.recent-post-item .article-meta-wrap { flex-wrap: wrap; gap: var(--efu-space-2); white-space: normal; }
+/* Anchor footer details to the bottom even when tags wrap onto several lines. */
+.recent-post-item .article-meta-wrap { flex-wrap: wrap; align-items: flex-end; gap: var(--efu-space-2); white-space: normal; }
 .recent-post-item .article-meta-wrap > .article-meta.tags { flex: 1 1 120px; flex-wrap: wrap; min-width: 0; gap: 4px 8px; overflow: visible; white-space: normal; margin: 0; }
 .recent-post-item .article-meta-wrap > .article-meta > .article-meta__tags { margin: 0; max-width: 100%; overflow-wrap: anywhere; }
 .recent-post-item .article-meta-wrap > .post-card-meta-details { flex: 0 0 auto; margin-inline-start: auto; }
