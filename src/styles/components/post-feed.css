@@ -243,15 +243,36 @@
   color: var(--efu-fontcolor);
 }
 
-.article-meta-wrap > .post-meta-date {
+.post-card-meta-details {
+  display: flex;
+  align-items: center;
   flex: 0 0 auto;
-  margin-inline-start: 12px;
-  right: 0;
+  gap: 12px;
+  margin-inline-start: auto;
+  color: var(--efu-secondtext);
+  white-space: nowrap;
+}
+
+.post-card-meta-details .post-meta-date {
   text-align: right;
 }
 
-.article-meta-wrap > .post-meta-date i {
-  display: none;
+.post-card-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.post-card-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.article-meta-wrap .post-card-stats i {
+  margin: 0;
+  font-size: 12px;
 }
 
 .article-meta-wrap .article-meta__separator {

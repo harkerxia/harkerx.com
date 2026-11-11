@@ -26,6 +26,12 @@ AFTER INSERT ON post_likes BEGIN
   UPDATE post_stats SET likes = likes + 1 WHERE post_id = NEW.post_id;
 END;
 
+-- Only an actual deletion removes a like; retries cannot decrement twice.
+CREATE TRIGGER IF NOT EXISTS post_like_delete
+AFTER DELETE ON post_likes BEGIN
+  UPDATE post_stats SET likes = MAX(likes - 1, 0) WHERE post_id = OLD.post_id;
+END;
+
 CREATE TRIGGER IF NOT EXISTS post_visit_insert
 AFTER INSERT ON post_visits BEGIN
   UPDATE post_stats SET views = views + 1 WHERE post_id = NEW.post_id;

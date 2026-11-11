@@ -61,6 +61,8 @@ async function publishedPosts(origin) {
   return manifestPromise;
 }
 
+const unlikeSchemaReady = db => db.prepare("SELECT name FROM sqlite_master WHERE type = 'trigger' AND name = 'post_like_delete'").first();
+
 const statsQuery = (db, post, visitor) => db.prepare(`SELECT
   COALESCE((SELECT views FROM post_stats WHERE post_id = ?), 0) AS views,
   COALESCE((SELECT likes FROM post_stats WHERE post_id = ?), 0) AS likes,
@@ -94,11 +96,12 @@ export async function handle(request, env) {
         return reply({ error: 'rate_limited' }, 429);
       }
       await env.DB.prepare('SELECT post_id FROM post_stats LIMIT 1').first();
-      return reply({ ok: true, version: 1 });
+      if (!(await unlikeSchemaReady(env.DB))) return reply({ error: 'schema_update_required' }, 503);
+      return reply({ ok: true, version: 2 });
     }
     if (origin !== site) return reply({ error: 'origin_not_allowed' }, 403);
     if (request.method === 'OPTIONS') {
-      headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+      headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
       headers.set('Access-Control-Allow-Headers', 'X-HarkerX-Action');
       headers.set('Access-Control-Max-Age', '600');
       return new Response(null, { status: 204, headers });
@@ -109,9 +112,9 @@ export async function handle(request, env) {
     try { post = decodeURIComponent(match[1]); } catch { return reply({ error: 'invalid_post' }, 400); }
     if (!post || post.length > 512 || /[\u0000-\u001f\u007f]/.test(post)) return reply({ error: 'invalid_post' }, 400);
     const action = match[2];
-    const method = action === 'like' ? 'PUT' : action === 'view' ? 'POST' : 'GET';
-    if (request.method !== method) {
-      headers.set('Allow', method);
+    const methods = action === 'like' ? ['PUT', 'DELETE'] : [action === 'view' ? 'POST' : 'GET'];
+    if (!methods.includes(request.method)) {
+      headers.set('Allow', methods.join(', '));
       return reply({ error: 'method_not_allowed' }, 405);
     }
     if (action && request.headers.get('X-HarkerX-Action') !== '1') return reply({ error: 'invalid_action' }, 403);
@@ -139,9 +142,15 @@ export async function handle(request, env) {
     let stats;
     if (!action) stats = await statsQuery(env.DB, post, visitorHash).first();
     else {
+      // A partially rolled-out Worker must not remove records without decrementing.
+      if (request.method === 'DELETE' && !(await unlikeSchemaReady(env.DB))) {
+        return reply({ error: 'schema_update_required' }, 503);
+      }
       const insert = env.DB.prepare('INSERT INTO post_stats (post_id) VALUES (?) ON CONFLICT DO NOTHING').bind(post);
       const mutation = action === 'like'
-        ? env.DB.prepare('INSERT INTO post_likes (post_id, visitor_hash, created_at) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').bind(post, visitorHash, now)
+        ? request.method === 'DELETE'
+          ? env.DB.prepare('DELETE FROM post_likes WHERE post_id = ? AND visitor_hash = ?').bind(post, visitorHash)
+          : env.DB.prepare('INSERT INTO post_likes (post_id, visitor_hash, created_at) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').bind(post, visitorHash, now)
         : env.DB.prepare(`INSERT INTO post_visits (post_id, visitor_hash, last_counted_at) VALUES (?, ?, ?)
             ON CONFLICT(post_id, visitor_hash) DO UPDATE SET last_counted_at = excluded.last_counted_at
             WHERE post_visits.last_counted_at <= excluded.last_counted_at - ?`).bind(post, visitorHash, now, VISIT_WINDOW);

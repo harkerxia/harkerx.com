@@ -170,6 +170,7 @@ Solitude.refresh = async () => {
     () => Solitude.addPhotoFigcaption(),
     initGreeting,
     initPostReadState,
+    initPostInteractions,
     () => Solitude.tagPageActive(),
     () => Solitude.categoriesBarActive(),
     () => Solitude.listenToPageInputPress(),
@@ -190,7 +191,6 @@ Solitude.refresh = async () => {
   Solitude.config.friend_links.async && Solitude.friendLinks?.init();
   if (is_post) {
     initPostCoverTilt();
-    initPostInteractions();
   }
   initObserver();
   if (is_home) {

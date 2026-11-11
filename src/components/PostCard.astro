@@ -1,6 +1,6 @@
 ---
 import I18n from "./I18n.astro";
-import { cfg, url, termPath, dateLabel, isoDate } from '../lib/site';
+import { cfg, t, url, termPath, dateLabel, isoDate } from '../lib/site';
 import { contentPath, legacyPostPath, postIdentity, type Post } from '../lib/content';
 interface Props {
   post: Post;
@@ -89,8 +89,22 @@ const right =
           ))}
         </span>
       )}
-      <span class="post-meta-date">
-        <time datetime={isoDate(p.date)}>{dateLabel(p.date)}</time>
+      <span class="post-card-meta-details">
+        {cfg.interactions.enable && (
+          <span class="post-card-stats" data-post-stats={postIdentity(post)}>
+            <span class="post-card-stat" title={t("pageViews")} data-i18n-title="pageViews">
+              <i class="solitude fas fa-eye" aria-hidden="true" />
+              <span data-post-views>—</span>
+            </span>
+            <span class="post-card-stat" title={t("postLikes")} data-i18n-title="postLikes">
+              <i class="solitude fas fa-heart" aria-hidden="true" />
+              <span data-post-likes>—</span>
+            </span>
+          </span>
+        )}
+        <span class="post-meta-date">
+          <time datetime={isoDate(p.date)}>{dateLabel(p.date)}</time>
+        </span>
       </span>
     </div>
   </div>
