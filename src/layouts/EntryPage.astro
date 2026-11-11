@@ -8,6 +8,7 @@ import customZh from "../i18n/site.zh-CN.json";
 import {
   cfg,
   config,
+  t,
   url,
   absolute,
   json,
@@ -192,6 +193,18 @@ const commentsEnabled = pageCommentsEnabled(type, p.comment);
                   ))}
                 </div>
               </div>
+              <button
+                class="post-share-button"
+                type="button"
+                title={t("copyLink")}
+                aria-label={t("copyLink")}
+                data-i18n-title="copyLink"
+                data-i18n-aria-label="copyLink"
+                data-solitude-action="copy"
+                data-solitude-value={`${post.data.title} - ${absolute(contentPath(post))}`}
+              >
+                <i class="solitude fas fa-share-from-square" aria-hidden="true" />
+              </button>
             </div>
 
             {cfg.related_post.enable && related.length > 0 && (

@@ -515,7 +515,38 @@
 }
 
 #post .post-tools-right {
+  gap: 8px 12px;
   padding: 0 2rem 24px;
+}
+
+#post .post-share-button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  margin-inline-start: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--efu-secondtext);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color var(--efu-motion-fast),
+    background-color var(--efu-motion-fast);
+}
+
+#post .post-share-button:hover {
+  background: var(--efu-main-op);
+  color: var(--efu-main);
+}
+
+#post .post-share-button:focus-visible {
+  outline: 2px solid var(--efu-main);
+  outline-offset: 2px;
 }
 
 @media screen and (max-width: 768px) {
