@@ -1,4 +1,5 @@
 {
+  "interactions": { "enable": false, "endpoint": "" },
   "site": {
     "name": {
       "class": "text",

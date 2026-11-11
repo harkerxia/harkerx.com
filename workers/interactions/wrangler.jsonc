@@ -1,0 +1,28 @@
+{
+  "$schema": "https://unpkg.com/wrangler@4.160.0/config-schema.json",
+  "name": "harkerx-interactions",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-11",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "stats.harkerx.com", "custom_domain": true }],
+  "vars": { "SITE_ORIGIN": "https://harkerx.com" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "harkerx-interactions",
+    "database_id": "7e7f7109-0865-449f-a503-0e6d8565ed25"
+  }],
+  "ratelimits": [
+    {
+      "name": "READ_LIMITER",
+      "namespace_id": "751401",
+      "simple": { "limit": 120, "period": 60 }
+    },
+    {
+      "name": "WRITE_LIMITER",
+      "namespace_id": "751402",
+      "simple": { "limit": 30, "period": 60 }
+    }
+  ],
+  "observability": { "enabled": true }
+}

@@ -27,7 +27,7 @@
 .recent-post-item .article-meta-wrap > .post-card-commenters:not([hidden]) { flex: 0 0 auto; }
 .recent-post-item:focus-within { border-color: var(--efu-theme); }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--efu-theme); outline-offset: 3px; }
-button:disabled { cursor: default; opacity: .45; }
+button:disabled:not(.post-like-button) { cursor: default; opacity: .45; }
 #pagination .pagination { flex-wrap: wrap; align-items: center; }
 .page-gap { display: inline-flex; align-items: center; justify-content: center; min-width: 12px; color: var(--efu-secondtext); }
 

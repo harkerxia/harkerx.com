@@ -519,6 +519,43 @@
   padding: 0 2rem 24px;
 }
 
+#post .post-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+
+#post .post-like-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: var(--style-border-always);
+  border-radius: var(--efu-radius-pill);
+  background: transparent;
+  color: var(--efu-secondtext);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#post .post-like-button i { font-size: 16px; }
+#post .post-like-button[aria-pressed="true"],
+#post .post-like-button:hover:not(:disabled) {
+  color: var(--efu-lighttext);
+  background: var(--efu-theme-op);
+}
+#post .post-like-button:disabled { cursor: default; }
+#post .post-like-button[aria-busy="true"] { opacity: 0.6; }
+#post .post-like-button:focus-visible {
+  outline: 2px solid var(--efu-lighttext);
+  outline-offset: 2px;
+}
+
 #post .post-share-button {
   display: grid;
   place-items: center;

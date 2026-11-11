@@ -1,6 +1,6 @@
 ---
 import I18n from "./I18n.astro";
-import { cfg, url, dateLabel, isoDate, termPath } from '../lib/site';
+import { cfg, t, url, dateLabel, isoDate, termPath } from '../lib/site';
 import { legacyPostPath, readingStats, type Post } from '../lib/content';
 interface Props {
   post: Post;
@@ -77,6 +77,12 @@ const { count, minutes } = readingStats(post.body ?? '');
             {minutes}{' '}
             <I18n k="readingMinutes" />
           </span>
+        </span>
+      )}
+      {cfg.interactions.enable && (
+        <span class="post-meta-views" title={t("pageViews")} data-i18n-title="pageViews">
+          <i class="post-meta-icon solitude fas fa-eye" aria-hidden="true" />
+          <span data-post-views>—</span>
         </span>
       )}
       {cfg.post.meta.locate && (

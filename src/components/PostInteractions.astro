@@ -1,0 +1,27 @@
+---
+import { cfg, t } from '../lib/site';
+import I18n from './I18n.astro';
+interface Props { postId: string; }
+const { postId } = Astro.props;
+---
+
+{cfg.interactions.enable && (
+  <button
+    type="button"
+    class="post-like-button"
+    data-post-like
+    data-post-id={postId}
+    data-interactions-endpoint={cfg.interactions.endpoint}
+    aria-label={t('postLike')}
+    title={t('postLike')}
+    data-i18n-aria-label="postLike"
+    data-i18n-title="postLike"
+    aria-pressed="false"
+    aria-busy="true"
+    disabled
+  >
+    <i class="solitude fas fa-heart" aria-hidden="true" />
+    <span data-post-like-label><I18n k="postLike" /></span>
+    <span data-post-like-count>—</span>
+  </button>
+)}

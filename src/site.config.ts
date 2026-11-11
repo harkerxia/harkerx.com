@@ -39,6 +39,8 @@ export default defineSolitudeConfig({
     { name: "Friends", url: "/links/" },
   ],
   theme: {
+    // Enable after deploying and verifying the statistics Worker.
+    interactions: { enable: false, endpoint: "https://stats.harkerx.com" },
     // Add more groups here for games, tools, or other links.
     nav: { group: { Connect: socialLinks } },
     hometop: {

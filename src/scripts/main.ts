@@ -14,6 +14,7 @@ import { initActionDelegation } from "./core/actions";
 import { Solitude } from "./core/api";
 import { lifecycle } from "./core/lifecycle";
 import { initPostReadState } from "./features/reading";
+import { initPostInteractions } from "./features/interactions";
 import { initPreloader } from "./core/preloader";
 import { initToc } from "./toc";
 let coverColor: (music?: boolean) => void | Promise<void> = () => {};
@@ -189,6 +190,7 @@ Solitude.refresh = async () => {
   Solitude.config.friend_links.async && Solitude.friendLinks?.init();
   if (is_post) {
     initPostCoverTilt();
+    initPostInteractions();
   }
   initObserver();
   if (is_home) {
